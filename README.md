@@ -1,2 +1,2 @@
 # CitizenVoice
-An inclusive, web-based, software platform for collaborative data collection that facilitates the citizen participation
+An inclusive, web-based software platform for collaborative data collection that facilitates the citizen participation
