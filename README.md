@@ -10,6 +10,7 @@ An inclusive, web-based software platform for collaborative data collection that
 
 ## Citation
 
+Surname1, N., & Surname2, N. Citizen Voice [Computer software]
 
 ## Acknowlegdements
 
