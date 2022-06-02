@@ -1,0 +1,18 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Citizen Voice
+message: Please cite this software using these metadata.
+type: software
+authors:
+  - given-names: Name1
+    family-names: Surname1
+    email: user@email.com
+    affiliation: Affiliation
+    orcid: 'https://orcid.org/0000-0000-0000-0000'
+  - given-names: Name2
+    family-names: Surname2
+    email: user@email.com
+    affiliation: Affiliation
+    orcid: 'https://orcid.org/0000-0000-0000-0000'
