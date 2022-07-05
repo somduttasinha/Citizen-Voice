@@ -1,3 +1,12 @@
+Technische Universiteit Delft hereby disclaims all copyright interest in the program “Citizen-Voice” (an inclusive, web-based software platform for collaborative data collection that facilitates citizen participation) written by the Author(s). 
+[Name Dean], Dean of [Name Faculty].
+
+(c) 2022, [AUTHOR(S)], [REFERENCE TO PROJECTS, GRANTS OR STUDY (if desired)], Delft, The Netherlands.
+
+This work is licensed under a [NAME and VERSION OF LICENSE] OSS license.
+
+[ADD A COPY OF LICENSE TEXT]
+
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
