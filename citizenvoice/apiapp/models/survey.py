@@ -12,7 +12,7 @@ class Survey(models.Model):
     template = models.CharField(max_length=150)
     publish_date = models.DateTimeField(_("Date that survey was made available"))
     expire_date = models.DateTimeField(_("Expiry date of survey"))
-    redirect_URL = models.CharField(_("Redirect URL"), max_length=150)
+    redirect_url = models.CharField(_("Redirect URL"), max_length=150)
 
     def __str__(self):
         return str(self.name)

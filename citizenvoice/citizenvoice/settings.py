@@ -14,6 +14,17 @@ import os
 from pathlib import Path
 from dotenv import  load_dotenv
 
+if os.name == 'nt':
+    import platform
+    OSGEO4W = r"C:\OSGeo4W"
+    # if '64' in platform.architecture()[0]:
+    #     OSGEO4W += "64"
+    assert os.path.isdir(OSGEO4W), "Directory does not exist: " + OSGEO4W
+    os.environ['OSGEO4W_ROOT'] = OSGEO4W
+    os.environ['GDAL_DATA'] = OSGEO4W + r"\share\gdal"
+    os.environ['PROJ_LIB'] = OSGEO4W + r"\share\proj"
+    os.environ['PATH'] = OSGEO4W + r"\bin;" + os.environ['PATH']
+
 # read environment variable form .env file
 load_dotenv()
 
@@ -37,6 +48,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'apiapp',
+    'rest_framework',
+    # 'apiapp.apps.ApiappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,3 +140,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# path declaration for geodjango
+
+
+GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+# GDAL_LIBRARY_PATH = r'C:\Users\Gerdus van der Laars\.conda\pkgs\gdal-3.1.4-py38hf7baafa_17\Lib\site-packages\osgeo\gdal'
