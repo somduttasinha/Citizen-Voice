@@ -3,7 +3,11 @@ from rest_framework import routers
 from . import views
 
 router = routers.DefaultRouter()
+router.register(r'answers', views.AnswerViewSet)
+router.register(r'questions', views.QuestionViewSet)
 router.register(r'surveys', views.SurveyViewSet)
+router.register(r'responses', views.ResponseViewSet)
+router.register(r'users', views.UserViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

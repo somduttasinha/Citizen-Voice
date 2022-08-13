@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Answer, Question, Survey, Response
+from django.contrib.auth.models import User
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -21,3 +22,8 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers', 'display_method',
          'template', 'publish_date', 'expire_date', 'redirect_url')
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email')
