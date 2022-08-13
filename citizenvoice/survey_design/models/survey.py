@@ -5,8 +5,10 @@ from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
+
 def in_duration_day():
     return now() + timedelta(days=settings.DEFAULT_SURVEY_PUBLISHING_DURATION)
+
 
 class Survey(models.Model):
 
@@ -22,8 +24,8 @@ class Survey(models.Model):
 
     name = models.CharField(_("Name"), max_length=400)
     description = models.TextField(_("Description"))
-    is_published = models.BooleanField(_("Users can see it and answer it"), default=True)
-    need_logged_user = models.BooleanField(_("Only authenticated users can see it and answer it"))
+    is_published = models.BooleanField(_("Users can see it and answer it"), default=False)
+    need_logged_user = models.BooleanField(_("Only authenticated users can see it and answer it"), default=False)
     editable_answers = models.BooleanField(_("Users can edit their answers afterwards"), default=True)
     display_method = models.SmallIntegerField(
         _("Display method"), choices=DISPLAY_METHOD_CHOICES, default=ALL_IN_ONE_PAGE
