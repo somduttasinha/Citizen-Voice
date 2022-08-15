@@ -141,6 +141,6 @@ dmypy.json
 ./citizenvoice/wheel/
 
 # Jetbrains
-.idea
+.idea/
 .idea/Citizen-Voice.iml
 .idea/.gitignore
