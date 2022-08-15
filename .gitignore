@@ -136,3 +136,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Wheels
+./citizenvoice/wheel/
+
+# Jetbrains
+.idea
+.idea/Citizen-Voice.iml
+.idea/.gitignore
