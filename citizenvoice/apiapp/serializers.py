@@ -1,6 +1,17 @@
+# ====================================================================================================================
+#
+# Created with reference "Build a REST API in 30 minutes with Django REST Framework" by Bennett Garner, May 17, 2019
+# https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c
+#
+# ====================================================================================================================
+
 from rest_framework import serializers
 from .models import Answer, Question, Survey, Response
 from django.contrib.auth.models import User
+
+#=============================================
+# Create serializer classes that allow for exposing certain model fields to be used in the API
+#=============================================
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

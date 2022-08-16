@@ -1,7 +1,15 @@
+# ====================================================================================================================
+#
+# Created with reference "Build a REST API in 30 minutes with Django REST Framework" by Bennett Garner, May 17, 2019
+# https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c
+#
+# ====================================================================================================================
+
 from django.urls import include, path
 from rest_framework import routers
 from . import views
 
+# Create a router object and point it to the model viewsets, allowing the API to be called through the given URL addresses
 router = routers.DefaultRouter()
 router.register(r'answers', views.AnswerViewSet)
 router.register(r'questions', views.QuestionViewSet)
