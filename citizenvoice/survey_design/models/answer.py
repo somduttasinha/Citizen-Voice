@@ -1,4 +1,10 @@
 """
+This code is based on the source code of the django-survey application
+by Pierre Sassoulas, 2022, version 1.4.0. 
+Available at https://github.com/Pierre-Sassoulas/django-survey/releases/tag/v1.4.0
+"""
+
+"""
     These type-specific answer models use a text field to allow for flexible
     field sizes depending on the actual question this answer corresponds to any
     "required" attribute will be enforced by the form.
