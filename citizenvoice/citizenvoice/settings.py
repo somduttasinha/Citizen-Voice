@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import  load_dotenv
+from dotenv import load_dotenv
 
 if os.name == 'nt':
     import platform
+
     OSGEO4W = r"C:\OSGeo4W"
     # if '64' in platform.architecture()[0]:
     #     OSGEO4W += "64"
@@ -34,7 +35,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -46,12 +46,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
+# note: add your custom apps after django apps
 INSTALLED_APPS = [
-    'users.apps.UsersConfig',
-    'survey_design.apps.SurveyDesignConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +57,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'users.apps.UsersConfig',
+    'survey_design.apps.SurveyDesignConfig',
 ]
 
 MIDDLEWARE = [
@@ -91,21 +91,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'citizen_voice_db',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('POSTGRES_PWD'),
-        'HOST': '127.0.0.1',
-        'PORT': '5432'
+        'ENGINE': "django.contrib.gis.db.backends.spatialite",  # 'django.contrib.gis.db.backends.postgis',
+        'NAME': BASE_DIR / "db.sqlite3",  # 'citizen_voice_db',
+        # 'USER': 'postgres',
+        # 'PASSWORD': os.getenv('POSTGRES_PWD'),
+        # 'HOST': '127.0.0.1',
+        # 'PORT': '5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -125,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -136,7 +133,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

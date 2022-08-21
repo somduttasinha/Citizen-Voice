@@ -109,3 +109,7 @@ class Question(models.Model):
             for value in answer.values:
                 answers_as_text.append(value)
         return answers_as_text
+
+    def __str__(self):
+        return self.text
+
