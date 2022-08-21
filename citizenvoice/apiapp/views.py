@@ -19,7 +19,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
 # Create a ViewSet that queries all the instances of Survey in the database, and parse them through the serializer
 class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all().order_by('name')
+    # queryset = Survey.objects.get(name="Test 1")
     serializer_class = SurveySerializer
+
+    def SurveyDetail(id):
+        queryset = Survey.objects.filter(id=id)
+        return queryset
 
 # Create a ViewSet that queries all the instances of Response in the database, and parse them through the serializer
 class ResponseViewSet(viewsets.ModelViewSet):
