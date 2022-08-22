@@ -11,10 +11,10 @@ from . import views
 
 # Create a router object and point it to the model viewsets, allowing the API to be called through the given URL addresses
 router = routers.DefaultRouter()
-router.register(r'answers', views.AnswerViewSet)
-router.register(r'questions', views.QuestionViewSet)
-router.register(r'surveys', views.SurveyViewSet)
-router.register(r'responses', views.ResponseViewSet)
+router.register(r'answers', views.AnswerViewSet, basename='answer')
+router.register(r'questions', views.QuestionViewSet, basename='question')
+router.register(r'surveys', views.SurveyViewSet, basename='survey')
+router.register(r'responses', views.ResponseViewSet, basename='response')
 router.register(r'users', views.UserViewSet)
 
 # Wire up our API using automatic URL routing.

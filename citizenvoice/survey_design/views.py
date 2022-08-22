@@ -12,8 +12,8 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        'surveys': SurveyViewSet.queryset
-        # 'surveys': SurveyViewSet.SurveyDetail(id=1)
+        # 'surveys': SurveyViewSet.queryset
+        'surveys': SurveyViewSet.GetSurveys()
     }
     return render(request, 'survey_design/survey.html', context)
 
