@@ -1,3 +1,9 @@
+"""
+This code is based on the source code of the django-survey application
+by Pierre Sassoulas, 2022, version 1.4.0. 
+Available at https://github.com/Pierre-Sassoulas/django-survey/releases/tag/v1.4.0
+"""
+
 import logging
 
 from django.conf import settings
