@@ -43,7 +43,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     GetQuestions() - returns a set of all Question instances in the database
 
-    GetQuestion(int id) - returns an instance of Question with the ID that was provided in the function.
+    GetQuestion(int id, int survey_id) - returns a filtered list of Question instances based either on a given question_id
+                                        or a given survey_id. Only one must be provided. The id that is provided is
+                                        used to filter by that particular metric.
 
     """
     # Get all questions
@@ -53,10 +55,15 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return queryset
 
     # Get a specific Question based on its ID
-    def GetQuestion(id):
-        queryset = Question.objects.filter(id=id)
-        serializer_class = QuestionSerializer
-        return queryset
+    def GetQuestion(id=0, survey_id=0):
+        if survey_id == 0:
+            queryset = Question.objects.filter(id=id)
+            serializer_class = QuestionSerializer
+            return queryset
+        elif id == 0:
+            queryset = Question.objects.filter(survey=survey_id)
+            serializer_class = QuestionSerializer
+            return queryset   
 
 # Create a ViewSet that queries all the instances of Survey in the database, and parse them through the serializer
 class SurveyViewSet(viewsets.ModelViewSet):

@@ -6,6 +6,7 @@ Available at https://github.com/Pierre-Sassoulas/django-survey
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from .survey import Survey
 
 # Represents a single question of any type
 class Question(models.Model):
@@ -39,3 +40,4 @@ class Question(models.Model):
     required = models.BooleanField(_("Question must be filled out"), default=False)
     question_type = models.CharField(_("Type of question"), max_length=150)
     choices = models.TextField(_("Choices for answers"))
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
