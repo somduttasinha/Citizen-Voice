@@ -119,5 +119,13 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
 # Create a ViewSet that queries all the instances of User in the database, and parse them through the serializer
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all().order_by('username')
-    serializer_class = UserSerializer
+    """
+    USer ViewSet used internally to query data from database for all users. The following functions are defined in this viewset:
+
+    GetUsers() - returns a set of all User instances in the database
+    """
+    # Get all users
+    def GetUsers():
+        queryset = User.objects.all().order_by('username')
+        serializer_class = UserSerializer
+        return queryset 

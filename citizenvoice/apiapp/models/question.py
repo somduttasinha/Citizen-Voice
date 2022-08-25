@@ -10,6 +10,11 @@ from .survey import Survey
 
 # Represents a single question of any type
 class Question(models.Model):
+    """
+    The Question class allows for creating questions of several different types. It also includes the possibility
+    to include potential answers as part of the question. These possible answers are not objects, but rather 
+    captured in a comma-separated text field.
+    """
 
     TEXT = "text"
     SHORT_TEXT = "short-text"
@@ -41,4 +46,3 @@ class Question(models.Model):
     question_type = models.CharField(_("Type of question"), max_length=150)
     choices = models.TextField(_("Choices for answers"))
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
-    

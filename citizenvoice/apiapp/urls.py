@@ -15,7 +15,7 @@ router.register(r'answers', views.AnswerViewSet, basename='answer')
 router.register(r'questions', views.QuestionViewSet, basename='question')
 router.register(r'surveys', views.SurveyViewSet, basename='survey')
 router.register(r'responses', views.ResponseViewSet, basename='response')
-router.register(r'users', views.UserViewSet)
+router.register(r'users', views.UserViewSet, basename='user')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

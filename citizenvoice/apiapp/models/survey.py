@@ -9,6 +9,11 @@ from django.utils.translation import gettext_lazy as _
 
 # Represents all the responses from every respondent
 class Survey(models.Model):
+    """
+    The Survey class represents a collection of questions that are to be answered by respondents.
+    It also represents all the responses made by respondents (users) for this specific Survey. 
+    """
+
     name = models.CharField(_("Name of the survey"),max_length=150)
     description = models.TextField(_("Description"))
     is_published = models.BooleanField(_("Survey is visible and accessible to users"), default=False)
@@ -22,4 +27,3 @@ class Survey(models.Model):
 
     def __str__(self):
         return str(self.name)
-        
