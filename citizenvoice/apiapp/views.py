@@ -121,13 +121,3 @@ class ResponseViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
-
-def home(request):
-    # context = {
-    #     'survey': Survey.objects.all()
-    # }
-    return render(request, 'survey/base.html', {'title': 'Home'})
-
-
-def about(request):
-    return render(request, 'survey/base.html', {'title': 'About'})

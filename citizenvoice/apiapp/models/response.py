@@ -16,3 +16,4 @@ class Response(models.Model):
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     interview_uuid = models.CharField(_("Unique ID of interview"), max_length=150)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    

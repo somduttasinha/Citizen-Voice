@@ -41,3 +41,4 @@ class Question(models.Model):
     question_type = models.CharField(_("Type of question"), max_length=150)
     choices = models.TextField(_("Choices for answers"))
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
+    

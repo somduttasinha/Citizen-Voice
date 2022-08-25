@@ -20,3 +20,4 @@ class Answer(models.Model):
     body = models.TextField(_("Answer Body"))
     lon = models.FloatField()
     lat = models.FloatField()
+    
