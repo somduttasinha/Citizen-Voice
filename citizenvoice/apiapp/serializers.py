@@ -29,7 +29,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Question
-        fields = ('text', 'order', 'required', 'question_type', 'choices')
+        fields = ('text', 'order', 'required', 'question_type', 'choices', 'survey')
 
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -49,7 +49,7 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers', 'display_method',
-         'template', 'publish_date', 'expire_date', 'redirect_url')
+         'template', 'publish_date', 'expire_date', 'redirect_url', 'author')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """

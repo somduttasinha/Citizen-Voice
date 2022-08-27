@@ -18,22 +18,21 @@ class AnswerViewSet(viewsets.ModelViewSet):
                                             used to filter by that particular metric.
 
     """
+    serializer_class = AnswerSerializer
 
     # Get all answers
-    def GetAnswers():
+    def get_queryset(response):
         queryset = Answer.objects.all()
-        serializer_class = AnswerSerializer
+        
         return queryset 
 
     # Get all answers by filtering based either on their related Response or Question
     def GetAnswer(response_id=0, question_id=0):
         if response_id == 0:
             queryset = Answer.objects.filter(question=question_id)
-            serializer_class = AnswerSerializer
             return queryset
         elif question_id == 0:
             queryset = Answer.objects.filter(response=response_id)
-            serializer_class = AnswerSerializer
             return queryset            
 
 # Create a ViewSet that queries all the instances of Question in the database, and parse them through the serializer
@@ -48,21 +47,21 @@ class QuestionViewSet(viewsets.ModelViewSet):
                                         used to filter by that particular metric.
 
     """
+
+    serializer_class = QuestionSerializer
+
     # Get all questions
-    def GetQuestions():
+    def get_queryset(response):
         queryset = Question.objects.all()
-        serializer_class = QuestionSerializer
         return queryset
 
     # Get a specific Question based on its ID
     def GetQuestion(id=0, survey_id=0):
         if survey_id == 0:
             queryset = Question.objects.filter(id=id)
-            serializer_class = QuestionSerializer
             return queryset
         elif id == 0:
             queryset = Question.objects.filter(survey=survey_id)
-            serializer_class = QuestionSerializer
             return queryset   
 
 # Create a ViewSet that queries all the instances of Survey in the database, and parse them through the serializer
@@ -76,16 +75,16 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
     """
 
+    serializer_class = SurveySerializer
+
     # Get all surveys
-    def GetSurveys():
+    def get_queryset(response):
         queryset = Survey.objects.all().order_by('name')
-        serializer_class = SurveySerializer
         return queryset
 
     # Get a specific Survey based on its ID
     def GetSurvey(id):
         queryset = Survey.objects.filter(id=id)
-        serializer_class = SurveySerializer
         return queryset
 
 # Create a ViewSet that queries all the instances of Response in the database, and parse them through the serializer
@@ -100,21 +99,21 @@ class ResponseViewSet(viewsets.ModelViewSet):
                                             used to filter by that particular metric.
 
     """   
+
+    serializer_class = ResponseSerializer
+
     # Get all responses
-    def GetResponses():
+    def get_queryset(response):
         queryset = Response.objects.all().order_by('created')
-        serializer_class = ResponseSerializer
         return queryset 
 
     # Get all responses by filtering based either on their related Survey or User
     def GetResponse(survey_id=0, user_id=0):
         if survey_id == 0:
             queryset = Response.objects.filter(question=user_id)
-            serializer_class = ResponseSerializer
             return queryset
         elif user_id == 0:
             queryset = Response.objects.filter(response=survey_id)
-            serializer_class = ResponseSerializer
             return queryset      
 
 # Create a ViewSet that queries all the instances of User in the database, and parse them through the serializer
@@ -124,8 +123,10 @@ class UserViewSet(viewsets.ModelViewSet):
 
     GetUsers() - returns a set of all User instances in the database
     """
+
+    serializer_class = UserSerializer
+
     # Get all users
-    def GetUsers():
+    def get_queryset(response):
         queryset = User.objects.all().order_by('username')
-        serializer_class = UserSerializer
         return queryset 
