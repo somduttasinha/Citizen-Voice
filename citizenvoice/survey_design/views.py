@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
-from .models.survey import Survey
+from apiapp.views import SurveyViewSet
 # Create your views here.
 
 
@@ -12,7 +12,7 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        'surveys': Survey.objects.all()
+        'surveys': SurveyViewSet.GetSurveys()
     }
     return render(request, 'survey_design/survey.html', context)
 
