@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 
 if os.name == 'nt':
     import platform
-
     OSGEO4W = r"C:\OSGeo4W"
     # if '64' in platform.architecture()[0]:
     #     OSGEO4W += "64"
@@ -57,6 +56,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'apiapp',
+    'rest_framework',
     'users.apps.UsersConfig',
     'survey_design.apps.SurveyDesignConfig',
 ]
@@ -94,14 +95,23 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# uncomment if you are working with postgis
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#         'NAME': 'citizen_voice_db',
+#         'USER': 'postgres',
+#         'PASSWORD': os.getenv('POSTGRES_PWD'),
+#         'HOST': os.getenv('POSTGRES_HOST'),
+#         'PORT': os.getenv('POSTGRES_POST')
+#     }
+# }
+
+# uncomment if you are working with spatialite
 DATABASES = {
     'default': {
-        'ENGINE': "django.contrib.gis.db.backends.spatialite",  # 'django.contrib.gis.db.backends.postgis',
-        'NAME': BASE_DIR / "db.sqlite3",  # 'citizen_voice_db',
-        # 'USER': 'postgres',
-        # 'PASSWORD': os.getenv('POSTGRES_PWD'),
-        # 'HOST': '127.0.0.1',
-        # 'PORT': '5432'
+        'ENGINE': "django.contrib.gis.db.backends.spatialite",
+        'NAME': BASE_DIR / "db.sqlite3"
     }
 }
 

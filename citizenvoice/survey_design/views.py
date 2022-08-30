@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
+from apiapp.views import SurveyViewSet
 from .models import Question, Survey
 
 
@@ -14,7 +15,7 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        'surveys': Survey.objects.all()
+        'surveys': SurveyViewSet.GetSurveys()
     }
     return render(request, 'survey_design/survey.html', context)
 
@@ -48,7 +49,6 @@ def question_detail(request, survey_id, question_order):
         # pass for now, we might add some warning in the future
         pass
     return render(request, 'survey_design/survey.html', context)
-
 
 
 
