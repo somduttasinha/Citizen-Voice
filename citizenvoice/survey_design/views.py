@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
-from apiapp.views import SurveyViewSet
-from .models import Question, Survey
+from apiapp.views import SurveyViewSet, QuestionViewSet
+# from .models import Question, Survey
 
 
 # Create your views here.
@@ -23,10 +23,10 @@ def survey(request):
 def survey_detail(request, survey_id):
     context = {
         'title': 'Survey Design',
-        'surveys': Survey.objects.all()
+        'surveys': SurveyViewSet.GetSurveys()
     }
     try:
-        context['survey_to_display'] = Survey.objects.get(pk=survey_id)
+        context['survey_to_display'] = SurveyViewSet.GetSurvey(survey_id)
     except:  # Survey.DoesNotExist
         # pass for now, we might add some warning in the future
         pass
@@ -36,13 +36,13 @@ def survey_detail(request, survey_id):
 def question_detail(request, survey_id, question_order):
     context = {
         'title': 'Survey Design',
-        'surveys': Survey.objects.all()
+        'surveys': SurveyViewSet.GetSurveys()
     }
     try:
-        context['survey_to_display'] = Survey.objects.get(pk=survey_id)
-        context['question_to_display'] = context['survey_to_display'].question_set.all().get(order=question_order)
+        context['survey_to_display'] = SurveyViewSet.GetSurvey(survey_id)
+        context['question_to_display'] = QuestionViewSet.GetOrderedQuestionFromSurvey(survey_id, question_order)
 
-        if len(context['survey_to_display'].question_set.all()) > question_order:
+        if context['survey_to_display'].question_count() > question_order:
             context['next_question_order'] = question_order + 1
 
     except:  # Survey.DoesNotExist

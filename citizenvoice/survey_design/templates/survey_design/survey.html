@@ -11,6 +11,7 @@
 <!--        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />-->
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'survey_design/css/bootstrap_template_survey.css' %}" rel="stylesheet" />
+        <base href="localhost/survey" />
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -36,7 +37,7 @@
 <!--                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>-->
                     {% for survey in surveys %}
                         <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                           href="survey/{{ survey.pk }}">
+                           href="../{{ survey.pk }}">
                             {{ survey.name }}
                         </a>
                     {% endfor %}

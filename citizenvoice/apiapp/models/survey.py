@@ -27,3 +27,7 @@ class Survey(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    def question_count(self):
+        return len(self.question_set.all())
+
