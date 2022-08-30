@@ -17,4 +17,5 @@ def survey(request):
     return render(request, 'survey_design/survey.html', context)
 
 
-
+def map_view(request):
+    return render(request, 'survey_design/map.html')
