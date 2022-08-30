@@ -1,3 +1,9 @@
+"""
+This code is based on the source code of the django-survey application
+by Pierre Sassoulas, 2022, version 1.4.0. 
+Available at https://github.com/Pierre-Sassoulas/django-survey/releases/tag/v1.4.0
+"""
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
