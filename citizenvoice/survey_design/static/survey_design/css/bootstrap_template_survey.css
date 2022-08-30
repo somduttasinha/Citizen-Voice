@@ -4028,13 +4028,13 @@ textarea.form-control-lg {
 }
 
 .navbar {
-  position: relative;
+  position: static;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 .navbar > .container,
 .navbar > .container-fluid,
@@ -6738,6 +6738,7 @@ textarea.form-control-lg {
 
 .d-flex {
   display: flex !important;
+  flex-direction: column;
 }
 
 .d-inline-flex {
@@ -11307,6 +11308,7 @@ textarea.form-control-lg {
 
 #page-content-wrapper {
   min-width: 100vw;
+  height: 80%;
 }
 
 body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
@@ -11326,4 +11328,94 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
   body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     margin-left: -15rem;
   }
+}
+
+html, body, #page-content-wrapper /*, and all other map parent selectors*/ {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+
+}
+
+.container-fluid {
+    padding: 0;
+    min-width: 100px;
+    width: 100%;
+    height: 100%;
+}
+
+.container-main {
+ display: flex !important;
+ -webkit-flex-direction: row !important;
+ flex-direction: row !important;
+ width: 100% !important;
+ height: 100% !important;
+}
+
+.container-map {
+    /*min-width: 80%;
+    height: 800px;*/
+    background-color: red;
+    flex: 6 !important;
+}
+
+#map {
+    position: relative;
+  /*width: 100%;
+  /*height: 300px;*/
+  width: 100%;
+  height: 90%;
+}
+
+#sidebar-wrapper-left {
+    overflow: hidden;
+    font-size: 1rem;
+    min-height: 100vh;
+    min-width: 200px;
+    flex: 1;
+    margin-left: 0;
+}
+
+#sidebar-wrapper-left .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper-left .list-group {
+  width: 15rem;
+}
+
+#sidebar-wrapper-right {
+    overflow: hidden;
+    font-size: 1rem;
+    min-height: 100vh;
+    min-width: 200px;
+    flex: 1.5;
+    margin-left: 0;
+}
+
+#sidebar-wrapper-right .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+#sidebar-wrapper-right .list-group {
+  width: 15rem;
+}
+
+.nav-bar-content {
+    background-color: black;
+    width: 100%;
+    height: 7.5%;
+}
+
+.test {
+    position: relative;
+    /*top: 100px;
+    left: 200px;*/
+    padding-top: 2.5%;
+    width: 100%;
+    height: 100%;
+    background-color: #BFBFBF;
+
 }
