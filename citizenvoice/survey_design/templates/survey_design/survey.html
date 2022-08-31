@@ -11,7 +11,7 @@
 <!--        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />-->
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{% static 'survey_design/css/bootstrap_template_survey.css' %}" rel="stylesheet" />
-        <base href="localhost/survey" />
+        <base href="/survey/" />
     </head>
     <body>
         <div class="d-flex" id="wrapper">
@@ -37,7 +37,7 @@
 <!--                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Status</a>-->
                     {% for survey in surveys %}
                         <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                           href="../{{ survey.pk }}">
+                           href="{{ survey.pk }}">
                             {{ survey.name }}
                         </a>
                     {% endfor %}
@@ -77,7 +77,9 @@
                 <div class="container-fluid">
                     <!-- In case user selected a survey to display-->
                     {% if survey_to_display%}
-                        <h1 class="mt-4"> {{ survey_to_display.name }} </h1>
+                        <h1 class="mt-4">
+                            {{ survey_to_display.name }}
+                        </h1>
                         <p> {{ survey_to_display.description }} <p>
 
                         {% if question_to_display%}
@@ -98,19 +100,22 @@
 
                             {% if next_question_order%}
                                 <a class="btn btn-primary" id="next-question"
-                                   href="../../question/{{ next_question_order }}"> Next Question
+                                   href="{{ survey_id }}/question/{{ next_question_order }}">
+                                    Next Question
                                 </a>
                             {% else %}
-                                <a class="btn btn-primary" id="end-survey" href="../.."> End Survey </a>
+                                <a class="btn btn-primary" id="end-survey" href="{{ survey_id }}"> End Survey </a>
                             {% endif %}
 
                             </form>
 
                         {% else %}
-                            <a class="btn btn-primary" id="start-survey" href="question/1"> Start Survey </a>
-                            {% for question in survey_to_display.question_set.all %}
+                            <a class="btn btn-primary"  id="start-survey" href="{{ survey_id }}/question/1">
+                                Start Survey
+                            </a>
+                            {% for question in questions_of_survey %}
                                 <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                                   href="question/{{ question.order }}">
+                                   href="{{ survey_id }}/question/{{ question.order }}">
                                     {{ question.text }}
                                 </a>
                             {% endfor %}

@@ -20,12 +20,14 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
 
     # Get all answers
+    @staticmethod
     def GetAnswers():
         queryset = Answer.objects.all()
         serializer_class = AnswerSerializer
         return queryset 
 
     # Get all answers by filtering based either on their related Response or Question
+    @staticmethod
     def GetAnswer(response_id=0, question_id=0):
         if response_id == 0:
             queryset = Answer.objects.filter(question=question_id)
@@ -34,7 +36,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
         elif question_id == 0:
             queryset = Answer.objects.filter(response=response_id)
             serializer_class = AnswerSerializer
-            return queryset            
+            return queryset
+
 
 # Create a ViewSet that queries all the instances of Question in the database, and parse them through the serializer
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -49,12 +52,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     """
     # Get all questions
+    @staticmethod
     def GetQuestions():
         queryset = Question.objects.all()
         serializer_class = QuestionSerializer
         return queryset
 
     # Get a specific Question based on its ID
+    @staticmethod
     def GetQuestion(id=0, survey_id=0):
         if survey_id == 0:
             queryset = Question.objects.filter(id=id)
@@ -65,9 +70,17 @@ class QuestionViewSet(viewsets.ModelViewSet):
             serializer_class = QuestionSerializer
             return queryset
 
+    # Get a Questions based on their survey ID
+    @staticmethod
+    def GetQuestionsFromSurvey(survey_id):
+        queryset = SurveyViewSet.GetSurvey(survey_id)[0].question_set.all()
+        serializer_class = QuestionSerializer
+        return queryset
+
     # Get a specific Question based on its survey ID and order in the survey
+    @staticmethod
     def GetOrderedQuestionFromSurvey(survey_id, question_order):
-        queryset = SurveyViewSet.GetSurvey(survey_id).question_set.all().filter(order=question_order)
+        queryset = SurveyViewSet.GetSurvey(survey_id)[0].question_set.all().filter(order=question_order)
         serializer_class = QuestionSerializer
         return queryset
 
@@ -83,12 +96,14 @@ class SurveyViewSet(viewsets.ModelViewSet):
     """
 
     # Get all surveys
+    @staticmethod
     def GetSurveys():
         queryset = Survey.objects.all().order_by('name')
         serializer_class = SurveySerializer
         return queryset
 
     # Get a specific Survey based on its ID
+    @staticmethod
     def GetSurvey(id):
         queryset = Survey.objects.filter(id=id)
         serializer_class = SurveySerializer
@@ -107,12 +122,14 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
     """   
     # Get all responses
+    @staticmethod
     def GetResponses():
         queryset = Response.objects.all().order_by('created')
         serializer_class = ResponseSerializer
         return queryset 
 
     # Get all responses by filtering based either on their related Survey or User
+    @staticmethod
     def GetResponse(survey_id=0, user_id=0):
         if survey_id == 0:
             queryset = Response.objects.filter(question=user_id)
@@ -131,6 +148,7 @@ class UserViewSet(viewsets.ModelViewSet):
     GetUsers() - returns a set of all User instances in the database
     """
     # Get all users
+    @staticmethod
     def GetUsers():
         queryset = User.objects.all().order_by('username')
         serializer_class = UserSerializer
