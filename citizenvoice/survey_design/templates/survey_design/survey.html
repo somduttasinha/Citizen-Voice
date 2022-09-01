@@ -17,7 +17,8 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-     <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+    <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+    <link href="{% static 'survey_design/js/map.js' %}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -29,13 +30,14 @@
             <div id="sidebar-wrapper-left">
                  <div class="sidebar-heading border-bottom bg-light">
                     Surveys
-<!--                     <box-icon name="menu"></box-icon>-->
                 </div>
-<!--                <button class="btn btn-primary" id="sidebarToggle">Add Survey</button>-->
                 <div class="list-group list-group-flush">
-                {% for survey in surveys %}
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">{{ survey.name }}</a>
-                {% endfor %}
+                    {% for survey in surveys %}
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">{{ survey.name }}</a>
+                    {% endfor %}
+                </div>
+                <div class="sidebar-heading border-bottom bg-light">
+                    Questions
                 </div>
             </div>
             <div class="container-map">
@@ -44,7 +46,8 @@
                 </div>
             </div>
             <div id="sidebar-wrapper-right">
-
+                <button onclick="select_circle_red()">Red Circle</button>
+                <button onclick="select_circle_green()">Green Circle</button>
             </div>
         </div>
     </div>
