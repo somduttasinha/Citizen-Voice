@@ -11,7 +11,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     Answer ViewSet used internally to query data from database. The following functions are defined in this viewset:
 
-    GetAnswers() - returns a set of all Answer instances in the database
+    get_queryset() - returns a set of all Answer instances in the database
 
     GetAnswer(int response_id, int question_id) - returns a filtered list of Answer instances based either on a given response_id
                                             or a given question_id. Only one must be provided. The id that is provided is
@@ -40,7 +40,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
     """
     Question ViewSet used internally to query data from database. The following functions are defined in this viewset:
 
-    GetQuestions() - returns a set of all Question instances in the database
+    get_queryset() - returns a set of all Question instances in the database
 
     GetQuestion(int id, int survey_id) - returns a filtered list of Question instances based either on a given question_id
                                         or a given survey_id. Only one must be provided. The id that is provided is
@@ -69,7 +69,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     """
     Survey ViewSet used internally to query data from database. The following functions are defined in this viewset:
 
-    GetSurveys() - returns a set of all Survey instances in the database
+    get_queryset() - returns a set of all Survey instances in the database
 
     GetSurvey(int id) - returns an instance of Survey with the ID that was provided in the function.
 
@@ -92,7 +92,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
     """
     Response ViewSet used internally to query data from database. The following functions are defined in this viewset:
 
-    GetResponses() - returns a set of all Response instances in the database
+    get_queryset() - returns a set of all Response instances in the database
 
     GetResponse(int survey_id, int user_id) - returns a filtered list of Response instances based either on a given survey_id
                                             or a given user_id. Only one must be provided. The id that is provided is
@@ -121,7 +121,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     USer ViewSet used internally to query data from database for all users. The following functions are defined in this viewset:
 
-    GetUsers() - returns a set of all User instances in the database
+    get_queryset() - returns a set of all User instances in the database
     """
 
     serializer_class = UserSerializer
