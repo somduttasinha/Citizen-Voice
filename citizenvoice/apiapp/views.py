@@ -71,7 +71,8 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
     get_queryset() - returns a set of all Survey instances in the database
 
-    GetSurvey(int id) - returns an instance of Survey with the ID that was provided in the function.
+    GetSurvey(int id) - returns a filtered list of Survey instances based on either the survey id or a given author id. Only
+                        one must be provided. The id that is provided is used to filter by that particular metric.
 
     """
 
@@ -83,9 +84,14 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset
 
     # Get a specific Survey based on its ID
-    def GetSurvey(id):
-        queryset = Survey.objects.filter(id=id)
-        return queryset
+    def GetSurvey(id=0, author=0):
+        if author == 0:
+            queryset = Survey.objects.filter(id=id)
+            return queryset
+        elif id == 0:
+            queryset = Survey.objects.filter(author=author)
+            return queryset   
+
 
 # Create a ViewSet that queries all the instances of Response in the database, and parse them through the serializer
 class ResponseViewSet(viewsets.ModelViewSet):
