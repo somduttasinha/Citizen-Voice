@@ -157,3 +157,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+
+LOGIN_REDIRECT_URL = 'survey-home'
