@@ -10,32 +10,47 @@ map.setView(longLat, 12);
 var group_circle = L.featureGroup();
 map.addLayer(group_circle)
 
-function onMapLeftClick_green(e) {
-    L.circle(e.latlng, {
-        color: 'green',
-        fillColor: '#f03',
-        fillOpacity: 0.3,
-        radius: 2000
-    }).addTo(group_circle)
-}
-
-function onMapLeftClick_red(e) {
+// Polygon Test
+var polygon = 0
+var abc = 1
+function onMapLeftClick(e) {
+    if(abc==1) {
+        L.circle(e.latlng, {
+            color: 'green',
+            fillColor: '#7FFF00',
+            fillOpacity: 0.3,
+            radius: 2000
+        }).addTo(group_circle)
+    }
+    else if(abc==2) {
     L.circle(e.latlng, {
         color: 'red',
         fillColor: '#f03',
         fillOpacity: 0.3,
         radius: 2000
     }).addTo(group_circle)
+    }
+    else {
+        if(polygon==0){
+            polygon = L.polygon([e.latlng], {color: 'blue'}).addTo(map);
+        }
+        else {
+            polygon.addLatLng(e.latlng);
+        }
+    }
 }
 
-//map.on('click', onMapLeftClick_green);
+map.on('click', onMapLeftClick);
 
 function select_circle_green() {
-    alert("You clicked Green");
-    map.on('click', onMapLeftClick_green);
+    abc = 1
 }
 
 function select_circle_red() {
-    alert("You clicked Red");
-    map.on('click', onMapLeftClick_red);
+    abc = 2
 }
+
+function select_polygon() {
+    abc = 3
+}
+
