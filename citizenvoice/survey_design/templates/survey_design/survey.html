@@ -17,8 +17,11 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
     <link href="{% static 'survey_design/js/map.js' %}" rel="stylesheet"/>
+
+    <!-- Icons    -->
+    <!-- <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -46,8 +49,11 @@
                 </div>
             </div>
             <div id="sidebar-wrapper-right">
-                <button onclick="select_circle_red()">Red Circle</button>
-                <button onclick="select_circle_green()">Green Circle</button>
+                <div class="list-group-right list-group-flush">
+                <button class="list-group-item list-group-item-action list-group-item-light p-3" onclick="select_circle_red()">Red Circle</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3" onclick="select_circle_green()">Green Circle</button>
+                <button class="list-group-item list-group-item-action list-group-item-light p-3" onclick="select_polygon()">Polygon</button>
+                </div>
             </div>
         </div>
     </div>
