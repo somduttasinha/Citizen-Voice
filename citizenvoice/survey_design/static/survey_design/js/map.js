@@ -12,9 +12,9 @@ map.addLayer(group_circle)
 
 // Polygon Test
 var polygon = 0
-var abc = 1
+var overlay_selected = 1
 function onMapLeftClick(e) {
-    if(abc==1) {
+    if(overlay_selected==1) {
         L.circle(e.latlng, {
             color: 'green',
             fillColor: '#7FFF00',
@@ -22,7 +22,7 @@ function onMapLeftClick(e) {
             radius: 2000
         }).addTo(group_circle)
     }
-    else if(abc==2) {
+    else if(overlay_selected==2) {
     L.circle(e.latlng, {
         color: 'red',
         fillColor: '#f03',
@@ -43,14 +43,14 @@ function onMapLeftClick(e) {
 map.on('click', onMapLeftClick);
 
 function select_circle_green() {
-    abc = 1
+    overlay_selected = 1
 }
 
 function select_circle_red() {
-    abc = 2
+    overlay_selected = 2
 }
 
 function select_polygon() {
-    abc = 3
+    overlay_selected = 3
 }
 
