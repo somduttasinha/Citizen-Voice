@@ -43,6 +43,15 @@ class Question(models.Model):
     text = models.TextField(_("Text of the Question"))
     order = models.IntegerField(_("Order of where question is placed"))
     required = models.BooleanField(_("Question must be filled out"), default=False)
-    question_type = models.CharField(_("Type of question"), max_length=150)
-    choices = models.TextField(_("Choices for answers"))
+    question_type = models.CharField(_("Type of question"), max_length=150, choices=QUESTION_TYPES, default=TEXT)
+    choices = models.TextField(_("Choices for answers"), blank=True, null=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = _("question")
+        verbose_name_plural = _("questions")
+        ordering = ("survey", "order")
+

@@ -21,9 +21,9 @@ class AnswerViewSet(viewsets.ModelViewSet):
         """
 
         queryset = Answer.objects.all()
-        
         return queryset 
 
+    @staticmethod
     def GetAnswerByQuestion(question_id):
         """
         Get all answers by filtering based either on their related Question.
@@ -37,7 +37,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         queryset = Answer.objects.filter(question=question_id)
         return queryset
      
-
+    @staticmethod
     def GetAnswerByResponse(response_id):
         """
         Get all answers by filtering based either on their related Response.
@@ -60,7 +60,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     serializer_class = QuestionSerializer
 
-    # Get all questions
     def get_queryset(response):
         """
         Returns a set of all Question instances in the database.
@@ -72,6 +71,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         queryset = Question.objects.all()
         return queryset
 
+    @staticmethod
     def GetQuestionByID(id):
         """
         Get a specific Question based on its ID.
@@ -86,10 +86,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
         queryset = Question.objects.filter(id=id)
         return queryset
 
-
+    @staticmethod
     def GetQuestionBySurvey(survey_id): 
         """
-        Get a specific Question based on its survey_id.
+        Get specific Questions based on its survey_id.
 
         Parameters:
             survey_id (int): Survey ID to be used for finding related Questions.
@@ -101,6 +101,21 @@ class QuestionViewSet(viewsets.ModelViewSet):
         queryset = Question.objects.filter(survey=survey_id)
         return queryset  
 
+    @staticmethod
+    def GetOrderedQuestionBySurvey(survey_id, question_order):
+        """
+        Get specific Questions based on its survey_id, and a specific order.
+
+        Parameters:
+            survey_id (int): Survey ID to be used for finding related Questions.
+            question_order (int): The order in which the questions in the Survey are to be displayed.
+
+        Return: 
+            queryset: containing the Question instance related to this survey, of a given order
+        """
+        queryset = Question.objects.filter(survey=survey_id, order=question_order)
+        return queryset
+        
 
 class SurveyViewSet(viewsets.ModelViewSet):
     """
@@ -121,7 +136,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
         queryset = Survey.objects.all().order_by('name')
         return queryset
 
-
+    @staticmethod
     def GetSurveyByID(id):
         """
         Get a specific Survey based on its ID.
@@ -135,7 +150,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
         queryset = Survey.objects.filter(id=id)
         return queryset
 
-
+    @staticmethod
     def GetSurveyByAuthor(author):
         """
         Get a specific Survey based on its author.
@@ -151,14 +166,12 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset   
 
 
-# Create a ViewSet that queries all the instances of Response in the database, and parse them through the serializer
 class ResponseViewSet(viewsets.ModelViewSet):
     """
     Response ViewSet used internally to query data from database.
     """   
 
     serializer_class = ResponseSerializer
-
 
     def get_queryset(response):
         """
@@ -171,7 +184,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         queryset = Response.objects.all().order_by('created')
         return queryset 
 
-    # Get all responses by filtering based either on their related Survey or User
+    @staticmethod
     def GetResponseBySurvey(survey_id):
         """
         Get a specific Response based on its survey.
@@ -186,6 +199,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         queryset = Response.objects.filter(response=survey_id)
         return queryset      
 
+    @staticmethod
     def GetResponseByRespondent(respondent):
         """
         Get a specific Response based on its respondent.
