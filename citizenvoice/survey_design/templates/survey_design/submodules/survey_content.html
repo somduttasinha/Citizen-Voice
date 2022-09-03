@@ -22,8 +22,6 @@
         {% endif %}
 
         {% if next_question_order%}
-            <p>{{ survey_id }}</p>
-            <p>{{ survey_id }}/question/{{ next_question_order }}</p>
             <a class="btn btn-primary" id="next-question"
                     href="{% url 'question-detail' survey_id=survey_id question_order=next_question_order %}">
             Next Question
