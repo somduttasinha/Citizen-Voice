@@ -15,7 +15,8 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        'surveys': SurveyViewSet.GetSurveys()
+        'surveys': SurveyViewSet.GetSurveys(),
+        'survey_id': 1
     }
     return render(request, 'survey_design/survey.html', context)
 
@@ -29,7 +30,8 @@ def survey_detail(request, survey_id):
     try:
         context['survey_to_display'] = SurveyViewSet.GetSurvey(survey_id)[0]
         context['questions_of_survey'] = QuestionViewSet.GetQuestionsFromSurvey(survey_id)
-    except Exception as e:  # Survey.DoesNotExist
+    except Exception as e:
+        # Survey.DoesNotExist
         # pass for now, we might add some warning in the future
         raise e
     return render(request, 'survey_design/survey.html', context)
@@ -48,7 +50,8 @@ def question_detail(request, survey_id, question_order):
         if context['survey_to_display'].question_count() > question_order:
             context['next_question_order'] = question_order + 1
 
-    except Exception as e:  # Survey.DoesNotExist
+    except Exception as e:
+        # Survey.DoesNotExist
         # pass for now, we might add some warning in the future
         raise e
     return render(request, 'survey_design/survey.html', context)

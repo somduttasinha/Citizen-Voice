@@ -52,16 +52,16 @@
                     <p>survey</p>
                     {% include 'survey_design/submodules/survey_content.html' %}
                 {% else %}
-<!--                    <a class="btn btn-primary"  id="start-survey" href="survey/{{ survey_id }}/question/1">Start Survey</a>-->
-<!--                    {% for question in questions_of_survey %}-->
-<!--                        <a class="list-group-item list-group-item-action list-group-item-light p-3"-->
-<!--                           href="{{ survey_id }}/question/{{ question.order }}">-->
-<!--                            {{ question.text }}-->
-<!--                        </a>-->
-<!--                    {% endfor %}-->
-                    <div class="test">
-                        {% include 'survey_design/submodules/question_map.html' %}
-                    </div>
+                    <a class="btn btn-primary"  id="start-survey" href="survey/{{ survey_id }}/question/1">Start Survey</a>
+                    {% for question in questions_of_survey %}
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3"
+                           href="{{ survey_id }}/question/{{ question.order }}">
+                            {{ question.text }}
+                        </a>
+                    {% endfor %}
+<!--                    <div class="test">-->
+<!--                        {% include 'survey_design/submodules/question_map.html' %}-->
+<!--                    </div>-->
                 {% endif %}
             </div>
 
