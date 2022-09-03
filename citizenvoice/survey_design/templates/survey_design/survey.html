@@ -36,7 +36,8 @@
                 </div>
                 <div class="list-group list-group-flush">
                     {% for survey in surveys %}
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">{{ survey.name }}</a>
+                        <!--TODO: update link so only surveys of the current user are accessible (even when changing url manually)-->
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-detail' survey_id=survey.pk question_order=1 %}">{{ survey.name }}</a>
                     {% endfor %}
                 </div>
                 <div class="sidebar-heading border-bottom bg-light">
@@ -49,19 +50,12 @@
 <!--                    <div class="test">-->
 <!--                        {% include 'survey_design/submodules/question_map.html' %}-->
 <!--                    </div>-->
-                    <p>survey</p>
+<!--                    <p>survey</p>-->
                     {% include 'survey_design/submodules/survey_content.html' %}
                 {% else %}
-                    <a class="btn btn-primary"  id="start-survey" href="survey/{{ survey_id }}/question/1">Start Survey</a>
-                    {% for question in questions_of_survey %}
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3"
-                           href="{{ survey_id }}/question/{{ question.order }}">
-                            {{ question.text }}
-                        </a>
-                    {% endfor %}
-<!--                    <div class="test">-->
-<!--                        {% include 'survey_design/submodules/question_map.html' %}-->
-<!--                    </div>-->
+                    <div class="test">
+                        {% include 'survey_design/submodules/question_map.html' %}
+                    </div>
                 {% endif %}
             </div>
 

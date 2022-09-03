@@ -16,7 +16,6 @@ def survey(request):
     context = {
         'title': 'Survey Design',
         'surveys': SurveyViewSet.GetSurveys(),
-        'survey_id': 1
     }
     return render(request, 'survey_design/survey.html', context)
 
