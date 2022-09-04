@@ -11472,3 +11472,8 @@ html, body, #page-content-wrapper /*, and all other map parent selectors*/ {
     width: 3rem;
     border-width: 0;
 }
+
+.limit {
+    display: flex;
+    flex-direction: row;
+}

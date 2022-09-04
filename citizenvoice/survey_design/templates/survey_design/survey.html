@@ -37,9 +37,14 @@
                      <div class="sidebar-heading-text">Surveys</div>
                      <button class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
                 </div>
-                <div class="list-group list-group-flush">
+                <div id="sidebar-left-survey-list" class="list-group list-group-flush">
                     {% for survey in surveys %}
+                    <div class="limit">
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-detail' survey_id=survey.pk question_order=1 %}">{{ survey.name }}</a>
+<!--                        <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">-->
+<!--                            <i class="fa fa-trash-o" aria-hidden="true"></i>-->
+<!--                        </a>-->
+                    </div>
                     {% endfor %}
                 </div>
                 <div class="sidebar-heading border-bottom bg-light">

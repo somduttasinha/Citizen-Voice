@@ -3,13 +3,18 @@ $(document).ready(
         let saveForm = function () {
             let form = $('#form-survey-create');
             $.ajax({
+//                url: form.attr("action-url"),
                 url: form.attr("action"),
                 data: form.serialize(),
                 type: form.attr("method"),
                 dataType: 'json',
                 success: function (data) {
                     if(data.form_is_valid) {
-                        alert("Valid")
+                        alert("Form is Valid");
+//                        alert(data.surveys[0].id)
+//                        alert(data.form_is_valid)
+                        alert(data.html_form);
+                        $('#sidebar-left-survey-list').html(data.html_form);
                     }
                     else {
                         alert("Not Valid")
