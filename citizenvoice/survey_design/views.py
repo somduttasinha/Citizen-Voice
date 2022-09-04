@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from apiapp.views import SurveyViewSet, QuestionViewSet
 from django.contrib.auth.models import User
 # from .models import Question, Survey
-
+from .forms import SurveyCreationForm
 
 # Create your views here.
 
@@ -59,3 +59,12 @@ def question_detail(request, survey_id, question_order):
         # pass for now, we might add some warning in the future
         raise e
     return render(request, 'survey_design/survey.html', context)
+
+@login_required
+def survey_create(request):
+    if request.method == 'POST':
+        form = SurveyCreationForm(request.POST)
+    else:
+        form = SurveyCreationForm()
+        pass
+    return save_survey_form(request, form, 'survey_design/survey.html')
