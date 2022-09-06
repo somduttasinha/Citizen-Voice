@@ -24,31 +24,21 @@ $(document).ready(
         };
 
         let editForm = function (selected_link) {
-            alert("EditForm function")
             let survey_link = $(selected_link);
-            alert(survey_link.attr("href"))
             $.ajax({
                 url: survey_link.attr("href"),
                 data: {},
                 type: 'get',
                 dataType: 'json',
                 success: function (data) {
-                    alert(data.html_form);
-                    alert(data.data_exists)
                     if(data.data_exists) {
-                        alert("Data exists");
-//                        alert(data.html_form);
                         $('#ajax-container-map-sidebar').html(data.html_form)
                     }
                     else {
-                        alert("Link Valid")
                     }
                 }
             });
         };
-//        superHeroes.marvel();
-//        alert("Success")
-
 
         let form_submit = $('#form-survey-create-submit')
         form_submit.on("click", function(event){
@@ -70,11 +60,6 @@ $(document).ready(
                 editForm(this);
             });
         });
-//        survey_link.on("click", function(event) {
-//            alert("Survey link select");
-//            event.preventDefault();
-//            editForm();
-//        });
     }
 );
 

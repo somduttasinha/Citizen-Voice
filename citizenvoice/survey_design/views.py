@@ -32,8 +32,6 @@ def survey(request):
 
 @login_required
 def survey_edit(request, survey_id):
-    print(request.path)
-    print("Received Survey Edit Req! " + str(survey_id))
     data = dict()
     context = {}
     if request.method == 'GET':
