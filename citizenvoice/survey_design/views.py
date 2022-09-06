@@ -41,7 +41,7 @@ def survey_edit(request, survey_id):
             context['survey'] = selected_survey
         else:
             data['data_exists'] = False
-    data['html_form'] = render_to_string('survey_design/submodules/map-sidebar-ajax.html', context, request=request)
+    data['html_form'] = render_to_string('survey_design/submodules/ajax/map-sidebar-ajax.html', context, request=request)
     return JsonResponse(data)
 
 
