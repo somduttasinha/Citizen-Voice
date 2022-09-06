@@ -11477,3 +11477,8 @@ html, body, #page-content-wrapper /*, and all other map parent selectors*/ {
     display: flex;
     flex-direction: row;
 }
+
+#sidebar-left-survey-list {
+    overflow-y: scroll;
+    max-height: 30%;
+}

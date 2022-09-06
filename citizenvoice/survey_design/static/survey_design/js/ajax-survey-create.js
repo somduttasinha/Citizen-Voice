@@ -32,6 +32,27 @@ $(document).ready(
             });
         };
 
+//        let updateForm = function () {
+//            let form = $('#form-survey-create');
+//            $.ajax({
+//                url: form.attr("action"),
+//                data: form.serialize(),
+//                type: form.attr("method"),
+//                dataType: 'json',
+//                success: function (data) {
+//                    if(data.form_is_valid) {
+//                        alert("Form is Valid");
+//                        $('#sidebar-left-survey-list').html(data.html_form);
+//                        let survey_link = $('.survey-link-select');
+//                        survey_link.each(survey_link_behaviour);
+//                    }
+//                    else {
+//                        alert("Not Valid")
+//                    }
+//                }
+//            });
+//        };
+
         let editForm = function (selected_link) {
             let survey_link = $(selected_link);
             $.ajax({
@@ -43,6 +64,12 @@ $(document).ready(
                     if(data.data_exists) {
                         alert("Data exists")
                         $('#ajax-container-map-sidebar').html(data.html_form)
+
+                        let button_survey_update = $('#form-survey-update-submit')
+                        button_survey_update.on("click", function(event) {
+                            event.preventDefault();
+                            alert("Clicked update button");
+                        });
                     }
                     else {
                     }

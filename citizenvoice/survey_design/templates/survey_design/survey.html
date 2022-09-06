@@ -41,10 +41,6 @@
                     {% for survey in surveys %}
                     <div class="limit">
                          <a class="survey-link-select list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'survey-edit' survey_id=survey.pk %}">{{ survey.name }}</a>
-<!--                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-detail' survey_id=survey.pk question_order=1 %}">{{ survey.name }}</a>-->
-<!--                        <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">-->
-<!--                            <i class="fa fa-trash-o" aria-hidden="true"></i>-->
-<!--                        </a>-->
                     </div>
                     {% endfor %}
                 </div>
@@ -55,13 +51,9 @@
             </div>
 
             <div class="container-map">
-                {% if survey_to_display%}
-                    {% include 'survey_design/submodules/survey_content.html' %}
-                {% else %}
                     <div class="test">
                         {% include 'survey_design/submodules/question_map.html' %}
                     </div>
-                {% endif %}
             </div>
 
             <div id="sidebar-wrapper-right">
