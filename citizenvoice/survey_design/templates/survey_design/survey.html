@@ -35,12 +35,13 @@
             <div id="sidebar-wrapper-left">
                  <div class="sidebar-heading border-bottom bg-light">
                      <div class="sidebar-heading-text">Surveys</div>
-                     <button class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                     <button id="sidebar-left-survey-add" class="sidebar-heading-button"><i class="fa fa-plus" aria-hidden="true"></i></button>
                 </div>
                 <div id="sidebar-left-survey-list" class="list-group list-group-flush">
                     {% for survey in surveys %}
                     <div class="limit">
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-detail' survey_id=survey.pk question_order=1 %}">{{ survey.name }}</a>
+                         <a class="survey-link-select list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'survey-edit' survey_id=survey.pk %}">{{ survey.name }}</a>
+<!--                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="{% url 'question-detail' survey_id=survey.pk question_order=1 %}">{{ survey.name }}</a>-->
 <!--                        <a class="btn btn-danger" href="path/to/settings" aria-label="Delete">-->
 <!--                            <i class="fa fa-trash-o" aria-hidden="true"></i>-->
 <!--                        </a>-->
@@ -77,6 +78,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Core theme JS-->
 <script src="{% static 'survey_design/js/survey.js' %}"></script>
-<script src="{% static 'survey_design/js/survey-ajax.js' %}"></script>
+<script src="{% static 'survey_design/js/ajax-survey-create.js' %}"></script>
 </body>
 </html>

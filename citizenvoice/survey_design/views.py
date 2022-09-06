@@ -31,6 +31,23 @@ def survey(request):
 
 
 @login_required
+def survey_edit(request, survey_id):
+    print(request.path)
+    print("Received Survey Edit Req! " + str(survey_id))
+    data = dict()
+    context = {}
+    if request.method == 'GET':
+        if User.objects.get(id=request.user.id).survey_set.filter(pk=survey_id).exists():
+            data['data_exists'] = True
+            selected_survey = User.objects.get(id=request.user.id).survey_set.filter(pk=survey_id)[0]
+            context['survey'] = selected_survey
+        else:
+            data['data_exists'] = False
+    data['html_form'] = render_to_string('survey_design/submodules/map-sidebar-ajax.html', context, request=request)
+    return JsonResponse(data)
+
+
+@login_required
 def survey_detail(request, survey_id):
     context = {
         'title': 'Survey Design',
@@ -95,5 +112,4 @@ def survey_create(request):
     data['form_is_valid'] = True
     data['surveys'] = SurveySerializer(surveys, many=True).data
     data['html_form'] = render_to_string('survey_design/submodules/sidebar-left-surveys.html', context, request=request)
-    print(data['html_form'])
     return JsonResponse(data)
