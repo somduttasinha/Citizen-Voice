@@ -49,6 +49,10 @@ ALLOWED_HOSTS = []
 
 # note: add your custom apps after django apps
 INSTALLED_APPS = [
+    'apiapp',
+    'rest_framework',
+    'users.apps.UsersConfig',
+    'survey_design.apps.SurveyDesignConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,10 +60,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'apiapp',
-    'rest_framework',
-    'users.apps.UsersConfig',
-    'survey_design.apps.SurveyDesignConfig',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +154,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+
+LOGIN_REDIRECT_URL = 'survey-home'
+LOGIN_URL = 'survey-design-index'

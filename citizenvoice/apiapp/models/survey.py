@@ -6,6 +6,8 @@ Available at https://github.com/Pierre-Sassoulas/django-survey
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+
 
 # Represents all the responses from every respondent
 class Survey(models.Model):
@@ -14,7 +16,7 @@ class Survey(models.Model):
     It also represents all the responses made by respondents (users) for this specific Survey. 
     """
 
-    name = models.CharField(_("Name of the survey"),max_length=150)
+    name = models.CharField(_("Name of the survey"), max_length=150)
     description = models.TextField(_("Description"))
     is_published = models.BooleanField(_("Survey is visible and accessible to users"), default=False)
     need_logged_user = models.BooleanField(_("Only authenticated users have access to this survey"), default=True)
@@ -24,10 +26,11 @@ class Survey(models.Model):
     publish_date = models.DateTimeField(_("Date that survey was made available"))
     expire_date = models.DateTimeField(_("Expiry date of survey"))
     redirect_url = models.CharField(_("Redirect URL"), max_length=150)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return str(self.name)
 
     def question_count(self):
-        return len(self.question_set.all())
+        return self.question_set.count()
 
