@@ -96,24 +96,24 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # uncomment if you are working with postgis
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': 'citizen_voice_db',
-#         'USER': 'postgres',
-#         'PASSWORD': os.getenv('POSTGRES_PWD'),
-#         'HOST': os.getenv('POSTGRES_HOST'),
-#         'PORT': os.getenv('POSTGRES_POST')
-#     }
-# }
-
-# uncomment if you are working with spatialite
 DATABASES = {
     'default': {
-        'ENGINE': "django.contrib.gis.db.backends.spatialite",
-        'NAME': BASE_DIR / "db.sqlite3"
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'citizen_voice_db',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('POSTGRES_PWD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_POST')
     }
 }
+
+# uncomment if you are working with spatialite
+# DATABASES = {
+#     'default': {
+#         'ENGINE': "django.contrib.gis.db.backends.spatialite",
+#         'NAME': BASE_DIR / "db.sqlite3"
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

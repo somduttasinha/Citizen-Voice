@@ -25,7 +25,7 @@ class Survey(models.Model):
     publish_date = models.DateTimeField(_("Date that survey was made available"))
     expire_date = models.DateTimeField(_("Expiry date of survey"))
     redirect_url = models.CharField(_("Redirect URL"), max_length=150)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    designer = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
 
     def __str__(self):

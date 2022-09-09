@@ -151,7 +151,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetSurveyByAuthor(author):
+    def GetSurveyByDesigner(designer):
         """
         Get a specific Survey based on its author.
 
@@ -162,7 +162,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
             queryset: containing the Survey instances related to this user
         """
 
-        queryset = Survey.objects.filter(author=author)
+        queryset = Survey.objects.filter(designer=designer)
         return queryset   
 
 
