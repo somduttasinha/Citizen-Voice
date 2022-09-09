@@ -15,7 +15,7 @@ class Survey(models.Model):
     It also represents all the responses made by respondents (users) for this specific Survey. 
     """
 
-    name = models.CharField(_("Name of the survey"),max_length=150)
+    name = models.CharField(_("Name of the survey"), max_length=150)
     description = models.TextField(_("Description"))
     is_published = models.BooleanField(_("Survey is visible and accessible to users"), default=False)
     need_logged_user = models.BooleanField(_("Only authenticated users have access to this survey"), default=True)
@@ -32,5 +32,5 @@ class Survey(models.Model):
         return str(self.name)
 
     def question_count(self):
-        return len(self.question_set.all())
+        return self.question_set.count()
 
