@@ -49,10 +49,6 @@ ALLOWED_HOSTS = []
 
 # note: add your custom apps after django apps
 INSTALLED_APPS = [
-    'apiapp',
-    'rest_framework',
-    'users.apps.UsersConfig',
-    'survey_design.apps.SurveyDesignConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +56,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'apiapp',
+    'rest_framework',
+    'users.apps.UsersConfig',
+    'survey_design.apps.SurveyDesignConfig',
+    'respondent.apps.RespondentConfig'
 ]
 
 MIDDLEWARE = [
@@ -108,12 +109,12 @@ DATABASES = {
 }
 
 # uncomment if you are working with spatialite
-# DATABASES = {
-#     'default': {
-#         'ENGINE': "django.contrib.gis.db.backends.spatialite",
-#         'NAME': BASE_DIR / "db.sqlite3"
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': "django.contrib.gis.db.backends.spatialite",
+        'NAME': BASE_DIR / "db.sqlite3"
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
