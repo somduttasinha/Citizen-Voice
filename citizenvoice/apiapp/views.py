@@ -6,150 +6,229 @@ from .serializers import AnswerSerializer, QuestionSerializer, SurveySerializer,
 from django.contrib.auth.models import User
 
 
-# Create a ViewSet that queries all the instances of Answer in the database, and parse them through the serializer
 class AnswerViewSet(viewsets.ModelViewSet):
     """
-    Answer ViewSet used internally to query data from database. The following functions are defined in this viewset:
-
-    GetAnswers() - returns a set of all Answer instances in the database
-
-    GetAnswer(int response_id, int question_id) - returns a filtered list of Answer instances based either on a given response_id
-                                            or a given question_id. Only one must be provided. The id that is provided is
-                                            used to filter by that particular metric.
-
+    Answer ViewSet used internally to query data from database.
     """
+    serializer_class = AnswerSerializer
 
-    # Get all answers
-    @staticmethod
-    def GetAnswers():
+    def get_queryset(response):
+        """
+        Returns a set of all Answer instances in the database.
+
+        Return:
+            queryset: containing all Answer instances
+        """
+
         queryset = Answer.objects.all()
-        serializer_class = AnswerSerializer
         return queryset 
 
-    # Get all answers by filtering based either on their related Response or Question
     @staticmethod
-    def GetAnswer(response_id=0, question_id=0):
-        if response_id == 0:
-            queryset = Answer.objects.filter(question=question_id)
-            serializer_class = AnswerSerializer
-            return queryset
-        elif question_id == 0:
-            queryset = Answer.objects.filter(response=response_id)
-            serializer_class = AnswerSerializer
-            return queryset
+    def GetAnswerByQuestion(question_id):
+        """
+        Get all answers by filtering based either on their related Question.
+
+        Parameters:
+            question_id (int): Question ID to be used for finding related Answers
+
+        Return: 
+            queryset: containing all Answer instances with this question_id
+        """
+        queryset = Answer.objects.filter(question=question_id)
+        return queryset
+     
+    @staticmethod
+    def GetAnswerByResponse(response_id):
+        """
+        Get all answers by filtering based either on their related Response.
+
+        Parameters:
+            response_id (int): Response ID to be used for finding related Answers
+
+        Return: 
+            queryset: containing all Answer instances with this response_id
+        """
+        queryset = Answer.objects.filter(response=response_id)
+        return queryset       
 
 
-# Create a ViewSet that queries all the instances of Question in the database, and parse them through the serializer
 class QuestionViewSet(viewsets.ModelViewSet):
     """
-    Question ViewSet used internally to query data from database. The following functions are defined in this viewset:
-
-    GetQuestions() - returns a set of all Question instances in the database
-
-    GetQuestion(int id, int survey_id) - returns a filtered list of Question instances based either on a given question_id
-                                        or a given survey_id. Only one must be provided. The id that is provided is
-                                        used to filter by that particular metric.
+    Question ViewSet used internally to query data from database.
 
     """
-    # Get all questions
-    @staticmethod
-    def GetQuestions():
+
+    serializer_class = QuestionSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all Question instances in the database.
+
+        Return:
+            queryset: containing all Question instances
+        """
+        
         queryset = Question.objects.all()
-        serializer_class = QuestionSerializer
         return queryset
 
-    # Get a specific Question based on its ID
     @staticmethod
-    def GetQuestion(id=0, survey_id=0):
-        if survey_id == 0:
-            queryset = Question.objects.filter(id=id)
-            serializer_class = QuestionSerializer
-            return queryset
-        elif id == 0:
-            queryset = Question.objects.filter(survey=survey_id)
-            serializer_class = QuestionSerializer
-            return queryset
+    def GetQuestionByID(id):
+        """
+        Get a specific Question based on its ID.
 
-    # Get a Questions based on their survey ID
-    @staticmethod
-    def GetQuestionsFromSurvey(survey_id):
-        queryset = SurveyViewSet.GetSurvey(survey_id)[0].question_set.all()
-        serializer_class = QuestionSerializer
+        Parameters:
+            id (int): Question ID to be used for finding this Question.
+
+        Return: 
+            queryset: containing the Question instance with this id
+        """
+
+        queryset = Question.objects.filter(id=id)
         return queryset
 
-    # Get a specific Question based on its survey ID and order in the survey
     @staticmethod
-    def GetOrderedQuestionFromSurvey(survey_id, question_order):
-        queryset = SurveyViewSet.GetSurvey(survey_id)[0].question_set.all().filter(order=question_order)
-        serializer_class = QuestionSerializer
-        return queryset
+    def GetQuestionBySurvey(survey_id): 
+        """
+        Get specific Questions based on its survey_id.
 
-# Create a ViewSet that queries all the instances of Survey in the database, and parse them through the serializer
+        Parameters:
+            survey_id (int): Survey ID to be used for finding related Questions.
+
+        Return: 
+            queryset: containing the Question instance related to this survey
+        """
+
+        queryset = Question.objects.filter(survey=survey_id)
+        return queryset  
+
+    @staticmethod
+    def GetOrderedQuestionBySurvey(survey_id, question_order):
+        """
+        Get specific Questions based on its survey_id, and a specific order.
+
+        Parameters:
+            survey_id (int): Survey ID to be used for finding related Questions.
+            question_order (int): The order in which the questions in the Survey are to be displayed.
+
+        Return: 
+            queryset: containing the Question instance related to this survey, of a given order
+        """
+        queryset = Question.objects.filter(survey=survey_id, order=question_order)
+        return queryset
+        
+
 class SurveyViewSet(viewsets.ModelViewSet):
     """
-    Survey ViewSet used internally to query data from database. The following functions are defined in this viewset:
-
-    GetSurveys() - returns a set of all Survey instances in the database
-
-    GetSurvey(int id) - returns an instance of Survey with the ID that was provided in the function.
+    Survey ViewSet used internally to query data from database.
 
     """
 
-    # Get all surveys
-    @staticmethod
-    def GetSurveys():
+    serializer_class = SurveySerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all Survey instances in the database.
+
+        Return:
+            queryset: containing all Survey instances
+        """
+
         queryset = Survey.objects.all().order_by('name')
-        serializer_class = SurveySerializer
         return queryset
 
-    # Get a specific Survey based on its ID
     @staticmethod
-    def GetSurvey(id):
+    def GetSurveyByID(id):
+        """
+        Get a specific Survey based on its ID.
+
+        Parameters:
+            id (int): Survey ID to be used for finding this Survey.
+
+        Return: 
+            queryset: containing the Survey instance with this id
+        """
         queryset = Survey.objects.filter(id=id)
-        serializer_class = SurveySerializer
         return queryset
 
-# Create a ViewSet that queries all the instances of Response in the database, and parse them through the serializer
+    @staticmethod
+    def GetSurveyByDesigner(designer):
+        """
+        Get a specific Survey based on its author.
+
+        Parameters:
+            author (int): User ID to be used for finding related Surveys.
+
+        Return: 
+            queryset: containing the Survey instances related to this user
+        """
+
+        queryset = Survey.objects.filter(designer=designer)
+        return queryset   
+
+
 class ResponseViewSet(viewsets.ModelViewSet):
     """
-    Response ViewSet used internally to query data from database. The following functions are defined in this viewset:
-
-    GetResponses() - returns a set of all Response instances in the database
-
-    GetResponse(int survey_id, int user_id) - returns a filtered list of Response instances based either on a given survey_id
-                                            or a given user_id. Only one must be provided. The id that is provided is
-                                            used to filter by that particular metric.
-
+    Response ViewSet used internally to query data from database.
     """   
-    # Get all responses
-    @staticmethod
-    def GetResponses():
+
+    serializer_class = ResponseSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all Response instances in the database.
+
+        Return:
+            queryset: containing all Response instances
+        """
+
         queryset = Response.objects.all().order_by('created')
-        serializer_class = ResponseSerializer
         return queryset 
 
-    # Get all responses by filtering based either on their related Survey or User
     @staticmethod
-    def GetResponse(survey_id=0, user_id=0):
-        if survey_id == 0:
-            queryset = Response.objects.filter(question=user_id)
-            serializer_class = ResponseSerializer
-            return queryset
-        elif user_id == 0:
-            queryset = Response.objects.filter(response=survey_id)
-            serializer_class = ResponseSerializer
-            return queryset      
+    def GetResponseBySurvey(survey_id):
+        """
+        Get a specific Response based on its survey.
 
-# Create a ViewSet that queries all the instances of User in the database, and parse them through the serializer
+        Parameters:
+            survey_id (int): Survey ID to be used for finding related Responses.
+
+        Return: 
+            queryset: containing the Response instances related to this Survey
+        """
+
+        queryset = Response.objects.filter(response=survey_id)
+        return queryset      
+
+    @staticmethod
+    def GetResponseByRespondent(respondent):
+        """
+        Get a specific Response based on its respondent.
+
+        Parameters:
+            respondent (int): User ID to be used for finding related Responses.
+
+        Return: 
+            queryset: containing the Response instances related to this respondent/ user
+        """
+
+        queryset = Response.objects.filter(user=respondent)
+        return queryset
+
+
 class UserViewSet(viewsets.ModelViewSet):
     """
-    USer ViewSet used internally to query data from database for all users. The following functions are defined in this viewset:
-
-    GetUsers() - returns a set of all User instances in the database
+    User ViewSet used internally to query data from database for all users.
     """
-    # Get all users
-    @staticmethod
-    def GetUsers():
+
+    serializer_class = UserSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all User instances in the database.
+
+        Return:
+            queryset: containing all User instances
+        """
+
         queryset = User.objects.all().order_by('username')
-        serializer_class = UserSerializer
         return queryset 

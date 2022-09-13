@@ -15,6 +15,6 @@ admin.site.register(PolygonLocation)
 
 
 # Unregister User and Group fields
-admin.site.unregister(auth.models.User)
-admin.site.unregister(auth.models.Group)
+# admin.site.unregister(auth.models.User)
+# admin.site.unregister(auth.models.Group)
 

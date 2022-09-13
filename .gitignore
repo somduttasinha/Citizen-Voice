@@ -144,3 +144,8 @@ dmypy.json
 .idea/
 .idea/Citizen-Voice.iml
 .idea/.gitignore
+ *.iml
+ modules.xml
+ .idea/misc.xml
+ *.ipr
+ *.iws
