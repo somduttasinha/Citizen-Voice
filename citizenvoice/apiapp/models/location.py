@@ -3,36 +3,46 @@ from django.contrib.gis.db.models  import PointField, PolygonField, LineStringFi
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .question import Question
-from abc import ABC
+from .answer import Answer
 
+class Location(models.Model):
+    """
+    Abstract class for representing geographic locations of
+    Questions and Answers.
 
-# class Location(models.Model):
-#     name = models.CharField(max_length=100, blank=True)
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-
-class PointLocation(models.Model):
-
+    Attributes:
+    - name: name for the location
+    - question: a location may belong to a question
+    - answer: a location may belong to an answer
+    """
     name = models.CharField(max_length=100, blank=True)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        "Returs the name of the location"
+        return str(self.name)
+
+
+class PointLocation(Location):
+    """
+    Represents the location of a question or answer as a POINT
+    """
     location = PointField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.name)
 
-class PolygonLocation(models.Model):
-
-    name = models.CharField(max_length=100, blank=True)
+class PolygonLocation(Location):
+    """
+    Represents the location of a question or answer as a POLYGON
+    """
     location = PolygonField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.name)
 
-class LineStringLocation(models.Model):
-
-    name = models.CharField(max_length=100, blank=True)
+class LineStringLocation(Location):
+    """
+    Represents the location of a question or answer as a LINESTRING
+    """
     location = LineStringField()
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return str(self.name)
