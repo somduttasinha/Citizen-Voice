@@ -40,6 +40,7 @@ class Migration(migrations.Migration):
                 ('publish_date', models.DateTimeField(verbose_name='Date that survey was made available')),
                 ('expire_date', models.DateTimeField(verbose_name='Expiry date of survey')),
                 ('redirect_url', models.CharField(max_length=150, verbose_name='Redirect URL')),
+                ('designer', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
