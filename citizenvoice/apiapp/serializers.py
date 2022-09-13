@@ -33,12 +33,12 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     """
-    Serialises 'created', 'updated', 'survey', 'interview_uuid', 'user'
+    Serialises 'created', 'updated', 'survey', 'interview_uuid', 'respondent'
     fields of the Response model for the API.
     """
     class Meta:
         model = Response
-        fields = ('created', 'updated', 'survey', 'interview_uuid', 'user')
+        fields = ('created', 'updated', 'survey', 'interview_uuid', 'respondent')
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """

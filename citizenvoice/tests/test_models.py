@@ -29,7 +29,7 @@ class ModelTest(TestCase):
 
         # Create a temporary response
         response = Response(created=date.today(), updated=date.today(), survey=survey,
-                            interview_uuid='134dasre0', user=user)
+                            interview_uuid='134dasre0', respondent=user)
         response.save()
         
         # Create a temporary answer
