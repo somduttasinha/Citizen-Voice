@@ -1,0 +1,57 @@
+name: Django CI/CD Workflow
+
+# triggers
+on:
+  pull_request:
+    banches:
+      - devel
+      - main
+  
+  push:
+    branches:
+      - devel
+      - main
+
+# job definition
+
+job:
+  health-check-job:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgis/postgis:14-master
+        env:  # environmental variables required for the job
+          POSTGRES_USER: postgres
+          POSTGRES_PWD: postgres
+          POSTGRES_DBASE: github-actions
+        ports:
+          - 5432:5432
+
+        options: --health-check pg_isready, --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Checkout code
+         uses: actions/checkout@v2
+      - name: Cache dependency
+         uses: actions/cache@v2
+         with:
+          path: ~/.cache/zip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+          ${{ runner.os }}-pip-
+      - name: Setup python environment
+          uses: actions/setup-python@v2
+          with:
+            python-version: '3.x'
+      - name: Check Python version
+        run: python --version
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Check Syntax
+        run: pycodestyle --statistics .
+      - name: Run Migrations
+        run: python manage.py migrate
+      - name: Run Test
+        run: python manage.py test
+  
+
+
