@@ -21,8 +21,8 @@ jobs:
         image: postgis/postgis:14-master
         env:  # environmental variables required for the job
           POSTGRES_USER: postgres
-          POSTGRES_PWD: postgres
-          POSTGRES_DBASE: github_actions
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
         ports:
           - 5432:5432
 
