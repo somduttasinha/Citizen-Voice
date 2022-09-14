@@ -22,7 +22,7 @@ jobs:
         env:  # environmental variables required for the job
           POSTGRES_USER: postgres
           POSTGRES_PWD: postgres
-          POSTGRES_DBASE: github-actions
+          POSTGRES_DBASE: github_actions
         ports:
           - 5432:5432
 
