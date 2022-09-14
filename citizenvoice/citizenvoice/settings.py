@@ -99,8 +99,8 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'citizen_voice_db',
-        'USER': 'postgres',
+        'NAME': os.getenv('POSTGRES_DBASE'),
+        'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PWD'),
         'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': os.getenv('POSTGRES_PORT')
