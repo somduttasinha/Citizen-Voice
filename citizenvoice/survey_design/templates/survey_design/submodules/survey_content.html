@@ -3,6 +3,7 @@
 <h1 class="mt-4">
     {{ survey_to_display.name }}
 </h1>
+<p> {{ survey_to_display.description }} <p>
 
 {% if question_to_display%}
     <p class="list-group-item list-group-item-action list-group-item-light p-3">
@@ -11,60 +12,22 @@
 
     <form method="post">
         {% csrf_token %}
-
-        {% if respondent %}
-            {% if question_to_display.question_type == "text" %}
-                    <textarea class="form-control" id="input-text" placeholder="Your answer" rows="3"></textarea>
-            {% endif %}
-
-            {% if question_to_display.question_type == "short-text" %}
-                    <input type="text" class="form-control" id="input-short-text" placeholder="Your answer">
-            {% endif %}
-
-            <!-- this is the case where we will allow the respondent to add new points/polygons -->
-            {% if question_to_display.question_type == "geospatial" %}
-                    {% include 'survey_design/submodules/question_map.html' %}
-            {% endif %}
-
+        {% if question_to_display.type == "text" %}
+                <textarea class="form-control" id="input-text" placeholder="Your answer" rows="3"></textarea>
+                <!--<input type="submit" value="Answer">-->
         {% endif %}
 
-        <!-- this is the case where we will allow the designer to add new points/polygons -->
-        {% if question_to_display.question_type == "geospatial" %}
-                {% include 'survey_design/submodules/question_map.html' %}
+        {% if question_to_display.type == "short-text" %}
+                <input type="text" class="form-control" id="input-short-text" placeholder="Your answer">
         {% endif %}
-
 
         {% if next_question_order%}
             <a class="btn btn-primary" id="next-question"
-                    {% if respondent %}
-                        href="{% url 'respondent-question-detail' survey_id=survey_id question_order=next_question_order %}"
-                    {% else%}
-                        href="{% url 'question-detail' survey_id=survey_id question_order=next_question_order %}"
-                    {% endif %}>
+                    href="{% url 'question-detail' survey_id=survey_id question_order=next_question_order %}">
             Next Question
             </a>
         {% else %}
-            <p class="list-group-item list-group-item-action list-group-item-light p-3">
-                {{ question_to_display.text }}
-            </p>
-            <a class="btn btn-primary" id="end-survey"
-               {% if respondent %}
-                    href="{% url 'respondent-home' %}"
-                {% else%}
-                    href="{% url 'survey-home' %}"
-                {% endif %}>
-            > End Survey </a>
+            <a class="btn btn-primary" id="end-survey" href="{% url 'survey-home' %}"> End Survey </a>
         {% endif %}
     </form>
-
-
-{% else %}
-    {% if survey_to_display%}
-        <p> {{ survey_to_display.description }} <p>
-        <a class="btn btn-primary" id="start-survey"
-                href="{% url 'question-detail' survey_id=survey_id question_order=next_question_order %}">
-        Next Question
-        </a>
-    {% endif %}
-
 {% endif %}
