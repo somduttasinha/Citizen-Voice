@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('designer/', include('survey_design.urls')),
+    path('', include('survey_design.urls')),
     path('respondent/', include('respondent.urls')),
     path('auth/', include('users.urls')),
     path('api/', include('apiapp.urls')),

@@ -8,7 +8,8 @@ from apiapp.views import SurveyViewSet, QuestionViewSet
 
 def index(request):
     form = UserCreationForm()
-    return render(request, '../../survey_design/templates/survey_design/index.html')
+    # return render(request, '../../survey_design/templates/survey_design/index.html')
+    return render(request, 'respondent/index.html')
 
 @login_required
 def survey(request):
@@ -16,7 +17,7 @@ def survey(request):
         'title': 'Survey Design',
         'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id)
     }
-    return render(request, '../../survey_design/templates/survey_design/survey.html', context)
+    return render(request, '../../survey_design/templates/survey_design/index.html', context)
 
 @login_required
 def survey_detail(request, survey_id):

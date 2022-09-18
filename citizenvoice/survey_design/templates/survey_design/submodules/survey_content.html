@@ -12,12 +12,12 @@
 
     <form method="post">
         {% csrf_token %}
-        {% if question_to_display.type == "text" %}
+        {% if question_to_display.question_type == "text" %}
                 <textarea class="form-control" id="input-text" placeholder="Your answer" rows="3"></textarea>
                 <!--<input type="submit" value="Answer">-->
         {% endif %}
 
-        {% if question_to_display.type == "short-text" %}
+        {% if question_to_display.question_type == "short-text" %}
                 <input type="text" class="form-control" id="input-short-text" placeholder="Your answer">
         {% endif %}
 

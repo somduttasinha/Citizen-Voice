@@ -11,7 +11,11 @@ from django.contrib.auth.models import User
 
 def index(request):
     form = UserCreationForm()
-    return render(request, 'survey_design/index.html')
+    context = {
+        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id)
+    }
+    #TODO: Get all available surveys, do not filter by designer
+    return render(request, 'survey_design/index.html', context)
 
 @login_required
 def survey(request):
