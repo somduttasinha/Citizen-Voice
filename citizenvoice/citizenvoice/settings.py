@@ -158,6 +158,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if os.name == 'nt':
     GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
 
-
 LOGIN_REDIRECT_URL = 'survey-home'
 LOGIN_URL = 'survey-design-index'
