@@ -23,9 +23,7 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        # 'surveys': SurveyViewSet.GetSurveys(),
-        # TODO: Replace with api variant
-        'surveys': User.objects.get(id=request.user.id).survey_set.all(),
+        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id)
     }
     return render(request, 'survey_design/survey.html', context)
 
@@ -40,7 +38,7 @@ def survey_create(request):
             survey_obj.display_method = 1
             survey_obj.publish_date = now()
             survey_obj.expire_date = now()
-            survey_obj.author_id = request.user.id
+            survey_obj.designer = request.user.id
             survey_obj.save()
     else:
         form = SurveyCreationForm()
@@ -52,10 +50,14 @@ def survey_create(request):
 
     # TODO: Test code
     data = dict()
+    print(request.user.id)
     surveys = User.objects.get(id=request.user.id).survey_set.all()
     data['form_is_valid'] = True
     data['surveys'] = SurveySerializer(surveys, many=True).data
     data['html_form'] = render_to_string('survey_design/submodules/ajax/ajax-sidebar-left-surveys.html', context, request=request)
+    print(data['html_form'])
+    print(data['surveys'])
+    print("printed")
     return JsonResponse(data)
 
 

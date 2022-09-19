@@ -21,6 +21,7 @@ $(document).ready(
                 success: function (data) {
                     if(data.form_is_valid) {
                         alert("Form is Valid");
+                        alert(data.html_form);
                         $('#sidebar-left-survey-list').html(data.html_form);
                         let survey_link = $('.survey-link-select');
                         survey_link.each(survey_link_behaviour);
