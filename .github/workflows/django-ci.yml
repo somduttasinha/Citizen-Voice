@@ -49,12 +49,12 @@ jobs:
         run: python --version
       - name: Install GDAl library
         run: |
-          sudo add-apt-repository ppa:ubuntugis/ppa
+          sudo add-apt-repository ppa:ubuntugis/ppa -y
           sudo apt-get update -y
-          sudo apt-get install gdal-bin libgdal-dev
+          sudo apt-get install gdal-bin libgdal-dev -y
       - name: Install requirements
         run: |
-          orginfo --version
+          ogrinfo --version
           export CPLUS_INCLUDE_PATH=/usr/include/gdal
           export C_INCLUDE_PATH=/usr/include/gdal
           pip install -r requirements.txt
