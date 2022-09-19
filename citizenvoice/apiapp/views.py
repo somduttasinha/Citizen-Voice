@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Answer, Question, Survey, Response
+from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation
 from django.http import HttpResponse
 from rest_framework import viewsets
-from .serializers import AnswerSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
+from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
 from django.contrib.auth.models import User
 
 
@@ -232,3 +232,57 @@ class UserViewSet(viewsets.ModelViewSet):
 
         queryset = User.objects.all().order_by('username')
         return queryset 
+
+class PointLocationViewSet(viewsets.ModelViewSet):
+    """
+    PointLocation ViewSet used internally to query data from database for all users.
+    """    
+
+    serializer_class = PointLocationSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all PointLocation instances in the database.
+
+        Return:
+            queryset: containing all PointLocation instances
+        """
+
+        queryset = PointLocation.objects.all()
+        return queryset
+
+class PolygonLocationViewSet(viewsets.ModelViewSet):
+    """
+    PolygonLocation ViewSet used internally to query data from database for all users.
+    """    
+
+    serializer_class = PolygonLocationSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all PolygonLocation instances in the database.
+
+        Return:
+            queryset: containing all PolygonLocation instances
+        """
+
+        queryset = PolygonLocation.objects.all()
+        return queryset
+
+class LineStringLocationViewSet(viewsets.ModelViewSet):
+    """
+    LineStringLocation ViewSet used internally to query data from database for all users.
+    """    
+
+    serializer_class = LineStringLocationSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all LineStringLocation instances in the database.
+
+        Return:
+            queryset: containing all LineStringLocation instances
+        """
+
+        queryset = LineStringLocation.objects.all()
+        return queryset

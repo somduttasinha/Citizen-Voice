@@ -6,7 +6,7 @@
 # ====================================================================================================================
 
 from rest_framework import serializers
-from .models import Answer, Question, Survey, Response
+from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation
 from django.contrib.auth.models import User
 
 #=============================================
@@ -44,12 +44,12 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'id', 'name', 'description', 'is_published', 'need_logged_user',
     'editable_answers', 'display_method', 'template', 'publish_date', 
-    'expire_date', 'redirect_url', 'author' fields of the Survey model for the API.
+    'expire_date', 'redirect_url', 'designer' fields of the Survey model for the API.
     """
     class Meta:
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers', 'display_method',
-         'template', 'publish_date', 'expire_date', 'redirect_url', 'author')
+         'template', 'publish_date', 'expire_date', 'redirect_url', 'designer')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -59,3 +59,27 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
+
+class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serialises 'location', 'name', 'question', 'answer' fields of the PointLocation model for the API.
+    """
+    class Meta:
+        model = PointLocation
+        fields = ('location', 'name', 'question', 'answer')   
+
+class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serialises 'location', 'name', 'question', 'answer' fields of the PolygonLocation model for the API.
+    """
+    class Meta:
+        model = PolygonLocation
+        fields = ('location', 'name', 'question', 'answer')  
+
+class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
+    """
+    Serialises 'location', 'name', 'question', 'answer' fields of the LineStringLocation model for the API.
+    """
+    class Meta:
+        model = LineStringLocation
+        fields = ('location', 'name', 'question', 'answer')  
