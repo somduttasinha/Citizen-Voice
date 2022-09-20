@@ -14,7 +14,7 @@ on:
 
 # job definition
 jobs:
-  health-check-job:
+  health-check:
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -55,8 +55,12 @@ jobs:
           pip install GDAL==3.3.2
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Run Migrations
+      - name: Apply Database Migrations
         run: python citizenvoice/manage.py migrate
-      - name: Run Test
+      - name: Run Tests
         run: python citizenvoice/manage.py test
-
+      - name: Test Server
+        run: | 
+          python citizenvoice/manamge.py runserver 
+          sleep 10
+        
