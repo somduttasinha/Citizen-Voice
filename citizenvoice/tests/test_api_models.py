@@ -1,23 +1,29 @@
+from re import template
 from django.test import TestCase
 from apiapp.models import Question, Survey, Answer, Response
 from django.contrib.auth.models import User
 from datetime import date
 
-
 class ModelTest(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(self):
         print("setUpTestData: Run once to set up non-modified data for all class methods.")
         user = User(username='testuser', password='testpass')
         user.save()
-        survey = Survey(name='Test Survey 1', description='This is used to test things',
-                        display_method=1, template='abcd', publish_date=date.today(),
-                        expire_date=date.today(), redirect_url='www.google.com', author=user)
-        survey.save()
-        print(survey)
+
+        Survey.objects.create(name='Test Survey', 
+            description='This is a test survey',
+            display_method=1, template='abcd',
+            publish_date=date.today(),
+            expire_date= date.today(),
+            redirect_url= 'https://www.google.com',
+            designer=user
+            )
+        
+        survey = Survey.objects.get(name='Test Survey')
         Question.objects.create(text='Testing question', order=1, required=True,
                                 question_type='text', choices='', survey=survey) 
-        pass
+        
 
     def test_created_label(self):
         question = Question.objects.get(id=1)
