@@ -1,4 +1,4 @@
-name: Django CI/CD Workflow
+name: Django CI
 
 # triggers
 on:
@@ -60,9 +60,9 @@ jobs:
       - name: Run Tests
         run: python citizenvoice/manage.py test
       - name: Run Development Server
-        run: | 
-          python citizenvoice/manage.py runserver 
+        run: |
+          nohup python citizenvoice/manage.py &
           sleep 5
-          pkill -f runserver
-
+      - name: Stop Development Server 
+        run: pkill -f runserver
         
