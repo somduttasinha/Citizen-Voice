@@ -96,8 +96,8 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # uncomment if you are working with postgis
-## The code below is necessary to distiguish a deplopyment for CI with 
-## GitHub Actions (IF part) and any other deployment  (the ESLSE part)
+# The code below is necessary to distiguish a deplopyment for CI with 
+# GitHub Actions (IF part) and any other deployment  (the ESLSE part)
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
@@ -118,8 +118,8 @@ else:
             'PASSWORD': os.getenv('POSTGRES_PWD'),
             'HOST': os.getenv('POSTGRES_HOST'),
             'PORT': os.getenv('POSTGRES_PORT')
+            }
         }
-}
 
 # uncomment if you are working with spatialite
 # DATABASES = {
@@ -170,7 +170,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if os.name == 'nt':
     GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
-
 
 LOGIN_REDIRECT_URL = 'survey-home'
 LOGIN_URL = 'survey-design-index'
