@@ -4,9 +4,12 @@ by Pierre Sassoulas, 2022, version 1.4.0.
 Available at https://github.com/Pierre-Sassoulas/django-survey
 """
 
+import django.contrib.gis.db.models 
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .survey import Survey
+
 
 # Represents a single question of any type
 class Question(models.Model):
@@ -28,7 +31,7 @@ class Question(models.Model):
     GEOSPATIAL = "geospatial"
 
     QUESTION_TYPES = (
-        (TEXT, _("text (multiple line)")),
+        (TEXT, _("text (multiple line)")), # syntax (value, label)
         (SHORT_TEXT, _("short text (one line)")),
         (RADIO, _("radio")),
         (SELECT, _("select")),
@@ -43,6 +46,16 @@ class Question(models.Model):
     text = models.TextField(_("Text of the Question"))
     order = models.IntegerField(_("Order of where question is placed"))
     required = models.BooleanField(_("Question must be filled out"), default=False)
-    question_type = models.CharField(_("Type of question"), max_length=150)
-    choices = models.TextField(_("Choices for answers"))
+    question_type = models.CharField(_("Type of question"), max_length=150, choices=QUESTION_TYPES, default=TEXT)
+    choices = models.TextField(_("Choices for answers"), blank=True, null=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE, default=1)
+    
+
+    def __str__(self):
+        return self.text
+
+    class Meta:
+        verbose_name = _("question")
+        verbose_name_plural = _("questions")
+        ordering = ("survey", "order")
+

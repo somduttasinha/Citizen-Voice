@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
-from dotenv import  load_dotenv
+from dotenv import load_dotenv
 
 if os.name == 'nt':
     import platform
@@ -34,7 +34,6 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -46,9 +45,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
+# note: add your custom apps after django apps
 INSTALLED_APPS = [
     'apiapp',
     'rest_framework',
@@ -93,28 +92,34 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#         'NAME': 'citizen_voice_db',
-#         'USER': 'postgres',
-#         'PASSWORD': os.getenv('POSTGRES_PWD'),
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432'
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# uncomment if you are working with postgis
+# The code below is necessary to distiguish a deplopyment for CI with 
+# GitHub Actions (IF part) and any other deployment  (the ESLSE part)
+if os.getenv('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+            'PORT': '5432'
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.getenv('POSTGRES_DBASE'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PWD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT')
+            }
+        }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -134,7 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -146,7 +150,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -156,4 +159,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+
+if os.name == 'nt':
+    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+
+LOGIN_REDIRECT_URL = 'survey-home'
+LOGIN_URL = 'survey-design-index'

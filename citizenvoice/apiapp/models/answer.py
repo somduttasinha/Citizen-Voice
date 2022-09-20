@@ -4,7 +4,7 @@ by Pierre Sassoulas, 2022, version 1.4.0.
 Available at https://github.com/Pierre-Sassoulas/django-survey
 """
 
-from abc import update_abstractmethods
+# from abc import update_abstractmethods
 # Import geographic model since we will be saving location data
 from django.contrib.gis.db import models
 from .response import Response
