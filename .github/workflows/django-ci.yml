@@ -59,7 +59,7 @@ jobs:
         run: python citizenvoice/manage.py migrate
       - name: Run Tests
         run: python citizenvoice/manage.py test
-      - name: Test Server
+      - name: Test Development Server
         run: | 
           python citizenvoice/manamge.py runserver 
           sleep 10
