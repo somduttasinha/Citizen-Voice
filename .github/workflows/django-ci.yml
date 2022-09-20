@@ -61,6 +61,6 @@ jobs:
         run: python citizenvoice/manage.py test
       - name: Test Development Server
         run: | 
-          python citizenvoice/manamge.py runserver 
+          python citizenvoice/manage.py runserver 
           sleep 10
         
