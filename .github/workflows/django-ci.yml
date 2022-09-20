@@ -55,8 +55,6 @@ jobs:
           pip install GDAL==3.3.2
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Create Migrations
-        run: python citizenvoice/manage.py makemigrations
       - name: Run Migrations
         run: python citizenvoice/manage.py migrate
       - name: Run Test
