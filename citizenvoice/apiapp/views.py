@@ -251,6 +251,37 @@ class PointLocationViewSet(viewsets.ModelViewSet):
         queryset = PointLocation.objects.all()
         return queryset
 
+    @staticmethod
+    def GetLocationsByQuestion(question):
+        """
+        Get a list of Point Locations associated to this question.
+
+        Parameters:
+            question (int): Question ID to be used for finding related PointLocations.
+
+        Return: 
+            queryset: containing the PointLocations instances related to this Question
+        """
+
+        queryset = PointLocation.objects.filter(question=question)
+        return queryset
+
+    @staticmethod
+    def GetLocationsByAnswer(answer):
+        """
+        Get a list of Point Locations associated to this answer.
+
+        Parameters:
+            answer (int): Answer ID to be used for finding related PointLocations.
+
+        Return: 
+            queryset: containing the PointLocations instances related to this Answer
+        """
+
+        queryset = PointLocation.objects.filter(answer=answer)
+        return queryset
+
+
 class PolygonLocationViewSet(viewsets.ModelViewSet):
     """
     PolygonLocation ViewSet used internally to query data from database for all users.
@@ -269,6 +300,36 @@ class PolygonLocationViewSet(viewsets.ModelViewSet):
         queryset = PolygonLocation.objects.all()
         return queryset
 
+    @staticmethod
+    def GetLocationsByQuestion(question):
+        """
+        Get a list of PolygonLocations associated to this question.
+
+        Parameters:
+            question (int): Question ID to be used for finding related PolygonLocations.
+
+        Return: 
+            queryset: containing the PolygonLocation instances related to this Question
+        """
+
+        queryset = PolygonLocation.objects.filter(question=question)
+        return queryset
+
+    @staticmethod
+    def GetLocationsByAnswer(answer):
+        """
+        Get a list of PolygonLocations associated to this answer.
+
+        Parameters:
+            answer (int): Answer ID to be used for finding related PolygonLocations.
+
+        Return: 
+            queryset: containing the PolygonLocation instances related to this Answer
+        """
+
+        queryset = PolygonLocation.objects.filter(answer=answer)
+        return queryset
+
 class LineStringLocationViewSet(viewsets.ModelViewSet):
     """
     LineStringLocation ViewSet used internally to query data from database for all users.
@@ -285,4 +346,34 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
         """
 
         queryset = LineStringLocation.objects.all()
+        return queryset
+
+    @staticmethod
+    def GetLocationsByQuestion(question):
+        """
+        Get a list of LineStringLocations associated to this question.
+
+        Parameters:
+            question (int): Question ID to be used for finding related LineStringLocations.
+
+        Return: 
+            queryset: containing the LineStringLocation instances related to this Question
+        """
+
+        queryset = LineStringLocation.objects.filter(question=question)
+        return queryset
+
+    @staticmethod
+    def GetLocationsByAnswer(answer):
+        """
+        Get a list of LineStringLocations associated to this answer.
+
+        Parameters:
+            answer (int): Answer ID to be used for finding related LineStringLocations.
+
+        Return: 
+            queryset: containing the LineStringLocation instances related to this Answer
+        """
+
+        queryset = LineStringLocation.objects.filter(answer=answer)
         return queryset

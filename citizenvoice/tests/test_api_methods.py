@@ -1,7 +1,8 @@
 from django.test import TestCase
-from apiapp.models import Question, Survey, Answer, Response
+from apiapp.models import Question, Survey, Answer, Response, PointLocation, PolygonLocation, LineStringLocation
 from django.contrib.auth.models import User
 from datetime import date
+from apiapp import views
 
 
 class ModelTest(TestCase):
@@ -9,28 +10,30 @@ class ModelTest(TestCase):
     def setUpTestData(cls):
         print("setUpTestData: Run once to set up non-modified data for all class methods.")
 
-        # Create test user
+        # Create a new user
         user = User(username='testuser', password='testpass')
         user.save()
 
-        # Create test survey
+        # Create a new survey
         survey = Survey(name='Test Survey 1', description='This is used to test things',
                         display_method=1, template='abcd', publish_date=date.today(),
                         expire_date=date.today(), redirect_url='www.google.com', designer=user)
         survey.save()
 
-        # Create test question
+        # Create a new question
         question = Question(text='Testing question', order=1, required=True,
                                 question_type='text', choices='', survey=survey)
         question.save()
+
+        # Create a new point location
+        point_location = PointLocation(location='SRID=4326;POINT (0.0075149652548134 0.0322341867016535)', name='test location',
+                                        question=question)
+        point_location.save()
+
         pass
 
-    def test_created_label(self):
-        question = Question.objects.get(id=2)
-        field_label = question._meta.get_field('text').verbose_name
-        self.assertEqual(field_label, 'Text of the Question')
-
-    def test_question_type_max_length(self):
-        question = Question.objects.get(id=2)
-        max_length = question._meta.get_field('question_type').max_length
-        self.assertEqual(max_length, 150)
+    def test_get_pointlocation_by_question(self):
+        question = Question.objects.get(id=1)
+        point_location = PointLocation.objects.get(question=question)
+        location = point_location.location
+        self.assertEqual(location, 'SRID=4326;POINT (0.0075149652548134 0.0322341867016535)')
