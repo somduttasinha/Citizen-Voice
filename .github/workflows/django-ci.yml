@@ -58,9 +58,9 @@ jobs:
       - name: Install requirements
         run: pip install -r requirements.txt
       - name: Create Migrations
-        run: python citizen-voice/manage.py makemigrations
+        run: python citizenvoice/manage.py makemigrations
       - name: Run Migrations
-        run: python citizen-voice/manage.py migrate
+        run: python citizenvoice/manage.py migrate
       - name: Run Test
-        run: python citizen-voice/manage.py test
+        run: python citizenvoice/manage.py test
 
