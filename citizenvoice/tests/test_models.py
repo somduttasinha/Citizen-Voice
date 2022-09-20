@@ -1,5 +1,5 @@
 from django.test import TestCase
-from apiapp.models import Question, Survey, Answer, Response
+from apiapp.models import Question, Survey, Answer, Response, MapView
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -15,13 +15,17 @@ class ModelTest(TestCase):
 
         # Create test survey
         survey = Survey(name='Test Survey 1', description='This is used to test things',
-                        display_method=1, template='abcd', publish_date=date.today(),
-                        expire_date=date.today(), redirect_url='www.google.com', designer=user)
+                        publish_date=date.today(), expire_date=date.today(), 
+                        public_url='www.google.com', designer=user)
         survey.save()
+
+        # Create test mapview
+        map_view = MapView(map_service_url='www.openstreetmaps.org',options='{"lat":22.3,"lon":32.1,"zoom":4}')
+        map_view.save()
 
         # Create test question
         question = Question(text='Testing question', order=1, required=True,
-                                question_type='text', choices='', survey=survey)
+                                question_type='text', choices='', survey=survey, map_view=map_view)
         question.save()
         pass
 
@@ -34,3 +38,10 @@ class ModelTest(TestCase):
         question = Question.objects.get(id=2)
         max_length = question._meta.get_field('question_type').max_length
         self.assertEqual(max_length, 150)
+
+    def test_mapview_json(self):
+        question = Question.objects.get(id=2)
+        zoom_level = question.map_view.options
+        json_string = '{"lat":22.3,"lon":32.1,"zoom":4}'
+        self.assertEqual(zoom_level, json_string)
+

@@ -15,21 +15,21 @@ from django.contrib.auth.models import User
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     """
-    Serialises 'response', 'question', 'created', 'updated', 'body', 'lat', 'lon' 
+    Serialises 'response', 'question', 'created', 'updated', 'body' 
     fields of the Answer model for the API.
     """
     class Meta:
         model = Answer
-        fields = ('response', 'question', 'created', 'updated', 'body', 'lat', 'lon')
+        fields = ('response', 'question', 'created', 'updated', 'body')
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     """
-    Serialises 'text', 'order', 'required', 'question_type', 'choices'
+    Serialises 'text', 'order', 'required', 'question_type', 'choices', 'is_geospatial', 'map_view'
     fields of the Question model for the API.
     """
     class Meta:
         model = Question
-        fields = ('text', 'order', 'required', 'question_type', 'choices', 'survey')
+        fields = ('text', 'order', 'required', 'question_type', 'choices', 'survey', 'is_geospatial', 'map_view')
 
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -43,13 +43,13 @@ class ResponseSerializer(serializers.HyperlinkedModelSerializer):
 class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'id', 'name', 'description', 'is_published', 'need_logged_user',
-    'editable_answers', 'display_method', 'template', 'publish_date', 
-    'expire_date', 'redirect_url', 'designer' fields of the Survey model for the API.
+    'editable_answers', 'publish_date', 'expire_date', 'public_url', 'designer'
+    fields of the Survey model for the API.
     """
     class Meta:
         model = Survey
-        fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers', 'display_method',
-         'template', 'publish_date', 'expire_date', 'redirect_url', 'designer')
+        fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers',
+         'publish_date', 'expire_date', 'public_url', 'designer')
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """

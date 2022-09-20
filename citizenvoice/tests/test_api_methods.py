@@ -16,8 +16,8 @@ class ModelTest(TestCase):
 
         # Create a new survey
         survey = Survey(name='Test Survey 1', description='This is used to test things',
-                        display_method=1, template='abcd', publish_date=date.today(),
-                        expire_date=date.today(), redirect_url='www.google.com', designer=user)
+                        publish_date=date.today(), expire_date=date.today(), 
+                        public_url='www.google.com', designer=user)
         survey.save()
 
         # Create a new question
