@@ -61,7 +61,7 @@ jobs:
         run: python citizenvoice/manage.py test
       - name: Run Development Server
         run: |
-          nohup python citizenvoice/manage.py &
+          nohup python citizenvoice/manage.py runserver &
           sleep 5
       - name: Stop Development Server 
         run: pkill -f runserver
