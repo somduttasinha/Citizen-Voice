@@ -47,7 +47,7 @@ jobs:
           python-version: '3.x'
       - name: Check Python version
         run: python --version
-      - name: Install GDAl library
+      - name: Install GDAL library
         run: |
           sudo add-apt-repository ppa:ubuntugis/ppa -y
           sudo apt-get update -y
@@ -58,10 +58,4 @@ jobs:
           pip install GDAL==3.3.2
       - name: Install requirements
         run: pip install -r requirements.txt
-      - name: Check Syntax
-        run: pycodestyle --statistics .
-      - name: Run Migrations
-        run: python manage.py migrate
-      - name: Run Test
-        run: python manage.py test
-  
+
