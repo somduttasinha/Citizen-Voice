@@ -62,6 +62,7 @@
                 </div>
                 <div class="row">
 
+                    <!-- for each survey that is passed in context-->
                     {% for survey in surveys %}
 
                         <div class="col-lg-4 col-sm-6 mb-4">
@@ -296,7 +297,7 @@
                 </div>
             </div>
         </footer>
-        <!-- Portfolio Modals-->
+        <!-- Portfolio Modals. These are the windows that open when user clicks on a survey on homepage-->
         {% for survey in surveys %}
             <!-- Portfolio item 1 modal popup-->
             <div class="portfolio-modal modal fade" id="survey{{ survey.pk }}" tabindex="-1" role="dialog" aria-hidden="true">

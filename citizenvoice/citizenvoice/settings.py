@@ -43,7 +43,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# You can configure a new database engine based on your preferences
+# Choice of database engine will be retrieved from .env file
 DATABASE_ENGINE = os.getenv('DATABASE_ENGINE')
 
 ALLOWED_HOSTS = []
@@ -100,8 +100,8 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # uncomment if you are working with postgis
-# The code below is necessary to distiguish a deplopyment for CI with
-# GitHub Actions (IF part) and any other deployment  (the ESLSE part)
+# The code below is necessary to distinguish a deployment for CI with
+# GitHub Actions (IF part) and any other deployment  (the ELSE part)
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
