@@ -97,18 +97,33 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 # uncomment if you are working with postgis
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'citizen_voice_db',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('POSTGRES_PWD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_POST')
+# The code below is necessary to distiguish a deplopyment for CI with
+# GitHub Actions (IF part) and any other deployment  (the ESLSE part)
+if os.getenv('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+            'PORT': '5432'
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.getenv('POSTGRES_DBASE'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PWD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT')
+            }
+        }
 
 # uncomment if you are working with spatialite
+#TODO: get the database option from .env
 DATABASES = {
     'default': {
         'ENGINE': "django.contrib.gis.db.backends.spatialite",
