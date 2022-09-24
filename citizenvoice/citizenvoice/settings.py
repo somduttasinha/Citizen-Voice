@@ -43,6 +43,9 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# You can configure a new database engine based on your preferences
+DATABASE_ENGINE = os.getenv('DATABASE_ENGINE')
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -111,25 +114,26 @@ if os.getenv('GITHUB_WORKFLOW'):
         }
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': os.getenv('POSTGRES_DBASE'),
-            'USER': os.getenv('POSTGRES_USER'),
-            'PASSWORD': os.getenv('POSTGRES_PWD'),
-            'HOST': os.getenv('POSTGRES_HOST'),
-            'PORT': os.getenv('POSTGRES_PORT')
+    if DATABASE_ENGINE == "postgis":
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.contrib.gis.db.backends.postgis',
+                'NAME': os.getenv('POSTGRES_DBASE'),
+                'USER': os.getenv('POSTGRES_USER'),
+                'PASSWORD': os.getenv('POSTGRES_PWD'),
+                'HOST': os.getenv('POSTGRES_HOST'),
+                'PORT': os.getenv('POSTGRES_PORT')
+                }
+            }
+    elif DATABASE_ENGINE == "spatialite":
+        DATABASES = {
+            'default': {
+                'ENGINE': "django.contrib.gis.db.backends.spatialite",
+                'NAME': BASE_DIR / "db.sqlite3"
             }
         }
-
-# uncomment if you are working with spatialite
-#TODO: get the database option from .env
-DATABASES = {
-    'default': {
-        'ENGINE': "django.contrib.gis.db.backends.spatialite",
-        'NAME': BASE_DIR / "db.sqlite3"
-    }
-}
+    else:
+        print("No settings is available for selected database engine!")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
