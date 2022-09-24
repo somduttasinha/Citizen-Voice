@@ -1,12 +1,12 @@
+from re import template
 from django.test import TestCase
 from apiapp.models import Question, Survey, Answer, Response, MapView
 from django.contrib.auth.models import User
 from datetime import date
 
-
 class ModelTest(TestCase):
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(self):
         print("setUpTestData: Run once to set up non-modified data for all class methods.")
 
         # Create test user
