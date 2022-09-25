@@ -27,6 +27,10 @@ lib/
 lib64/
 parts/
 sdist/
+vue/
+node_modules/
+package-lock.json
+package.json
 var/
 wheels/
 pip-wheel-metadata/
