@@ -7,7 +7,7 @@ message: Please cite this software using these metadata.
 type: software
 authors:
   - given-names: Juliana E.
-    family-names: Goncalvex
+    family-names: Goncalves
     email: J.E.Goncalves@tudelft.nl
     affiliation: Department of Urbanism, Faculty of Architecture and the Built Environment, TU Delft
     orcid: 'https://orcid.org/0000-0001-6888-3362'
