@@ -11,13 +11,14 @@ The application is under development, but relevant documentation will be availab
 
 If you would like to contribute with the development. Please refer to our [Contribution Guidelines](CONTRIBUTING.md)
 
-
 ## Copyright
 
 &copy; 2022 Goncalvex, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
 
 ## Citation
-Goncalves, J. E., Forgaci, C., & Verma, T. Citizen Voice [Computer software], Delft University of Technology, The Netherlands. 
+Please cite this software as follows:
+
+*Goncalves, J. E., Forgaci, C., & Verma, T. Citizen Voice [Computer software], Delft University of Technology, The Netherlands.*
 
 ## Acknowlegdements
 > The authors acknowledge the invaluable contribution of the software development team: **Gerdus van der Laarse**, **Johannes IJpma**, **Yaren Aslan**, and **Somdutta Sinha**. 
