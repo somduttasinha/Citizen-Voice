@@ -99,7 +99,6 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# uncomment if you are working with postgis
 # The code below is necessary to distinguish a deployment for CI with
 # GitHub Actions (IF part) and any other deployment  (the ELSE part)
 if os.getenv('GITHUB_WORKFLOW'):
