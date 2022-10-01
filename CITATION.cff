@@ -6,13 +6,18 @@ title: Citizen Voice
 message: Please cite this software using these metadata.
 type: software
 authors:
-  - given-names: Name1
-    family-names: Surname1
-    email: user@email.com
-    affiliation: Affiliation
-    orcid: 'https://orcid.org/0000-0000-0000-0000'
-  - given-names: Name2
-    family-names: Surname2
-    email: user@email.com
-    affiliation: Affiliation
-    orcid: 'https://orcid.org/0000-0000-0000-0000'
+  - given-names: Juliana E.
+    family-names: Goncalves
+    email: J.E.Goncalves@tudelft.nl
+    affiliation: Department of Urbanism, Faculty of Architecture and the Built Environment, TU Delft
+    orcid: 'https://orcid.org/0000-0001-6888-3362'
+  - given-names: Claudiu
+    family-names: Forgaci
+    email: C.Forgaci@tudelft.nl
+    affiliation: Department of Urbanism, Faculty of Architecture and the Built Environment, TU Delft
+    orcid: 'https://orcid.org/0000-0003-3218-5102'
+  - given-names: Trivik
+    family-names: Verma
+    email: T.Verma@tudelft.nl
+    affiliation: Department of Multi-Actor Systems, Faculty of Technology, Policy and Management, TU Delft
+    orcid: 'https://orcid.org/0000-0003-2761-5155'
