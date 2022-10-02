@@ -22,7 +22,7 @@ class Survey(models.Model):
     editable_answers = models.BooleanField(_("Answers can be edited after submission"), default=True)
     publish_date = models.DateTimeField(_("Date that survey was made available"))
     expire_date = models.DateTimeField(_("Expiry date of survey"))
-    public_url = models.CharField(_("Public URL"), max_length=150, default='')
+    public_url = models.CharField(_("Public URL"), max_length=255, default='')
     designer = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
 
