@@ -42,7 +42,7 @@ def survey_create(request):
             survey_obj.display_method = 1
             survey_obj.publish_date = now()
             survey_obj.expire_date = now()
-            survey_obj.designer = request.user.id
+            survey_obj.designer = request.user
             survey_obj.save()
     else:
         form = SurveyCreationForm()
@@ -55,9 +55,10 @@ def survey_create(request):
     # TODO: Test code
     data = dict()
     print(request.user.id)
-    surveys = User.objects.get(id=request.user.id).survey_set.all()
+    # surveys = User.objects.get(id=request.user.id).survey_set.all()
+    surveys = SurveyViewSet.GetSurveyByDesigner(request.user.id)
     data['form_is_valid'] = True
-    data['surveys'] = SurveySerializer(surveys, many=True).data
+    data['surveys'] = SurveySerializer(surveys, many=True, context={'request': request}).data
     data['html_form'] = render_to_string('survey_design/submodules/ajax/ajax-sidebar-left-surveys.html', context, request=request)
     print(data['html_form'])
     print(data['surveys'])
