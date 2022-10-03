@@ -18,25 +18,24 @@ If you would like to contribute with the development. Please refer to our [Contr
 ## Citation
 Please cite this software as follows:
 
-Two options:
+- Option 1:
 
-1. all names
+Goncalves, J. E., Forgaci, C., Verma, T., van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. Citizen Voice [Computer software]
 
+- Option 2:
 
-
-2. development team as a collective
-
-
+Goncalves, J. E., Forgaci, C., Verma, T., Garcia Alvarez, M., & Citizen-Voice Development Team. Citizen Voice [Computer software]
 
 
 ### Contributions 
 
 **--CRediT taxonomy applied to the aspects of software development--**
+Description of roles: https://credit.niso.org/contributor-roles-defined/
+
 
 | Role | Author |
 |------|--------|
 | Conceptulization | Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M. |
-| Conceptulization| Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M.|
 | Funding acquisition | Goncalves, J. E., Forgaci, C., & Verma, T.|
 | Project administration | Goncalves, J. E., & Verma, T. |
 | Software | van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. |
@@ -48,6 +47,8 @@ Two options:
 | Validation | |
 | Visualization | |
 | Writing | |
+
+
 
 ## Acknowledgements
 
