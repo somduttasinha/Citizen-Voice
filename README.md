@@ -13,14 +13,42 @@ If you would like to contribute with the development. Please refer to our [Contr
 
 ## Copyright
 
-&copy; 2022 Goncalvex, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
+&copy; 2022 Goncalves, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
 
 ## Citation
 Please cite this software as follows:
 
-*Goncalves, J. E., Forgaci, C., & Verma, T. Citizen Voice [Computer software], Delft University of Technology, The Netherlands.*
+Two options:
 
-## Acknowlegdements
-> The authors acknowledge the invaluable contribution of the software development team: **Gerdus van der Laarse**, **Johannes IJpma**, **Yaren Aslan**, and **Somdutta Sinha**. 
+1. all names
 
-> The authors also deeply appreciate the important contributions of **Manuel Garcia Alvarez** to the software architecture and management of the software development team, the research input of **Ioannis Ioannou** to the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
+
+
+2. development team as a collective
+
+
+
+
+### Contributions 
+
+**--CRediT taxonomy applied to the aspects of software development--**
+
+| Role | Author |
+|------|--------|
+| Conceptulization | Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M. |
+| Conceptulization| Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M.|
+| Funding acquisition | Goncalves, J. E., Forgaci, C., & Verma, T.|
+| Project administration | Goncalves, J. E., & Verma, T. |
+| Software | van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. |
+| Supervision | Garcia Alvarez, M. |
+| Methodology | |
+| Data curation | |
+| Investigation | |
+| Formal Analysis | |
+| Validation | |
+| Visualization | |
+| Writing | |
+
+## Acknowledgements
+
+> We would like to acknowledge the invaluable contributions of **Ioannis Ioannou**, who provided research input to the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
