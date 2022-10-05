@@ -16,22 +16,11 @@ If you would like to contribute with the development. Please refer to our [Contr
 &copy; 2022 Goncalves, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
 
 ## Citation
-Please cite this software as follows:
-
-- Option 1:
+If you use this software, please cite it as follows:
 
 Goncalves, J. E., Forgaci, C., Verma, T., van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. Citizen Voice [Computer software]
 
-- Option 2:
-
-Goncalves, J. E., Forgaci, C., Verma, T., Garcia Alvarez, M., & Citizen-Voice Development Team. Citizen Voice [Computer software]
-
-
-### Contributions 
-
-**--CRediT taxonomy applied to the aspects of software development--**
-Description of roles: https://credit.niso.org/contributor-roles-defined/
-
+### Author Contributions:
 
 | Role | Author |
 |------|--------|
@@ -40,16 +29,9 @@ Description of roles: https://credit.niso.org/contributor-roles-defined/
 | Project administration | Goncalves, J. E., & Verma, T. |
 | Software | van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. |
 | Supervision | Garcia Alvarez, M. |
-| Methodology | |
-| Data curation | |
-| Investigation | |
-| Formal Analysis | |
-| Validation | |
-| Visualization | |
-| Writing | |
-
-
 
 ## Acknowledgements
 
-> We would like to acknowledge the invaluable contributions of **Ioannis Ioannou**, who provided research input to the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
+> We would like to acknowledge the invaluable contributions of **Ioannis Ioannou**, who provided research inputs for the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
+
+> The *Citizen Voice Project* recieved support from the [Ditigital Competence Centre](https://dcc.tudelft.nl/), Delft University of Technology. 
