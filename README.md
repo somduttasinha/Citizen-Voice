@@ -34,4 +34,4 @@ If you use this software, please cite it as follows:
 
 > We would like to acknowledge the invaluable contributions of **Ioannis Ioannou**, who provided research inputs for the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
 
-> The *Citizen Voice Project* recieved support from the [Ditigital Competence Centre](https://dcc.tudelft.nl/), Delft University of Technology. 
+> The *Citizen Voice Project* was supported by the [Ditigital Competence Centre](https://dcc.tudelft.nl/), Delft University of Technology. 
