@@ -22,7 +22,7 @@ If you use this software, please cite it as follows:
 
 ### Author Contributions:
 
-| Role | Author |
+| [Role](https://credit.niso.org/contributor-roles-defined/) | Author |
 |------|--------|
 | Conceptulization | Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M. |
 | Funding acquisition | Goncalves, J. E., Forgaci, C., & Verma, T.|
