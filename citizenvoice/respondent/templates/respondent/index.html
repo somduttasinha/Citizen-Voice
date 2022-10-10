@@ -11,7 +11,11 @@
 
         <!-- Masthead-->
         {% if survey%}
-            {% include 'respondent/submodules/survey_details_masthead.html' %}
+            {% if question%}
+                {% include 'respondent/submodules/survey_question.html' %}
+            {% else %}
+                {% include 'respondent/submodules/survey_details_masthead.html' %}
+            {% endif %}
 
 
         {% else %}
