@@ -185,6 +185,20 @@ class ResponseViewSet(viewsets.ModelViewSet):
         return queryset 
 
     @staticmethod
+    def GetResponseByID(id):
+        """
+        Get a specific Response based on its ID.
+
+        Parameters:
+            id (int): Response ID to be used for finding this Response.
+
+        Return:
+            queryset: containing the Response instance with this id
+        """
+        queryset = Response.objects.filter(id=id)
+        return queryset
+
+    @staticmethod
     def GetResponseBySurvey(survey_id):
         """
         Get a specific Response based on its survey.

@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     """
-    Serialises 'response', 'question', 'created', 'updated', 'body' 
+    Serialises 'response', 'question', 'created', 'updated', 'body'
     fields of the Answer model for the API.
     """
     class Meta:
@@ -66,7 +66,7 @@ class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = PointLocation
-        fields = ('location', 'name', 'question', 'answer')   
+        fields = ('location', 'name', 'question', 'answer')
 
 class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -74,7 +74,7 @@ class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = PolygonLocation
-        fields = ('location', 'name', 'question', 'answer')  
+        fields = ('location', 'name', 'question', 'answer')
 
 class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -82,4 +82,4 @@ class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = LineStringLocation
-        fields = ('location', 'name', 'question', 'answer')  
+        fields = ('location', 'name', 'question', 'answer')

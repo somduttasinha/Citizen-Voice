@@ -43,16 +43,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Choice of database engine will be retrieved from .env file
+DATABASE_ENGINE = os.getenv('DATABASE_ENGINE')
+
 ALLOWED_HOSTS = []
 
 # Application definition
 
 # note: add your custom apps after django apps
 INSTALLED_APPS = [
-    'apiapp',
-    'rest_framework',
-    'users.apps.UsersConfig',
-    'survey_design.apps.SurveyDesignConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +59,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'apiapp',
+    'rest_framework',
+    'users.apps.UsersConfig',
+    'survey_design.apps.SurveyDesignConfig',
+    'respondent.apps.RespondentConfig'
 ]
 
 MIDDLEWARE = [
@@ -95,9 +99,8 @@ WSGI_APPLICATION = 'citizenvoice.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# uncomment if you are working with postgis
-# The code below is necessary to distiguish a deplopyment for CI with 
-# GitHub Actions (IF part) and any other deployment  (the ESLSE part)
+# The code below is necessary to distinguish a deployment for CI with
+# GitHub Actions (IF part) and any other deployment  (the ELSE part)
 if os.getenv('GITHUB_WORKFLOW'):
     DATABASES = {
         'default': {
@@ -110,19 +113,29 @@ if os.getenv('GITHUB_WORKFLOW'):
         }
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': os.getenv('POSTGRES_DBASE'),
-            'USER': os.getenv('POSTGRES_USER'),
-            'PASSWORD': os.getenv('POSTGRES_PWD'),
-            'HOST': os.getenv('POSTGRES_HOST'),
-            'PORT': os.getenv('POSTGRES_PORT'),
-            'TEST': {
-                'NAME': 'mytestdatabase',
-                    },
+    if DATABASE_ENGINE == "postgis":
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.contrib.gis.db.backends.postgis',
+                'NAME': os.getenv('POSTGRES_DBASE'),
+                'USER': os.getenv('POSTGRES_USER'),
+                'PASSWORD': os.getenv('POSTGRES_PWD'),
+                'HOST': os.getenv('POSTGRES_HOST'),
+                'PORT': os.getenv('POSTGRES_PORT'),
+                'TEST': {
+                    'NAME': os.getenv('TEST_DBASE'),
+                },
+                }
+            }
+    elif DATABASE_ENGINE == "spatialite":
+        DATABASES = {
+            'default': {
+                'ENGINE': "django.contrib.gis.db.backends.spatialite",
+                'NAME': BASE_DIR / "db.sqlite3"
             }
         }
+    else:
+        print("No settings is available for selected database engine!")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
