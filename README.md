@@ -13,14 +13,27 @@ If you would like to contribute with the development. Please refer to our [Contr
 
 ## Copyright
 
-&copy; 2022 Goncalvex, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
+&copy; 2022 Goncalves, J. E., Forgaci, C., & Verma, T., Delft, The Netherlands. 
 
 ## Citation
-Please cite this software as follows:
+If you use this software, please cite it as follows:
 
-*Goncalves, J. E., Forgaci, C., & Verma, T. Citizen Voice [Computer software], Delft University of Technology, The Netherlands.*
+*Goncalves, J. E., Forgaci, C., Verma, T., van der Laarse, G., Ijpma, J., Aslan, Y., Ioannou, I., & Garcia Alvarez, M. Citizen Voice [Computer software]*
 
-## Acknowlegdements
-> The authors acknowledge the invaluable contribution of the software development team: **Gerdus van der Laarse**, **Johannes IJpma**, **Yaren Aslan**, and **Somdutta Sinha**. 
+### Author Contributions:
 
-> The authors also deeply appreciate the important contributions of **Manuel Garcia Alvarez** to the software architecture and management of the software development team, the research input of **Ioannis Ioannou** to the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
+| [Role](https://credit.niso.org/contributor-roles-defined/) | Author |
+|------|--------|
+| Conceptulization | Goncalves, J. E., Forgaci, C., Verma, T., & Garcia Alvarez, M. |
+| Funding acquisition | Goncalves, J. E., Forgaci, C., & Verma, T.|
+| Project administration | Goncalves, J. E., Forgaci, C., & Verma, T. |
+| Investigation | Ioannou I. |
+| Software | van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. |
+| Supervision | Garcia Alvarez, M. |
+
+
+## Acknowledgements
+
+> We would like to acknowledge the invaluable contributions of **Ioannis Ioannou**, who provided research inputs for the theoretical conceptualisation of the software, and the support of **Matvei Isaenko** to the project management and organisation.
+
+> The *Citizen Voice Project* was supported by the [Ditigital Competence Centre](https://dcc.tudelft.nl/), Delft University of Technology. 
