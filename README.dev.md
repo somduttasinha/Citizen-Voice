@@ -6,9 +6,14 @@ If you're looking for user documentation, go [here](README.md).
 
 Follow the instruction below to set up a development environment. We use Python 3.10 and Django 4.0.x for development.
 
+### Requirements
+
+* [GDAL 3.3.2](https://gdal.org/download.html) or later
+* [PostgreSQL](https://www.postgresql.org/) database with the [PostGIS](https://postgis.net/install/) extension
+
 ### Create a virtual environment
 
-Make a virtual environment, activate it, and install the development dependencies in it. This will enable you to run the tests and web-apps later.
+Create a virtual environment, activate it, and install the development dependencies in it. This will enable you to run the tests and web-apps later.
 [For Windows read here.](https://medium.com/co-learning-lounge/create-virtual-environment-python-windows-2021-d947c3a3ca78)
 
 ```shell
@@ -28,13 +33,18 @@ pip install -r requirements.txt
 
 ## Running the Django App
 
-1. Create a `.env` file with a secret key for the django project, such as:
+1. Create a `.env` file with a secret key for the django project, and the database configuration, such as:
     
     ```shell
     # .env file in ./citizenvoice/
     SECRET_KEY = 'django-insecure-<a hexadecimal string>'
+    POSTGRES_USER = '<username>'
+    POSTGRES_DBASE = '<database-name>'
+    POSTGRES_PWD = '<password>'
+    POSTGRES_HOST = '<server-name/IP>'
+    POSTGRES_PORT = '<port-number>'
     ```
-1. Run the development server from the project directory. Saved changes will be authomatically reloaded:
+2. Run the development server from the project directory. Saved changes will be authomatically reloaded:
 
     ```shell
     python manage.py runserver
@@ -46,10 +56,9 @@ Running the tests requires an activated virtual environment with the development
 
 ```shell
 # unit tests
-pytest
-pytest tests/
+cd ./citizenvoice
+python manage.py test
 ```
-
 
 ## Making a release
 
@@ -58,7 +67,7 @@ pytest tests/
 1. Make sure the `CHANGELOG.md` has been updated
 2. Verify that the information in `CITATION.cff` is correct, and that `.zenodo.json` contains equivalent data
 3. Make sure that `version` in [setup.cfg](setup.cfg) and  `version` in [CITATION.cff](CITATION.cff) have been bumped to the to-be-released version of the template
-4. Run the unit tests with `XXX`
+4. Run the unit tests with `python manage.py test`
 5. Go through the steps outlined above for [generating a new package from the command line](#), and verify that the generated package works as it should.
 
 ### GitHub
