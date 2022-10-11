@@ -18,7 +18,7 @@ If you would like to contribute with the development. Please refer to our [Contr
 ## Citation
 If you use this software, please cite it as follows:
 
-*Goncalves, J. E., Forgaci, C., Verma, T., van der Laarse, G., Ijpma, J., Aslan, Y., & Garcia Alvarez, M. Citizen Voice [Computer software]*
+*Goncalves, J. E., Forgaci, C., Verma, T., van der Laarse, G., Ijpma, J., Aslan, Y., Ioannou, I., & Garcia Alvarez, M. Citizen Voice [Computer software]*
 
 ### Author Contributions:
 
