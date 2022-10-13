@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from apiapp.views import SurveyViewSet, QuestionViewSet, ResponseViewSet
 from .forms import ResponseCreationForm, AnswerCreationForm
 from django.utils import timezone
-import pytz
 
 # Create your views here.
 
