@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Head-->
+    {% include 'respondent/submodules/head.html' %}
+
+    <body id="page-top">
+        <!-- Navigation-->
+        {% include 'respondent/submodules/navigation.html' %}
+
+        <!-- Masthead-->
+        {% if survey%}
+            {% if question%}
+                {% include 'respondent/submodules/survey_question.html' %}
+            {% else %}
+                {% include 'respondent/submodules/survey_details_masthead.html' %}
+            {% endif %}
+
+
+        {% else %}
+            {% include 'respondent/submodules/welcoming_masthead.html' %}
+            {% include 'respondent/submodules/portfolio_grid.html' %}
+            {% include 'respondent/submodules/portfolio_modals.html' %}
+        {% endif %}
+
+        <!-- Footer-->
+        {% include 'respondent/submodules/footer.html' %}
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static 'survey_design/js/scripts.js' %}"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
+</html>
