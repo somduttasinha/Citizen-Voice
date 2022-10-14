@@ -15,7 +15,7 @@ from .forms import SurveyCreationForm
 def index(request):
     form = UserCreationForm()
     context = {
-        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id)
+        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id, unexpired_only=False)
     }
     #TODO: Get all available surveys, do not filter by designer
     return render(request, 'survey_design/index.html', context)
@@ -25,7 +25,7 @@ def index(request):
 def survey(request):
     context = {
         'title': 'Survey Design',
-        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id)
+        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id, unexpired_only=False)
     }
     return render(request, 'survey_design/survey.html', context)
 
