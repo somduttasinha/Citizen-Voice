@@ -1,0 +1,53 @@
+import dash
+import pandas as pd
+import plotly.express as px
+from dash import dcc
+from dash import html
+from dash.dependencies import Input, Output
+import json
+import plotly.io as pio
+pio.renderers.default = "browser"
+
+
+app = dash.Dash(__name__)
+df = pd.read_csv("resources/census-historic-population-borough.csv")
+
+year_to_col_name_mapping = {}
+
+for colname in df.columns[2:]:
+    year_to_col_name_mapping[colname[-4:]] = colname
+
+app.layout = html.Div([
+    html.H1("London population evolution by borough"),
+    dcc.Dropdown(
+        id="select-year",
+        options=year_to_col_name_mapping,
+        multi=False,
+        value=2011, # default value?
+        style={'width': "40%"}
+    ),
+
+    # the div below is where our output graph will eventually lie
+    html.Div(id='output-container',
+             children=[]),
+
+    dcc.Graph(id='choropleth-map',
+              figure={})
+])
+
+@app.callback(
+    [Output(component_id='output-container', component_property='children'),
+     Output(component_id='choropleth-map', component_property='figure')],
+    [Input(component_id='select-year', component_property='value')]
+)
+def update_graph(selected_option):
+    print("The user selected ", selected_option)
+
+
+
+def run():
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+
+
+run()
