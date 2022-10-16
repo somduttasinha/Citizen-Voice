@@ -8,9 +8,10 @@ import json
 import plotly.io as pio
 pio.renderers.default = "browser"
 
-
 app = dash.Dash(__name__)
-df = pd.read_csv("resources/census-historic-population-borough.csv")
+mac_path = "/Users/somduttasinha/Google Drive/Work/CV/Citizen-Voice/citizenvoice/dashboard/concept/resources/census-historic-population-borough.csv"
+windows_path = "resources/census-historic-population-borough.csv"
+df = pd.read_csv(mac_path)
 
 year_to_col_name_mapping = {}
 
