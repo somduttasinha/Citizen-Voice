@@ -73,7 +73,7 @@ app.layout = html.Div([
     Output(title, component_property='children'),
     Input(user_input, component_property='value')
 )
-def update_titlte(user_input):
+def update_title(user_input):
     return user_input # this will be assigned to the output
 
 '''
