@@ -12,19 +12,40 @@ pio.renderers.default = "browser"
 # Building components
 stylesheets = [dbc.themes.SOLAR] # change this when we have our own CSS
 
-app = dash.Dash(__name__, external_stylesheets=stylesheets)
+app = Dash(__name__, external_stylesheets=stylesheets)
 title = dcc.Markdown(children='')
-input = dbc.Input(value = "# Hello World - this is the London population evolution by borough")
-app.layout = dbc.Container([title, input])
+user_input = dbc.Input(value="# Hello World - this is the London population evolution by borough")
+graph = dcc.Graph(figure='') # this is the graph that we should be updating
 
-mac_path = "/Users/somduttasinha/Google Drive/Work/CV/Citizen-Voice/citizenvoice/dashboard/concept/resources/census-historic-population-borough.csv"
+app.layout = dbc.Container([title, user_input])
+
+mac_path = "/Users/somduttasinha/Google Drive/Work/CV/Citizen-Voice/citizenvoice/dashboard/concept/resources/census" \
+           "-historic-population-borough.csv "
 windows_path = "resources/census-historic-population-borough.csv"
-df = pd.read_csv(mac_path)
+df = pd.read_csv(windows_path)
 
 year_to_col_name_mapping = {}
 
 for colname in df.columns[2:]:
     year_to_col_name_mapping[colname[-4:]] = colname
+
+
+def initialise_graph(initial_year=2011):
+    fig = px.choropleth_mapbox(population_2011,
+                               locations="id",
+                               geojson=london_boroughs,
+                               color="Persons-2011",
+                               hover_name="Area Name",
+                               mapbox_style="carto-positron",
+                               center={
+                                   'lat': 51.5,
+                                   'lon': -0.11
+                               },
+                               zoom=9,
+                               opacity=1
+
+                               )
+    fig.show()
 
 
 
@@ -50,7 +71,7 @@ app.layout = html.Div([
 
 @app.callback(
     Output(title, component_property='children'),
-    Input(input, component_property='value')
+    Input(user_input, component_property='value')
 )
 def update_titlte(user_input):
     return user_input # this will be assigned to the output
