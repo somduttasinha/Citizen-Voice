@@ -8,7 +8,7 @@ class Parser:
         self.dataframe = dataframe
 
     def combine_df_with_geojson(self, geojson_file):
-        geojson_data = json.load(open("resources/london_boroughs.json", "r"))
+        geojson_data = json.load(open(geojson_file, "r"))
         geojson_features = geojson_data['features']
 
         # map ids
