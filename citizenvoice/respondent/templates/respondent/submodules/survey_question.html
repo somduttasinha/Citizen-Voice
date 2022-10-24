@@ -1,4 +1,11 @@
 {% load static %}
+<!--<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+<div class="container-map">
+    {% include 'respondent/submodules/question_map.html' %}
+</div>
+
+-->
 
         <section class="masthead" style="background-color: #1C1F23;">
             <section class="page-section" id="survey-question">
@@ -12,44 +19,35 @@
                                     </h2>
                                 </div>
 
-
                                 {% if question.is_geospatial %}
-                                    <div class="col-md-6 col-sm-12 my-3">
-                                        <h2 class="section-heading text" style="color: white">
-                                            [Insert map]
-                                        </h2>
-
-                                    </div>
-
-                                    <div class="col-md-6 col-sm-12 my-3">
-                                        {% if question.question_type == "text" %}
-                                            <textarea class="form-control" id="spatial-input-text" placeholder="Your answer" rows="3"></textarea>
-                                            <!--&lt;!&ndash;<input type="submit" value="Answer">&ndash;&gt;-->
-                                        {% endif %}
-
-                                        {% if question.question_type == "short-text" %}
-                                            <input type="text" class="form-control" id="spatial-input-short-text" placeholder="Your answer">
-                                        {% endif %}
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12 my-3">
+                                                <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+                                                <div class="container-map">
+                                                    {% include 'respondent/submodules/question_map.html' %}
+                                                </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12 my-3">
+                                            <form action="" method="post">
+                                                    {% csrf_token %}
+                                                    {{form}}
+                                                    <div>
+                                                        <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
+                                                    </div>
+                                            </form>
+                                        </div>
                                     </div>
 
                                 {% else %}
                                     <form action="" method="post">
-                                        {% csrf_token %}
-                                        {{form}}
-                                        <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
+                                        <div>
+                                            {% csrf_token %}
+                                            {{form}}
+                                        </div>
+                                        <div>
+                                            <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
+                                        </div>
                                     </form>
-
-                                    <!--
-                                    <div class="col-md-12 col-sm-12 my-3">
-                                        {% if question.question_type == "text" %}
-                                            <textarea class="form-control" id="input-text" placeholder="Your answer" rows="3"></textarea>
-                                        {% endif %}
-
-                                        {% if question.question_type == "short-text" %}
-                                            <input type="text" class="form-control" id="input-short-text" placeholder="Your answer">
-                                        {% endif %}
-                                    </div>
-                                    -->
 
                                 {% endif %}
                             </div>
@@ -61,4 +59,5 @@
 
             </section>
         </section>
+
 
