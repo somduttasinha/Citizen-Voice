@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -151,18 +152,37 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetSurveyByDesigner(designer):
+    def GetSurveyByDesigner(designer, unexpired_only=False):
         """
         Get a specific Survey based on its author.
 
         Parameters:
-            author (int): User ID to be used for finding related Surveys.
+            designer (int): User ID to be used for finding related Surveys.
+            unexpired_only (bool):  True - only unexpired surveys (by current date and time) will be returned
+                                    False - all surveys will be returned
+                                    default = True
 
         Return: 
             queryset: containing the Survey instances related to this user
         """
+        if unexpired_only:
+            now = datetime.now()
+            queryset = Survey.objects.filter(designer=designer, expire_date__gte=now)
+        else:
+            queryset = Survey.objects.filter(designer=designer)
+        return queryset   
 
-        queryset = Survey.objects.filter(designer=designer)
+    @staticmethod
+    def GetSurveyByAvailable():
+        """
+        Get a all Surveys that are still available (current date is not past expiration date).
+
+        Return: 
+            queryset: containing the Survey instances that have not expired yet
+        """
+        
+        now = datetime.now()
+        queryset = Survey.objects.filter(expire_date__gte=now)
         return queryset   
 
 
