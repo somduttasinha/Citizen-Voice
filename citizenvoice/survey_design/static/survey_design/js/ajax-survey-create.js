@@ -5,7 +5,7 @@ $(document).ready(
     function() {
         let survey_link_behaviour = function() {
             $(this).on("click", function(event) {
-                alert("Survey link select");
+                // alert("Survey link select");
                 event.preventDefault();
                 editForm(this);
             });
@@ -20,8 +20,8 @@ $(document).ready(
                 dataType: 'json',
                 success: function (data) {
                     if(data.form_is_valid) {
-                        alert("Form is Valid");
-                        alert(data.html_form);
+                        // alert("Form is Valid");
+                        // alert(data.html_form);
                         $('#sidebar-left-survey-list').html(data.html_form);
                         let survey_link = $('.survey-link-select');
                         survey_link.each(survey_link_behaviour);
@@ -63,7 +63,7 @@ $(document).ready(
                 dataType: 'json',
                 success: function (data) {
                     if(data.data_exists) {
-                        alert("Data exists")
+                        // alert("Data exists")
                         $('#ajax-container-map-sidebar').html(data.html_form)
 
                         let button_survey_update = $('#form-survey-update-submit')
@@ -117,8 +117,8 @@ $(function() {
         return cookieValue;
     }
     var csrftoken = getCookie('csrftoken');
-    alert("CSRFTOKEN");
-    alert(csrftoken);
+    // alert("CSRFTOKEN");
+    // alert(csrftoken);
     /*
     The functions below will create a header with csrftoken
     */
