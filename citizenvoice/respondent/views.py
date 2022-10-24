@@ -10,7 +10,7 @@ from django.utils import timezone
 
 def index(request):
     context = {
-        'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id, unexpired_only=True)
+        'surveys': SurveyViewSet.GetSurveyByAvailable()
     }
     #TODO: Get all available surveys, do not filter by designer
     return render(request, 'respondent/index.html', context)

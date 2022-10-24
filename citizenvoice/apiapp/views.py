@@ -152,7 +152,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetSurveyByDesigner(designer, unexpired_only=True):
+    def GetSurveyByDesigner(designer, unexpired_only=False):
         """
         Get a specific Survey based on its author.
 
