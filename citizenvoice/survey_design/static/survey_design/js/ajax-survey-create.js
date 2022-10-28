@@ -20,7 +20,7 @@ $(document).ready(
                 dataType: 'json',
                 success: function (data) {
                     if(data.form_is_valid) {
-                        // alert("Form is Valid");
+                        alert("Form is Valid");
                         // alert(data.html_form);
                         $('#sidebar-left-survey-list').html(data.html_form);
                         let survey_link = $('.survey-link-select');
@@ -33,26 +33,25 @@ $(document).ready(
             });
         };
 
-//        let updateForm = function () {
-//            let form = $('#form-survey-create');
-//            $.ajax({
-//                url: form.attr("action"),
-//                data: form.serialize(),
-//                type: form.attr("method"),
-//                dataType: 'json',
-//                success: function (data) {
-//                    if(data.form_is_valid) {
-//                        alert("Form is Valid");
-//                        $('#sidebar-left-survey-list').html(data.html_form);
-//                        let survey_link = $('.survey-link-select');
-//                        survey_link.each(survey_link_behaviour);
-//                    }
-//                    else {
-//                        alert("Not Valid")
-//                    }
-//                }
-//            });
-//        };
+       let updateForm = function () {
+           let form = $('#form-survey-update');
+           $.ajax({
+               url: form.attr("action"),
+               data: form.serialize(),
+               type: form.attr("method"),
+               dataType: 'json',
+               success: function (data) {
+                   if(data.form_is_valid) {
+                       $('#sidebar-left-survey-list').html(data.html_form);
+                       let survey_link = $('.survey-link-select');
+                       survey_link.each(survey_link_behaviour);
+                   }
+                   else {
+                       alert("Not Valid")
+                   }
+               }
+           });
+       };
 
         let editForm = function (selected_link) {
             let survey_link = $(selected_link);
@@ -63,13 +62,12 @@ $(document).ready(
                 dataType: 'json',
                 success: function (data) {
                     if(data.data_exists) {
-                        // alert("Data exists")
                         $('#ajax-container-map-sidebar').html(data.html_form)
 
                         let button_survey_update = $('#form-survey-update-submit')
                         button_survey_update.on("click", function(event) {
                             event.preventDefault();
-                            alert("Clicked update button");
+                            updateForm();
                         });
                     }
                     else {
@@ -81,13 +79,11 @@ $(document).ready(
         let form_submit = $('#form-survey-create-submit')
         form_submit.on("click", function(event){
             event.preventDefault();
-            alert("clicked");
             saveForm();
         });
 
         let button_add_survey = $('#sidebar-left-survey-add')
         button_add_survey.on("click", function(event) {
-            alert("Clicked add button")
         });
 
         let survey_link = $('.survey-link-select');
