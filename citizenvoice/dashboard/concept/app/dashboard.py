@@ -12,7 +12,7 @@ mac_path = "/Users/somduttasinha/Google Drive/Work/CV/Citizen-Voice/citizenvoice
            "-historic-population-borough.csv "
 windows_path = "../resources/census-historic-population-borough.csv"
 df = pd.read_csv(windows_path)
-df = df.drop([33, 34, 35])
+
 
 year_to_col_name_mapping = {}
 
@@ -21,34 +21,62 @@ for colname in df.columns[2:]:
 
 pio.renderers.default = "browser"
 # Building components
-stylesheets = [dbc.themes.SOLAR]  # change this when we have our own CSS
+stylesheets = [dbc.themes.CYBORG]  # change this when we have our own CSS
 
 app = Dash(__name__, external_stylesheets=stylesheets)
 title = dcc.Markdown(children='# London population evolution by borough')
+project_credits = dcc.Markdown(children='Citizen Voice Project')
 input_year = dcc.Dropdown(id="select-year",
                           options=year_to_col_name_mapping,
                           multi=False,
                           value=2011,
-                          style={'width': "40%"})
+                          style={'width': "70%"})
+
+options_checklist = dcc.Checklist(
+    id="options-checklist",
+    options=["option1", "option2"]
+)
 
 graph = dcc.Graph(id='choropleth-map',
-                  figure={})  # this is the graph that we should be updating
+                  figure={},
+                  style={
+                      "margin": "0"
+                  }
+                  )  # this is the graph that we should be updating
 
-app.layout = dbc.Container([title, input_year, graph])
+# app.layout = dbc.Container([title, input_year, graph])
+app.layout = dbc.Container([
+    dbc.Row([title]),
+    dbc.Row(children=[
+        dbc.Col(children=[options_checklist], style={
+            'width': "5"
+        }),
+        dbc.Col(children=[input_year, graph], style={
+            'width': "10"
+        })
+    ]),
+    dbc.Row(children=[
+        dbc.Col(children=[project_credits]),
+        html.Div()
+    ])]
+
+)
 
 
 @app.callback(
-    [Output(graph, component_property='figure')],
-    [Input(input_year, component_property='value')]
+    Output(graph, 'figure'),
+    Input(input_year, component_property='value')
 )
 def update_graph(year):
 
-    print(year)
     generator = Generator(df)
     fig = generator.create_choropleth(
         geojson_file="../resources/london_boroughs.json",
-        column_name="Persons-"+str(year)
+        statistic_column_name="Persons-"+str(year),
+        area_column_name="Area Name"
     )
+    fig.update_layout(width=600,
+                      height=500)
     return fig
 
 
