@@ -8,6 +8,6 @@
             <input type="text" id="lname" name="description" value="{{ survey.description }}"><br><br>
             <input id="form-survey-update-submit" type="submit" value="Update"><br>
         </form>
-        <input id="form-survey-delete" type="submit" value="Delete" method="post" action="{% url 'survey_delete' survey_id=survey.id %}">
+        <input id="form-survey-delete" type="submit" value="Delete" method="post"  onclick="return confirm('Are you sure you want to delete this Survey?')" action="{% url 'survey_delete' survey_id=survey.id %}">
     </div>
 </div>

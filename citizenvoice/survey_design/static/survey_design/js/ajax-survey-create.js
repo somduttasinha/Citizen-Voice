@@ -56,7 +56,6 @@ $(document).ready(
 
        let deleteForm = function () {
         let form = $('#form-survey-delete');
-        alert("File being deleted")
         $.ajax({
             url: form.attr("action"),
             type: form.attr("method"),
