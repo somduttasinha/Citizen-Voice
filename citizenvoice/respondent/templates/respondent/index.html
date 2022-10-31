@@ -9,19 +9,21 @@
         <!-- Navigation-->
         {% include 'respondent/submodules/navigation.html' %}
 
-        <!-- Masthead-->
-        {% if survey%}
-            {% if question%}
-                {% include 'respondent/submodules/survey_question.html' %}
-            {% else %}
-                {% include 'respondent/submodules/survey_details_masthead.html' %}
-            {% endif %}
+        <main id="main">
+            <!-- Masthead-->
+            {% if survey%}
+                {% if question%}
+                    {% include 'respondent/submodules/survey_question.html' %}
+                {% else %}
+                    {% include 'respondent/submodules/survey_details_masthead.html' %}
+                {% endif %}
 
-        {% else %}
-            {% include 'respondent/submodules/welcoming_masthead.html' %}
-            {% include 'respondent/submodules/portfolio_grid.html' %}
-            {% include 'respondent/submodules/portfolio_modals.html' %}
-        {% endif %}
+            {% else %}
+                {% include 'respondent/submodules/welcoming_masthead.html' %}
+                {% include 'respondent/submodules/portfolio_grid.html' %}
+                {% include 'respondent/submodules/portfolio_modals.html' %}
+            {% endif %}
+        </main>
 
         <!-- Footer-->
         {% include 'respondent/submodules/footer.html' %}
