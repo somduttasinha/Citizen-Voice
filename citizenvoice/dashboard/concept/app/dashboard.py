@@ -8,10 +8,9 @@ import plotly.io as pio
 import dash_bootstrap_components as dbc
 from citizenvoice.dashboard.concept.graph_utils.graph_generator import Generator
 
-mac_path = "/Users/somduttasinha/Google Drive/Work/CV/Citizen-Voice/citizenvoice/dashboard/concept/resources/census" \
-           "-historic-population-borough.csv "
-windows_path = "../resources/census-historic-population-borough.csv"
-df = pd.read_csv(windows_path)
+
+path = "../resources/census-historic-population-borough.csv"
+df = pd.read_csv(path)
 
 
 year_to_col_name_mapping = {}
