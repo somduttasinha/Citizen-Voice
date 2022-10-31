@@ -45,6 +45,7 @@ $(document).ready(
                        $('#sidebar-left-survey-list').html(data.html_form);
                        let survey_link = $('.survey-link-select');
                        survey_link.each(survey_link_behaviour);
+                       alert("The survey has been updated.")
                    }
                    else {
                        alert("Not Valid")
