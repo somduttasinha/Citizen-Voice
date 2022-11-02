@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 from apiapp.serializers import SurveySerializer
+from apiapp.models import Survey
 
 from .forms import SurveyCreationForm
 
@@ -68,7 +69,7 @@ def survey_edit(request, survey_id):
             data['data_exists'] = True
             selected_survey = SurveyViewSet.GetSurveyByID(survey_id)[0]
             context['survey'] = selected_survey
-            print(selected_survey)
+            print(selected_survey, " Yes")
         else:
             data['data_exists'] = False
     data['html_form'] = render_to_string('survey_design/submodules/ajax/map-sidebar-ajax.html', context, request=request)
@@ -77,6 +78,43 @@ def survey_edit(request, survey_id):
 
 @login_required
 def survey_update(request, survey_id):
-    # print("Update")
-    # print(survey_id)
-    pass
+    survey = Survey.objects.get(id=survey_id)
+    form = SurveyCreationForm(request.POST, instance=survey)
+    
+    if request.method == 'POST':
+        if form.is_valid():
+            # TODO: override form.is_valid to autofill gaps
+            survey_obj = form.save(commit=False)
+            survey_obj.designer = request.user
+            survey_obj.save()
+    else:
+        form = SurveyCreationForm(instance=survey)
+
+    surveys = SurveyViewSet.GetSurveyByDesigner(request.user.id)
+    context = {
+        'title': 'Survey Design',
+        'surveys': surveys,
+    }        
+    data = dict()
+    data['form_is_valid'] = True
+    data['surveys'] = SurveySerializer(surveys, many=True, context={'request': request}).data
+    data['html_form'] = render_to_string('survey_design/submodules/ajax/ajax-sidebar-left-surveys.html', context, request=request)
+    return JsonResponse(data)
+
+@login_required
+def survey_delete(request, survey_id):
+    survey = Survey.objects.get(id=survey_id)
+    
+    if request.method == 'POST':
+        survey.delete()
+
+    surveys = SurveyViewSet.GetSurveyByDesigner(request.user.id)
+    context = {
+        'title': 'Survey Design',
+        'surveys': surveys,
+    }        
+    data = dict()
+    data['form_is_valid'] = True
+    data['surveys'] = SurveySerializer(surveys, many=True, context={'request': request}).data
+    data['html_form'] = render_to_string('survey_design/submodules/ajax/ajax-sidebar-left-surveys.html', context, request=request)
+    return JsonResponse(data)
