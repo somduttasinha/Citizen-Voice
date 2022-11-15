@@ -77,18 +77,6 @@
         }
     }
 
-    function getAllSelectedPoints() {
-        if(singlePoint==true){
-            for (const [key, value] of Object.entries(group_circle._layers)) {
-              console.log(key, value._latlng);
-            }
-        } else {
-            for(var i =0; i < polygon._latlngs[0].length; i++) {
-                console.log(polygon._latlngs[0][i])
-            }
-        }
-    }
-
     function placePointLocationOnMap(latlng){
         L.circle(latlng, {
             color: colorPoint,
@@ -106,6 +94,34 @@
             polygon.addLatLng(latlng);
         }
     }
+
+    function getAllSelectedPoints() {
+        if(singlePoint==true){
+            for (const [key, value] of Object.entries(group_circle._layers)) {
+              console.log(key, value._latlng);
+            }
+        } else {
+            for(var i =0; i < polygon._latlngs[0].length; i++) {
+                console.log(polygon._latlngs[0][i])
+            }
+        }
+    }
+
+    function saveSelectedLocations() {
+        $.ajax({
+            method: 'GET',
+            data: {'locationPoints': group_circle._layers},
+            success: function (data) {
+                 //this gets called when server returns an OK response
+                 //alert("it worked!");
+            },
+            error: function (data) {
+                 //alert("it didnt work");
+            }
+
+        });
+    };
+
 
 
 </script>

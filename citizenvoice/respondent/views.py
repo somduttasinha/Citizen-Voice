@@ -69,6 +69,11 @@ def question_detail(request, survey_id, question_order, response_id):
         else:
             return redirect(index)
 
+    if request.method == 'GET':
+        request_data = request.GET
+        print(request_data)
+
+
     context = {
         'answer_form': answer_form,
         'title': 'Survey Design',
