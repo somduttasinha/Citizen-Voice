@@ -1,10 +1,10 @@
 from django import forms
 from apiapp.models.response import Response
 from apiapp.models.answer import Answer
-
+from apiapp.models.location import PointLocation, PolygonLocation, LineStringLocation
 
 class ResponseCreationForm(forms.ModelForm):
-    """ModelForm child class for creating Response objects."""
+    """ModelForm child class for creating Response objects. Form does not include any field (fields are autofilled)"""
 
     class Meta:
         model = Response
@@ -21,3 +21,25 @@ class AnswerCreationForm(forms.ModelForm):
         labels = {
             'body': '',
         }
+
+class PointLocationCreationForm(forms.ModelForm):
+    """ModelForm child class for LocationPoint objects. Form does not include any field (fields are autofilled)"""
+
+    class Meta:
+        model = PointLocation
+        fields = []
+
+class PolygonLocationCreationForm(forms.ModelForm):
+    """ModelForm child class for PolygonLocation objects. Form does not include any field (fields are autofilled)"""
+
+    class Meta:
+        model = PolygonLocation
+        fields = []
+
+class LineStringLocationCreationForm(forms.ModelForm):
+    """ModelForm child class for LineStringLocation objects. Form does not include any field (fields are autofilled)"""
+
+    class Meta:
+        model = LineStringLocation
+        fields = []
+

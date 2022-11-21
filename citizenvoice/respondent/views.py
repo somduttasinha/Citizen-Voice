@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
-from apiapp.views import SurveyViewSet, QuestionViewSet, ResponseViewSet
+from apiapp.views import SurveyViewSet, QuestionViewSet, ResponseViewSet, PointLocationViewSet
 from .forms import ResponseCreationForm, AnswerCreationForm
 from django.utils import timezone
 
@@ -53,12 +53,12 @@ def survey_detail(request, survey_id):
 
 
 def question_detail(request, survey_id, question_order, response_id):
-    form = AnswerCreationForm()
+    answer_form = AnswerCreationForm()
 
     if request.method == 'POST':
-        form = AnswerCreationForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
+        answer_form = AnswerCreationForm(request.POST)
+        if answer_form.is_valid():
+            obj = answer_form.save(commit=False)
             obj.created = timezone.now()
             obj.updated = timezone.now()
             obj.response = ResponseViewSet.GetResponseByID(response_id)[0]
@@ -69,21 +69,28 @@ def question_detail(request, survey_id, question_order, response_id):
         else:
             return redirect(index)
 
+    if request.method == 'GET':
+        request_data = request.GET
+        print(request_data)
+
+
     context = {
-        'form': form,
+        'answer_form': answer_form,
         'title': 'Survey Design',
         'surveys': SurveyViewSet.GetSurveyByDesigner(request.user.id),
         'survey_id': survey_id,
         'respondent': True,
-        'button_value': "End Survey"
+        'button_value': "End Survey",
     }
     try:
         context['survey'] = SurveyViewSet.GetSurveyByID(survey_id)[0]
         context['question'] = QuestionViewSet.GetOrderedQuestionBySurvey(survey_id, question_order)[0]
+        context['locations_by_question'] = PointLocationViewSet.GetLocationsByQuestion(context['question'])
 
         if context['survey'].question_count() > question_order:
             context['next_question_order'] = question_order + 1
             context['button_value'] = "Next Question"
+
 
     except Exception as e:
         # Survey.DoesNotExist
