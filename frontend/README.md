@@ -44,6 +44,6 @@ For the linting to work, install these plugins in your editor:
 - [Vue.volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 - [VS Code ESLint extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
 
-## Libs
+## Libraries
 
 - [Quasar](https://quasar.dev/) a an component library. (Think of Bootstrap css but then with Vue component)
