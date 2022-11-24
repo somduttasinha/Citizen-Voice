@@ -4,6 +4,12 @@ Look at the [nuxt 3 documentation](https://v3.nuxtjs.org) to learn more.
 
 _We are using Nuxt 3 and Quasar together this go's a bit against the build of the 2 frameworks. As they have both there own redenering and routing features. But we are using Quasar as a pure component library because it has an extensive component library and we are using Nuxt for server side rendering and for it's simple routing system._
 
+### To keep in mind
+
+We are using a proxy to talk to the backend. Because all external calls on the client side result in a cross origin error, this means the browser blocks these calls.
+So all `/api/**` will point to the backend url. For local development this is `http://127.0.0.1:8000/`.
+See `pages/surveys` for an example of how to fetch the backend data.
+
 ## Setup
 
 Make sure to install the dependencies:
