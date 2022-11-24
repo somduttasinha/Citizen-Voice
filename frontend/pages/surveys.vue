@@ -1,91 +1,44 @@
 <template>
     <NuxtLayout name="default">
+        <h2>Surveys</h2>
         <div class="row q-col-gutter-sm">
-            <q-card class="my-card col" flat bordered>
+            <q-card v-for="survey in surveys" style="min-width: 300px;" class="my-card col" flat bordered>
                 <q-card-section horizontal>
-                    <q-card-section class="q-pt-xs">
-                        <div class="text-h5 q-mt-sm q-mb-xs">Survey title</div>
-                        <div class="text-caption ">
-                            Survey description
-                        </div>
+                    <q-card-section class="q-pt-xs flex column space-between ">
+                        <div class="text-h5 q-mt-sm q-mb-xs">{{
+                                survey.name
+                        }}</div>
+                        <p class="text-caption ">
+                            {{ survey.description }}
+                        </p>
                         <div class=" text-caption">
-                            <span class="">Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
-                            <span>Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
+                            <span class="">Publish date: {{ formatDate(survey.publish_date) }}</span><br />
+                            <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
-                        <q-card-actions>
-                            <q-btn color="primary">
+                        <q-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
+                            <q-btn :to="`/survey/${survey.id}`" color="primary">
                                 Start survey
                             </q-btn>
-
                         </q-card-actions>
                     </q-card-section>
 
-                    <q-card-section class="col-5 flex flex-center">
+                    <q-card-section class="col flex flex-center">
                         <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
                     </q-card-section>
                 </q-card-section>
-            </q-card>
-            <q-card class="my-card col q-px-xs" flat bordered>
-                <q-card-section horizontal>
-                    <q-card-section class="q-pt-xs">
-                        <div class="text-h5 q-mt-sm q-mb-xs">Survey title</div>
-                        <div class="text-caption ">
-                            Survey description
-                        </div>
-                        <div class=" text-caption">
-                            <span class="">Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
-                            <span>Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
-                        </div>
-                        <q-card-actions>
-                            <q-btn color="primary">
-                                Start survey
-                            </q-btn>
-
-                        </q-card-actions>
-                    </q-card-section>
-
-                    <q-card-section class="col-5 flex flex-center">
-                        <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
-                    </q-card-section>
-                </q-card-section>
-
-
-            </q-card>
-            <q-card class="my-card col q-px-xs" flat bordered>
-                <q-card-section horizontal>
-                    <q-card-section class="q-pt-xs">
-                        <div class="text-h5 q-mt-sm q-mb-xs">Survey title</div>
-                        <div class="text-caption ">
-                            Survey description
-                        </div>
-                        <div class=" text-caption">
-                            <span class="">Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
-                            <span>Publish Date: Nov. 15, 2022, 1:26 p.m.</span>
-                        </div>
-                        <q-card-actions>
-                            <q-btn color="primary">
-                                Start survey
-                            </q-btn>
-
-                        </q-card-actions>
-                    </q-card-section>
-
-                    <q-card-section class="col-5 flex flex-center">
-                        <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
-                    </q-card-section>
-                </q-card-section>
-
-
             </q-card>
         </div>
-        <pre>{{ data }}</pre>
-
     </NuxtLayout>
+
 </template>
 
 <script setup>
-// TODO: Get surveys
+import { formatDate } from "~/utils/formatData"
 const url = "http://127.0.0.1:8000/api/surveys/"
+
+const { data: surveys } = await useAsyncData(() => $fetch(url));
+
+console.log('surveys //> ', surveys)
 
 </script>
 
