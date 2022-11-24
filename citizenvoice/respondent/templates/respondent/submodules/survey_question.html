@@ -19,7 +19,18 @@
                                     </h2>
                                 </div>
 
-                                {% if question.is_geospatial %}
+                                {% if question.map_view == None and question.is_geospatial == False %}
+                                    <form action="" method="post">
+                                        <div>
+                                            {% csrf_token %}
+                                            {{answer_form}}
+                                        </div>
+                                        <div>
+                                            <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
+                                        </div>
+                                    </form>
+                                {% else %}
+
                                     <div class="row">
                                         <div class="col-md-6 col-sm-12 my-3">
                                                 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -30,7 +41,7 @@
                                         <div class="col-md-6 col-sm-12 my-3">
                                             <form action="" method="post">
                                                     {% csrf_token %}
-                                                    {{form}}
+                                                    {{answer_form}}
                                                     <div>
                                                         <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
                                                     </div>
@@ -38,18 +49,8 @@
                                         </div>
                                     </div>
 
-                                {% else %}
-                                    <form action="" method="post">
-                                        <div>
-                                            {% csrf_token %}
-                                            {{form}}
-                                        </div>
-                                        <div>
-                                            <input type ="submit" value={{button_value}} class="btn btn-primary btn-xl text-uppercase">
-                                        </div>
-                                    </form>
-
                                 {% endif %}
+
                             </div>
 
                         </div>
