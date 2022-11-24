@@ -34,11 +34,12 @@
 
 <script setup>
 import { formatDate } from "~/utils/formatData"
-const url = "http://127.0.0.1:8000/api/surveys/"
+/**
+ * All `/api/**` are proxies pointing to the local or production server of the backend.
+ */
+const url = "/api/surveys/"
 
 const { data: surveys } = await useAsyncData(() => $fetch(url));
-
-console.log('surveys //> ', surveys)
 
 </script>
 

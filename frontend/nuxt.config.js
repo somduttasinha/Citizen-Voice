@@ -36,4 +36,18 @@ export default defineNuxtConfig({
         },
         paymentSecretKey: '',
     },
+    proxy: {
+        enableProxy: true,
+        proxies: {
+            // string shorthand
+            '/foo': 'http://localhost:4567',
+            // with options
+            '^/api/.*': {
+                target: 'http://127.0.0.1:8000/',
+                changeOrigin: true,
+                // rewrite: (path) => path.replace(/^\/api/, '')
+            },
+        },
+        fetch: true
+    }
 })
