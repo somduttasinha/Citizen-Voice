@@ -4,6 +4,19 @@ import { quasar } from "@quasar/vite-plugin"
 export default defineNuxtConfig({
     build: {
         transpile: ["quasar"],
+        loaders:  {
+          vue: {
+             prettify: false // this is to make the nuxt application run
+          }
+        }
+    },
+    app: {
+        head: {
+          title: "Citizen Voice",
+          link: [
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+          ],
+        }
     },
     css: [
         "@quasar/extras/roboto-font/roboto-font.css",
