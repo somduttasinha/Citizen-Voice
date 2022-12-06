@@ -12,7 +12,8 @@
 
                 <div class="row justify-between">
                     <q-tabs align="left">
-                        <q-route-tab to="#" label="Start designing" />
+                        <q-route-tab to="/" label="Home" />
+                        <q-route-tab to="/design" label="Start designing" />
                         <q-route-tab to="/surveys" label="Start answering" />
                         <q-route-tab to="/about" label="About" />
                     </q-tabs>
@@ -26,9 +27,9 @@
 
 
             <q-page-container>
-                <q-page padding>
+<!--                <q-page padding>-->
                     <slot />
-                </q-page>
+<!--                </q-page>-->
             </q-page-container>
 
             <q-footer elevated class="bg-grey-8 text-white">
@@ -67,5 +68,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.custom-zero-padding {
+  padding: 0;
+  padding-left: 0;
+}
 </style>
