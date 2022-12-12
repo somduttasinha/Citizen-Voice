@@ -17,7 +17,8 @@
                         </div>
                         <q-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
                             <q-btn :to="`/survey/${survey.id}`" color="primary">
-                                Start survey
+                                <i class="fa-solid fa-play"></i>
+                                <span class="q-pa-sm">Start survey</span>
                             </q-btn>
                         </q-card-actions>
                     </q-card-section>
