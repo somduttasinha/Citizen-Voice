@@ -40,6 +40,7 @@
 
 <script setup>
   import { ref } from "vue"
+  import {navigateTo} from "nuxt/app";
   /**
    * All `/api/**` are proxies pointing to the local or production server of the backend.
    */
@@ -63,6 +64,7 @@
   const nextQuestion = async () => {
     demo_question = demo_question + 1;
     console.log(demo_question)
+    // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
   }
 
 
