@@ -1,7 +1,8 @@
 <template>
     <NuxtLayout name="default">
-        <div>
-            <h1>{{ survey.name }}</h1>
+      <q-page>
+        <div class="padding-16">
+            <h2>{{ survey.name }}</h2>
 
             <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
             <p>{{ survey.description }} </p>
@@ -16,6 +17,7 @@
             <!--{{ $route.params.id }}
             <pre>{{ survey }}</pre>-->
         </div>
+      </q-page>
     </NuxtLayout>
 </template>
 
@@ -36,9 +38,5 @@
   const { data: survey } = await useAsyncData(() => $fetch(url + route.params._id));
 
 
-
 </script>
 
-<style lang="scss" scoped>
-
-</style>
