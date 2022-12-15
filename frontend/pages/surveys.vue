@@ -44,7 +44,7 @@ import { formatDate } from "~/utils/formatData"
 const url = "/api/surveys/"
 const { data: surveys } = await useAsyncData(() => $fetch(url));
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .my-card {
   margin: 10px 15px
 }
