@@ -1,6 +1,7 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import { quasar } from "@quasar/vite-plugin"
 
+
 export default defineNuxtConfig({
     build: {
         transpile: ["quasar"],
@@ -14,8 +15,18 @@ export default defineNuxtConfig({
         head: {
           title: "Citizen Voice",
           link: [
-            { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' },
+            { rel: 'stylesheet', href: 'https://unpkg.com/leaflet@1.9.3/dist/leaflet.css',
+               integrity:'sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=', crossorigin:''
+            },
           ],
+          script: [
+            {
+              src:"https://unpkg.com/leaflet@1.9.3/dist/leaflet.js",
+              integrity:"sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=",
+              crossorigin:""
+            }
+          ]
         }
     },
     css: [

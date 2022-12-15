@@ -1,18 +1,33 @@
 <template>
     <NuxtLayout name="default">
+
         <div class="q-pa-md row items-start q-gutter-md">
+          <!-- Question card: number & text -->
+          <q-card class="my-card">
+            <q-card-section>
+              <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
+              <!-- <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div> -->
+            </q-card-section>
+          </q-card>
+        </div>
 
-            <q-card class="my-card">
-              <q-card-section>
-                <div class="text-h1 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
-              </q-card-section>
-            </q-card>
+        <div class="q-pa-md row items-start q-gutter-md">
+          <!-- Map card
+          real v-if statement = (question.map_view != null || question.is_geospatial)-->
+          <q-card v-if="true"
+                  style="min-width: 300px; min-height: 300px;" class="my-card col">
+            <q-card-section>
+              <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>
+              <div id="map"></div>
+            </q-card-section>
+          </q-card>
 
-            <q-card class="my-card">
-              <q-card-section>
-                <div class="text-h4 q-mt-sm q-mb-xs">{{ question.text }}</div>
-              </q-card-section>
-            </q-card>
+          <!-- Answer card-->
+          <q-card style="min-width: 300px;" class="my-card col">
+            <q-card-section>
+
+            </q-card-section>
+          </q-card>
 
         </div>
 
@@ -35,12 +50,9 @@
 
 
 <script setup>
-
-</script>
-
-<script setup>
   import { ref } from "vue"
   import {navigateTo} from "nuxt/app";
+  import leaflet from "leaflet"
   /**
    * All `/api/**` are proxies pointing to the local or production server of the backend.
    */
@@ -59,17 +71,20 @@
   const prevQuestion = async () => {
     demo_question = demo_question - 1;
     console.log(demo_question)
+    // if this is not the first question:
+    // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) - 1))
   }
 
   const nextQuestion = async () => {
     demo_question = demo_question + 1;
     console.log(demo_question)
+    // if this is not the last question:
     // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
   }
 
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 
 </style>
