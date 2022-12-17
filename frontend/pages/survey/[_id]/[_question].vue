@@ -1,12 +1,13 @@
 <template>
     <NuxtLayout name="default">
 
+
         <div class="q-pa-md row items-start q-gutter-md">
           <!-- Question card: number & text -->
           <q-card class="my-card">
             <q-card-section>
               <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
-              <!-- <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div> -->
+              <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
             </q-card-section>
           </q-card>
         </div>
@@ -14,8 +15,8 @@
         <div class="q-pa-md row items-start q-gutter-md">
           <!-- Map card
           real v-if statement = (question.map_view != null || question.is_geospatial)-->
-          <q-card v-if="true"
-                  style="min-width: 300px; min-height: 300px;" class="my-card col">
+          <q-card v-if="question.is_geospatial"
+                  style="min-width: 300px;" class="my-card col">
             <q-card-section>
               <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>
               <div id="map"></div>
@@ -28,7 +29,6 @@
 
             </q-card-section>
           </q-card>
-
         </div>
 
 
@@ -69,17 +69,18 @@
   let { data: question } = await useAsyncData(() => $fetch(question_url + demo_question));
 
   const prevQuestion = async () => {
-    demo_question = demo_question - 1;
-    console.log(demo_question)
     // if this is not the first question:
-    // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) - 1))
+    let question_to_navigate = (parseInt(route.params._question, 10) - 1)
+    if (question_to_navigate != 0) {
+      return navigateTo('/survey/' + route.params._id + '/' + question_to_navigate)
+    } else {
+      return navigateTo('/survey/' + route.params._id)
+    }
   }
 
   const nextQuestion = async () => {
-    demo_question = demo_question + 1;
-    console.log(demo_question)
     // if this is not the last question:
-    // return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
+    return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
   }
 
 
