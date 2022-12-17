@@ -19,6 +19,7 @@
                 </div>
                 <q-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
                   <q-btn :to="`/survey/${survey.id}`" color="primary">
+                    <i class="fa-solid fa-play"></i>
                     Start survey
                   </q-btn>
                 </q-card-actions>
@@ -43,7 +44,7 @@ import { formatDate } from "~/utils/formatData"
 const url = "/api/surveys/"
 const { data: surveys } = await useAsyncData(() => $fetch(url));
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .my-card {
   margin: 10px 15px
 }
