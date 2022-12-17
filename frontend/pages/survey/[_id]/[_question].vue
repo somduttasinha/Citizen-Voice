@@ -87,5 +87,5 @@
 </script>
 
 <style lang="scss">
-
+#map { height: 180px; }
 </style>
