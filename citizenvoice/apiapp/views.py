@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation
 from django.http import HttpResponse
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
 from django.contrib.auth.models import User
 from datetime import datetime
-
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import action 
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -118,12 +120,36 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return queryset
         
 
+# TEST
+
+# @api_view(['GET', 'POST', 'DELETE'])
+# def survey_list(request):
+#     if request.method == 'GET':
+#         surveys = Survey.objects.all()
+        
+#         title = request.query_params.get('title', None)
+#         if title is not None:
+#             surveys = surveys.filter(title__icontains=title)
+        
+#         survey_serializer = SurveySerializer(surveys, many=True)
+#         return JsonResponse(tutorials_serializer.data, safe=False)
+#         # 'safe=False' for objects serialization    
+#     elif response.method == 'POST':
+#         data = JSONParser().parse(response)
+#         survey_serializer = SurveySerializer(data=data)
+#         if survey_serializer.is_valid():
+#             survey_serializer.save()
+#             return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
+#         return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 class SurveyViewSet(viewsets.ModelViewSet):
     """
     Survey ViewSet used internally to query data from database.
 
     """
-
+    authentication_classes = []
     serializer_class = SurveySerializer
 
     def get_queryset(response):
@@ -133,9 +159,22 @@ class SurveyViewSet(viewsets.ModelViewSet):
         Return:
             queryset: containing all Survey instances
         """
-
         queryset = Survey.objects.all().order_by('name')
+
         return queryset
+
+
+    @action(detail=True, methods=['post'])
+    def CreateSurvey(response):
+        """
+        Create a survey
+        """
+        data = JSONParser().parse(response)
+        survey_serializer = SurveySerializer(data=data, context={'request': response})
+        if survey_serializer.is_valid():
+            survey_serializer.save()
+            return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
+        return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def GetSurveyByID(id):

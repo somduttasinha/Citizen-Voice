@@ -14,7 +14,7 @@
     "@quasar/vite-plugin": "^1.2.3",
     "eslint": "^8.27.0",
     "eslint-plugin-nuxt": "^4.0.0",
-    "nuxt": "3.0.0",
+    "nuxt": "^3.0.0",
     "sass": "1.32.12"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "@vueuse/nuxt": "^9.6.0",
     "dayjs": "^1.11.6",
     "jsdom": "^20.0.3",
+    "package.json": "^2.0.1",
     "quasar": "^2.10.1"
   }
 }
