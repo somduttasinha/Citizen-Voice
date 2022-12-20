@@ -8,16 +8,16 @@
 
                             <q-form ref="myForm" class="q-gutter-md">
 
-                                <q-input filled v-model="form.data.email" label="Email *" lazy-rules
+                                <q-input filled v-model="email" label="Email *" lazy-rules
                                     :rules="[val => val && val.length > 0 || 'Please type something']" />
 
-                                <q-input filled v-model="form.data.password" label="Password *" lazy-rules :rules="[
+                                <q-input filled v-model="password" label="Password *" lazy-rules :rules="[
                                     val => val !== null && val !== '' || 'Please enter your password'
                                 ]" />
 
                             </q-form>
                             <div class="q-mt-md">
-                                <q-btn label="Submit" :disabled="form.pending" @click="onSubmit" color="primary" />
+                                <q-btn label="Submit" @click="onSubmit" color="primary" />
                                 <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm" />
                             </div>
                         </div>
@@ -29,67 +29,50 @@
 </template>
 
 <script setup>
-import BaseButton from "../components/BaseButton";
-import LeftDrawer from "../layouts/leftDrawer";
-import DrawerBothSides from "../layouts/drawerBothSides";
-import FormLogin from "../layouts/formLogin";
 import CenterDiv from "../layouts/centerDiv";
 import { useQuasar } from 'quasar'
-// import {login} from "../composables/auth/useAuth"
 
 const $q = useQuasar()
 const data = ref(null)
 const email = ref(null)
 const password = ref(null)
 
+
 const url = "/api/auth/login/"
 
-const { login } = useAuth()
-
-const form = reactive({
-    data: {
-        email: '',
-        password: '',
-    },
-    error: '',
-    pending: false,
-})
-
 const onSubmit = async () => {
-    try {
-        form.error = ''
-        form.pending = true
+    let formData = new FormData();
+    formData.append('password', password.value);
+    formData.append('email', email.value);
 
-        await login(form.data.email, form.data.password)
+    const { data: login } = await useAsyncData(() => $fetch(url, {
+        method: "post",
+        body: formData
+    }));
 
+    if (login?.value?.token) {
         $q.notify({
             color: 'green-4',
             textColor: 'white',
             icon: 'cloud_done',
             message: 'Logged-in'
         })
-
-        // emit('success')
-    }
-    catch (error) {
-        console.error('error: ', error)
-
+        // Store auth token in local storage
+        localStorage.setItem('token', login.value.token)
+    } else {
         $q.notify({
             color: 'red-5',
             textColor: 'white',
             icon: 'warning',
             message: 'Something went wrong, make sure you have the right credentials'
         })
+    }
 
-    }
-    finally {
-        form.pending = false
-    }
 }
 
 const onReset = () => {
-    form.data.email = null
-    form.data.password = false
+    email.value = null
+    password.value = false
 }
 
 

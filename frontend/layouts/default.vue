@@ -19,17 +19,18 @@
                     </q-tabs>
 
                     <q-tabs align="right">
+                        <q-btn to="/user" flat round dense icon="person" />
                         <q-route-tab to="/login" label="Login" /> |
-                        <q-route-tab to="/auth/register" label="Register" />
+                        <q-route-tab to="/register" label="Register" />
                     </q-tabs>
                 </div>
             </q-header>
 
 
             <q-page-container>
-<!--                <q-page padding>-->
-                    <slot />
-<!--                </q-page>-->
+                <!--                <q-page padding>-->
+                <slot />
+                <!--                </q-page>-->
             </q-page-container>
 
             <q-footer elevated class="bg-grey-8 text-white">
@@ -69,7 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .custom-zero-padding {
-  padding: 0;
-  padding-left: 0;
+    padding: 0;
+    padding-left: 0;
 }
 </style>
