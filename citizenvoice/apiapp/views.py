@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation
+from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.http import HttpResponse
 from rest_framework import viewsets, status
-from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
+from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
+    LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
+    MapViewSerializer
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http.response import JsonResponse
@@ -118,30 +120,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
         """
         queryset = Question.objects.filter(survey=survey_id, order=question_order)
         return queryset
-        
-
-# TEST
-
-# @api_view(['GET', 'POST', 'DELETE'])
-# def survey_list(request):
-#     if request.method == 'GET':
-#         surveys = Survey.objects.all()
-        
-#         title = request.query_params.get('title', None)
-#         if title is not None:
-#             surveys = surveys.filter(title__icontains=title)
-        
-#         survey_serializer = SurveySerializer(surveys, many=True)
-#         return JsonResponse(tutorials_serializer.data, safe=False)
-#         # 'safe=False' for objects serialization    
-#     elif response.method == 'POST':
-#         data = JSONParser().parse(response)
-#         survey_serializer = SurveySerializer(data=data)
-#         if survey_serializer.is_valid():
-#             survey_serializer.save()
-#             return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
-#         return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
@@ -449,4 +427,23 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
         """
 
         queryset = LineStringLocation.objects.filter(answer=answer)
+        return queryset
+
+class MapViewViewSet(viewsets.ModelViewSet):
+    """
+    Question ViewSet used internally to query data from database.
+
+    """
+
+    serializer_class = MapViewSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all MapView instances in the database.
+
+        Return:
+            queryset: containing all MapView instances
+        """
+
+        queryset = MapView.objects.all()
         return queryset
