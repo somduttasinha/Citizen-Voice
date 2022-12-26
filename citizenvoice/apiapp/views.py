@@ -142,17 +142,17 @@ class SurveyViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-    @action(detail=True, methods=['post'])
-    def CreateSurvey(response):
-        """
-        Create a survey
-        """
-        data = JSONParser().parse(response)
-        survey_serializer = SurveySerializer(data=data, context={'request': response})
-        if survey_serializer.is_valid():
-            survey_serializer.save()
-            return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
-        return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # @action(detail=True, methods=['post'])
+    # def CreateSurvey(response):
+    #     """
+    #     Create a survey
+    #     """
+    #     data = JSONParser().parse(response)
+    #     survey_serializer = SurveySerializer(data=data, context={'request': response})
+    #     if survey_serializer.is_valid():
+    #         survey_serializer.save()
+    #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
+    #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def GetSurveyByID(id):

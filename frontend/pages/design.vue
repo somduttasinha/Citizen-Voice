@@ -32,7 +32,7 @@ const { data: surveys } = await useAsyncData(() => $fetch(url));
 </script>
 
 <script submit>
-const add_url = "/api/newsurvey/";
+const add_url = "/api/surveys/";
 
 // Get the CSRF token in the cookie stored in the browser
 function getCookie(name) {
@@ -51,6 +51,12 @@ function getCookie(name) {
   return cookieValue;
 }
 const csrftoken = getCookie('csrftoken');
+var expire_date = new Date();
+var current_date = new Date();
+
+// set default expire date 100 days after current day
+expire_date.setDate(expire_date.getDate() + 100);
+current_date.setDate(current_date.getDate());
 
 export default {
   data() {
@@ -68,9 +74,8 @@ export default {
         body: JSON.stringify({
           name: this.textName,
           description: this.textDescription,
-          // Dummy variables for time for now
-          publish_date: "2029-06-15T13:45:30",
-          expire_date: "2039-06-15T13:45:30"
+          publish_date: current_date,
+          expire_date: expire_date
         })
       };
       fetch(add_url, requestOptions)
