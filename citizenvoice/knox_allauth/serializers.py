@@ -87,7 +87,8 @@ class AllauthLoginSerializer(serializers.Serializer):
         ):
             email_address = user.emailaddress_set.get(email=user.email)
             if not email_address.verified:
-                raise serializers.ValidationError("Email address is not verified.")
+                raise serializers.ValidationError(
+                    "Email address is not verified.")
 
         attrs["user"] = user
         return attrs
@@ -101,8 +102,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = []
-        read_only_fields = []
+        fields = ["id"]
+        read_only_fields = ["id"]
 
         if allauth_settings.USER_MODEL_USERNAME_FIELD:
             fields.append("username")
@@ -246,7 +247,8 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
             )
 
         if not default_token_generator.check_token(self.user, attrs["token"]):
-            raise serializers.ValidationError({"token": ["Invalid user token."]})
+            raise serializers.ValidationError(
+                {"token": ["Invalid user token."]})
 
         # Run password validation (None if valid, DjangoValidationError if invalid)
         new_password = attrs.get("new_password")

@@ -5,23 +5,26 @@
                 <center-div>
                     <template v-slot:centered-component>
                         <div class="q-pa-md custom-login-form">
-
+                            <h1 class="q-pb-md text-h6">Login or
+                                <NuxtLink to="/register">create an account</NuxtLink>
+                            </h1>
                             <q-form ref="myForm" class="q-gutter-md">
 
-                                <q-input filled v-model="form.data.email" label="Email *" lazy-rules
+                                <q-input filled v-model="email" label="Email *" lazy-rules
                                     :rules="[val => val && val.length > 0 || 'Please type something']" />
 
-                                <q-input filled v-model="form.data.password" label="Password *" lazy-rules :rules="[
-                                    val => val !== null && val !== '' || 'Please enter your password'
-                                ]" />
-
+                                <q-input filled v-model="password" label="Password *" lazy-rules
+                                    :rules="[val => val !== null && val !== '' || 'Please enter your password']" />
                             </q-form>
                             <div class="q-mt-md">
-                                <q-btn label="Submit" :disabled="form.pending" @click="onSubmit" color="primary" />
+                                <q-btn label="Submit" :disabled="userStore.userData.pending" @click="onSubmit"
+                                    color="primary" />
                                 <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm" />
+
                             </div>
                         </div>
                     </template>
+                    {{ user }}
                 </center-div>
             </div>
         </q-page>
@@ -29,67 +32,29 @@
 </template>
 
 <script setup>
-import BaseButton from "../components/BaseButton";
-import LeftDrawer from "../layouts/leftDrawer";
-import DrawerBothSides from "../layouts/drawerBothSides";
-import FormLogin from "../layouts/formLogin";
 import CenterDiv from "../layouts/centerDiv";
+import { useUserStore } from "~/stores/user"
 import { useQuasar } from 'quasar'
-// import {login} from "../composables/auth/useAuth"
 
-const $q = useQuasar()
-const data = ref(null)
 const email = ref(null)
 const password = ref(null)
 
-const url = "/api/auth/login/"
+const $q = useQuasar()
+const userStore = useUserStore()
 
-const { login } = useAuth()
-
-const form = reactive({
-    data: {
-        email: '',
-        password: '',
-    },
-    error: '',
-    pending: false,
-})
 
 const onSubmit = async () => {
-    try {
-        form.error = ''
-        form.pending = true
-
-        await login(form.data.email, form.data.password)
-
-        $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Logged-in'
-        })
-
-        // emit('success')
-    }
-    catch (error) {
-        console.error('error: ', error)
-
-        $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Something went wrong, make sure you have the right credentials'
-        })
-
-    }
-    finally {
-        form.pending = false
+    await userStore.loginUser(email.value, password.value)
+    if (userStore.isAuthenticated) {
+        userStore.succesNotification($q)
+        // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
+        // See: https://nuxt.com/docs/api/composables/use-route
+        await navigateTo('/design')
     }
 }
 
 const onReset = () => {
-    form.data.email = null
-    form.data.password = false
+    userStore.clearUser()
 }
 
 

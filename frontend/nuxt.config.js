@@ -21,7 +21,8 @@ export default defineNuxtConfig({
             // ... or scan modules nested one level deep with a specific name and file extension      
             'composables/*/index.{ts,js,mjs,mts}',
             // ... or scan all modules within given directory      
-            'composables/**']
+            'composables/**'
+        ]
     },
     plugins: [],
     vite: {
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
 
     },
     modules: [
-        '@vueuse/nuxt', '@nuxtjs-alt/proxy', '@pinia/nuxt'
+        '@vueuse/nuxt', '@nuxtjs-alt/proxy', '@pinia/nuxt',
     ],
     runtimeConfig: {
         cookieName: process.env.COOKIE_NAME || '__session',

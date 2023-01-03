@@ -14,6 +14,9 @@
 import CenterDiv from "../layouts/centerDiv";
 import { useQuasar } from 'quasar'
 
+// Make sure the user is authenticated or trigger the reroute to login
+definePageMeta({ middleware: 'authorization' })
+
 const $q = useQuasar()
 const data = ref(null)
 const email = ref(null)
@@ -21,9 +24,9 @@ const password = ref(null)
 
 const url = "/api/auth/login/"
 
-const { me } = useAuth()
+// const { me } = useAuth()
 
-me()
+// me()
 
 </script>
 

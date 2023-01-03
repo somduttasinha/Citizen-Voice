@@ -7,18 +7,21 @@
                         <div class="q-pa-md custom-login-form">
 
                             <q-form ref="myForm" class="q-gutter-md">
+                                <h1 class="text-h6">Register</h1>
+
+                                <q-input filled v-model="username" label="Username *" lazy-rules
+                                    :rules="[val => val && val.length > 0 || 'Please type something']" />
 
                                 <q-input filled v-model="email" label="Email *" lazy-rules
                                     :rules="[val => val && val.length > 0 || 'Please type something']" />
 
                                 <q-input filled v-model="password" label="Password *" lazy-rules :rules="[
-                                    val => val !== null && val !== '' || 'Please enter your password'
-                                ]" />
+    val => val !== null && val !== '' || 'Please enter your password'
+]" />
 
                             </q-form>
                             <div class="q-mt-md">
                                 <q-btn label="Submit" @click="onSubmit" color="primary" />
-                                <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm" />
                             </div>
                         </div>
                     </template>
@@ -29,53 +32,35 @@
 </template>
 
 <script setup>
-import CenterDiv from "../layouts/centerDiv";
 import { useQuasar } from 'quasar'
+import CenterDiv from "../layouts/centerDiv";
+import { useUserStore } from "~/stores/user"
 
+const userStore = useUserStore()
 const $q = useQuasar()
-const data = ref(null)
+
+const username = ref(null)
 const email = ref(null)
 const password = ref(null)
 
+onMounted(async () => {
+    /**
+     * Just to make sure a user is not logged-in already
+     */
+    await userStore.logout()
+})
 
-const url = "/api/auth/login/"
 
 const onSubmit = async () => {
-    let formData = new FormData();
-    formData.append('password', password.value);
-    formData.append('email', email.value);
+    const { status, succes } = await userStore.registerUser({ username: username.value, email: email.value, password: password.value })
 
-    const { data: login } = await useAsyncData(() => $fetch(url, {
-        method: "post",
-        body: formData
-    }));
-
-    if (login?.value?.token) {
-        $q.notify({
-            color: 'green-4',
-            textColor: 'white',
-            icon: 'cloud_done',
-            message: 'Logged-in'
-        })
-        // Store auth token in local storage
-        localStorage.setItem('token', login.value.token)
-    } else {
-        $q.notify({
-            color: 'red-5',
-            textColor: 'white',
-            icon: 'warning',
-            message: 'Something went wrong, make sure you have the right credentials'
-        })
+    if (status.succes) {
+        userStore.succesNotification()
+        // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
+        // See: https://nuxt.com/docs/api/composables/use-route
+        await navigateTo('/login')
     }
-
 }
-
-const onReset = () => {
-    email.value = null
-    password.value = false
-}
-
-
 </script>
 
 <style lang="scss" scoped>
