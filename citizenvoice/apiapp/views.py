@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation
+from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.http import HttpResponse
 from rest_framework import viewsets
-from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer
+from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
+    LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
+    MapViewSerializer
 from django.contrib.auth.models import User
 from datetime import datetime
 
@@ -116,7 +118,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         """
         queryset = Question.objects.filter(survey=survey_id, order=question_order)
         return queryset
-        
+
 
 class SurveyViewSet(viewsets.ModelViewSet):
     """
@@ -410,4 +412,23 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
         """
 
         queryset = LineStringLocation.objects.filter(answer=answer)
+        return queryset
+
+class MapViewViewSet(viewsets.ModelViewSet):
+    """
+    Question ViewSet used internally to query data from database.
+
+    """
+
+    serializer_class = MapViewSerializer
+
+    def get_queryset(response):
+        """
+        Returns a set of all MapView instances in the database.
+
+        Return:
+            queryset: containing all MapView instances
+        """
+
+        queryset = MapView.objects.all()
         return queryset
