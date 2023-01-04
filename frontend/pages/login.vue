@@ -3,28 +3,25 @@
         <q-page style="display: flex;justify-content: center;align-items: center">
             <div class="padding-16">
                 <center-div>
-                    <template v-slot:centered-component>
-                        <div class="q-pa-md custom-login-form">
-                            <h1 class="q-pb-md text-h6">Login or
-                                <NuxtLink to="/register">create an account</NuxtLink>
-                            </h1>
-                            <q-form ref="myForm" class="q-gutter-md">
+                    <div class="q-pa-md custom-login-form">
+                        <h1 class="q-pb-md text-h6">Login or
+                            <NuxtLink to="/register">create an account</NuxtLink>
+                        </h1>
+                        <q-form ref="myForm" class="q-gutter-md">
 
-                                <q-input filled v-model="email" label="Email *" lazy-rules
-                                    :rules="[val => val && val.length > 0 || 'Please type something']" />
+                            <q-input filled v-model="email" label="Email *" lazy-rules
+                                :rules="[val => val && val.length > 0 || 'Please type something']" />
 
-                                <q-input filled v-model="password" label="Password *" lazy-rules
-                                    :rules="[val => val !== null && val !== '' || 'Please enter your password']" />
-                            </q-form>
-                            <div class="q-mt-md">
-                                <q-btn label="Submit" :disabled="userStore.userData.pending" @click="onSubmit"
-                                    color="primary" />
-                                <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm" />
+                            <q-input filled v-model="password" label="Password *" lazy-rules
+                                :rules="[val => val !== null && val !== '' || 'Please enter your password']" />
+                        </q-form>
+                        <div class="q-mt-md">
+                            <!-- :disabled="userStore.userData.pending" -->
+                            <q-btn label="Submit" @click="onSubmit" color="primary" />
+                            <q-btn label="Reset" @click="onReset" color="primary" flat class="q-ml-sm" />
 
-                            </div>
                         </div>
-                    </template>
-                    {{ user }}
+                    </div>
                 </center-div>
             </div>
         </q-page>

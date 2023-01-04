@@ -12,7 +12,7 @@ export const useUserStore = defineStore('user', {
                 user: {
                     id: null,
                     email: '',
-                    password: '',
+                    username: ''
                 },
             },
             register: {
@@ -22,11 +22,12 @@ export const useUserStore = defineStore('user', {
         }
     },
     getters: {
-        isAuthenticated: (state) => state.userData.isAuthenticated
+        isAuthenticated: (state) => state.userData.isAuthenticated,
     },
     actions: {
         /**
          * See if user is logged-in
+         * Remember this only works client side, make user to use `if (process.client) {}` or the `onMounted()` hook in a vue component
          */
         async loadUser() {
             this.userData.error = ''
@@ -48,18 +49,16 @@ export const useUserStore = defineStore('user', {
                     this.userData = {
                         ...this.userData,
                         isAuthenticated: true,
-                        ...response
+                        user: response,
                     }
                 })
                 .catch(error => {
                     console.log('error //> ', error)
-                    this.clearUser()
+                    this.resetUser()
                     this.userData.error = error
                     this.userData.isAuthenticated = false
-                    console.log('this.userData //> ', this.userData)
                 }).finally(() => {
                     this.userData.pending = false
-                    console.log('this.userData.isAuthenticated //> ', this.userData.isAuthenticated)
                 })
         },
         /**
@@ -77,14 +76,13 @@ export const useUserStore = defineStore('user', {
                 body
             }
 
-            const { data: register, pending, error } = await useAsyncData('login', () => $fetch('/api/auth/register/', config))
+            const { data: register, pending, error } = await useAsyncData('register', () => $fetch('/api/auth/register/', config))
 
             if (error.value) {
                 let warnMessage = null
                 for (const [key, value] of Object.entries(error._value.data)) {
                     warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
                 }
-
                 this.register.succes = false
                 // Notification
                 global.negativeNotify(warnMessage)
@@ -102,25 +100,48 @@ export const useUserStore = defineStore('user', {
          * Login user
          * @param {*} email 
          * @param {*} password 
+         * TODO: add pending functionality
          */
         async loginUser(
             email,
             password,
         ) {
+            const global = useGlobalStore()
             this.userData.error = ''
             this.userData.pending = true
 
-            await $fetch('/api/auth/login/', {
+            const config = {
                 method: 'POST',
                 body: {
                     email,
                     password,
                 },
-            }).then(async res => {
+            }
+
+            const { data: login, pending, error } = await useAsyncData('login', () => $fetch('/api/auth/login/', config))
+
+            if (error.value) {
+                console.log('error: ', error.value)
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
+
+                // this.userData.error = err
+                this.userData.isAuthenticated = false
+
+                // Notification
+                global.negativeNotify(warnMessage)
+
+            }
+            if (login?.value) {
+                console.log('login //> ', login.value)
                 this.userData = {
                     ...this.userData,
                     isAuthenticated: true,
-                    ...res
+                    token: login?.value.token,
+                    user: login?.value.user,
+                    // ...res
                 }
                 localStorage.setItem('token', this.userData.token)
                 // Notification
@@ -128,23 +149,19 @@ export const useUserStore = defineStore('user', {
                 // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
                 // See: https://nuxt.com/docs/api/composables/use-route
                 await navigateTo('/design')
-            }).catch(err => {
-                console.log('error //> ', err)
-                this.userData.error = err
-                this.userData.isAuthenticated = false
-            }).finally(() => {
-                this.userData.pending = false
-            })
+            }
 
         },
         /**
          * User logout
          */
         async logout() {
+            const global = useGlobalStore()
             const token = this.userData.token || localStorage.getItem('token')
 
             if (!token) {
-                this.$reset()
+                // Resets all stores to initial data
+                this.resetUser()
                 $q.notify({
                     color: 'blue-5',
                     textColor: 'white',
@@ -179,6 +196,12 @@ export const useUserStore = defineStore('user', {
                 return
             })
 
+        },
+        /**
+          * Resets all store values to initial data
+          */
+        async resetUser() {
+            this.$reset()
         }
     },
 })

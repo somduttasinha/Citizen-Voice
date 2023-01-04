@@ -3,28 +3,25 @@
         <q-page style="display: flex;justify-content: center;align-items: center">
             <div class="padding-16">
                 <center-div>
-                    <template v-slot:centered-component>
-                        <div class="q-pa-md custom-login-form">
+                    <div class="q-pa-md custom-login-form">
 
-                            <q-form ref="myForm" class="q-gutter-md">
-                                <h1 class="text-h6">Register</h1>
+                        <q-form ref="myForm" class="q-gutter-md">
+                            <h1 class="text-h6">Register</h1>
 
-                                <q-input filled v-model="username" label="Username *" lazy-rules
-                                    :rules="[val => val && val.length > 0 || 'Please type something']" />
+                            <q-input filled v-model="username" label="Username *" lazy-rules
+                                :rules="[val => val && val.length > 0 || 'Please type something']" />
 
-                                <q-input filled v-model="email" label="Email *" lazy-rules
-                                    :rules="[val => val && val.length > 0 || 'Please type something']" />
+                            <q-input filled v-model="email" label="Email *" lazy-rules
+                                :rules="[val => val && val.length > 0 || 'Please type something']" />
 
-                                <q-input filled v-model="password" label="Password *" lazy-rules :rules="[
-    val => val !== null && val !== '' || 'Please enter your password'
-]" />
+                            <q-input filled v-model="password" label="Password *" lazy-rules
+                                :rules="[val => val !== null && val !== '' || 'Please enter your password']" />
 
-                            </q-form>
-                            <div class="q-mt-md">
-                                <q-btn label="Submit" @click="onSubmit" color="primary" />
-                            </div>
+                        </q-form>
+                        <div class="q-mt-md">
+                            <q-btn label="Submit" @click="onSubmit" color="primary" />
                         </div>
-                    </template>
+                    </div>
                 </center-div>
             </div>
         </q-page>
