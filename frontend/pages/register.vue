@@ -32,34 +32,17 @@
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar'
 import CenterDiv from "../layouts/centerDiv";
 import { useUserStore } from "~/stores/user"
 
 const userStore = useUserStore()
-const $q = useQuasar()
 
 const username = ref(null)
 const email = ref(null)
 const password = ref(null)
 
-onMounted(async () => {
-    /**
-     * Just to make sure a user is not logged-in already
-     */
-    await userStore.logout()
-})
-
-
 const onSubmit = async () => {
-    const { status, succes } = await userStore.registerUser({ username: username.value, email: email.value, password: password.value })
-
-    if (status.succes) {
-        userStore.succesNotification()
-        // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
-        // See: https://nuxt.com/docs/api/composables/use-route
-        await navigateTo('/login')
-    }
+    await userStore.registerUser({ username: username.value, email: email.value, password: password.value })
 }
 </script>
 
