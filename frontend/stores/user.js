@@ -25,6 +25,9 @@ export const useUserStore = defineStore('user', {
         isAuthenticated: (state) => state.userData.isAuthenticated
     },
     actions: {
+        /**
+         * See if user is logged-in
+         */
         async loadUser() {
             this.userData.error = ''
             this.userData.pending = true
@@ -59,7 +62,11 @@ export const useUserStore = defineStore('user', {
                     console.log('this.userData.isAuthenticated //> ', this.userData.isAuthenticated)
                 })
         },
-        async registerUser(body, $q) {
+        /**
+         * Register user
+         * @param {username, email, password} body 
+         */
+        async registerUser(body) {
             const global = useGlobalStore()
 
             const config = {
@@ -70,39 +77,36 @@ export const useUserStore = defineStore('user', {
                 body
             }
 
-            const { data, pending, error, refresh } = await useAsyncData('mountains', () => $fetch('/api/auth/register/', config))
+            const { data: register, pending, error } = await useAsyncData('login', () => $fetch('/api/auth/register/', config))
 
-            watch(data, (newCount) => {  // Because count starts out null, you won't have access  // to its contents immediately, but you can watch it.
-                console.log('data //> ', data)
-            })
+            if (error.value) {
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
 
-            watch(error, (newCount) => {  // Because count starts out null, you won't have access  // to its contents immediately, but you can watch it.
-                console.log('error //> ', error)
-            })
+                this.register.succes = false
+                // Notification
+                global.negativeNotify(warnMessage)
 
+            }
+            if (register?.value) {
+                this.register.succes = true
+                // Notification
+                global.succesNotify('Register complete')
+                await navigateTo('/login')
+            }
 
-
-            // const res = await $fetch('/api/auth/register/', config)
-            //     .then(response => {
-            //         console.log('response //> ', response)
-            //         this.register.succes = true
-            //         // Notification
-            //         global.succesNotify('Register complete')
-            //     })
-            //     .catch(error => {
-            //         console.log('error //> ', error)
-            //         this.register.succes = false
-            //         // Notification
-            //         global.negativeNotify('Something went wrong')
-            //     })
-
-            console.log('data //> ', data, error, pending)
         },
+        /**
+         * Login user
+         * @param {*} email 
+         * @param {*} password 
+         */
         async loginUser(
             email,
             password,
         ) {
-
             this.userData.error = ''
             this.userData.pending = true
 
@@ -112,13 +116,18 @@ export const useUserStore = defineStore('user', {
                     email,
                     password,
                 },
-            }).then(res => {
+            }).then(async res => {
                 this.userData = {
                     ...this.userData,
                     isAuthenticated: true,
                     ...res
                 }
                 localStorage.setItem('token', this.userData.token)
+                // Notification
+                global.succesNotify('Login complete')
+                // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
+                // See: https://nuxt.com/docs/api/composables/use-route
+                await navigateTo('/design')
             }).catch(err => {
                 console.log('error //> ', err)
                 this.userData.error = err
@@ -128,10 +137,10 @@ export const useUserStore = defineStore('user', {
             })
 
         },
-        // updateUser(payload) {
-
-        // },
-        async logout($q) {
+        /**
+         * User logout
+         */
+        async logout() {
             const token = this.userData.token || localStorage.getItem('token')
 
             if (!token) {
@@ -142,6 +151,8 @@ export const useUserStore = defineStore('user', {
                     // icon: 'warning',
                     message: 'You are already logged-out'
                 })
+                // Notification
+                global.infoNotify('You are already logged-out')
                 return
             }
 
@@ -156,22 +167,14 @@ export const useUserStore = defineStore('user', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            await $fetch('/api/auth/logout/', config).then(() => {
+            await $fetch('/api/auth/logout/', config).then(async () => {
                 localStorage.removeItem('token')
                 this.$reset()
-                $q.notify({
-                    color: 'green-4',
-                    textColor: 'white',
-                    icon: 'cloud_done',
-                    message: 'Logged-out'
-                })
+                // Notification
+                global.succesNotify('Logged-out successfully')
+                await navigateTo('/')
             }).catch(err => {
-                $q.notify({
-                    color: 'red-5',
-                    textColor: 'white',
-                    icon: 'warning',
-                    message: 'Something went wrong'
-                })
+                global.negativeNotify('Something went wrong')
             }).finally(() => {
                 return
             })

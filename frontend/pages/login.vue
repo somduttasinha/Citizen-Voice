@@ -39,18 +39,10 @@ import { useQuasar } from 'quasar'
 const email = ref(null)
 const password = ref(null)
 
-const $q = useQuasar()
 const userStore = useUserStore()
-
 
 const onSubmit = async () => {
     await userStore.loginUser(email.value, password.value)
-    if (userStore.isAuthenticated) {
-        userStore.succesNotification($q)
-        // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
-        // See: https://nuxt.com/docs/api/composables/use-route
-        await navigateTo('/design')
-    }
 }
 
 const onReset = () => {
