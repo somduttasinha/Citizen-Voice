@@ -18,8 +18,8 @@ class Response(models.Model):
     the respondent (user) that created the answer and for which survey.
     """
     
-    created = models.DateTimeField(_("Date response was submitted"))
-    updated = models.DateTimeField(_("Last edit"))
+    created = models.DateTimeField(_("Date response was submitted"), auto_now_add=True)
+    updated = models.DateTimeField(_("Last edit"), auto_now=True)
     survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
     interview_uuid = models.CharField(_("Unique ID of interview"), max_length=150)
     respondent = models.ForeignKey(User, on_delete=models.CASCADE)
