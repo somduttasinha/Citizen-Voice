@@ -35,6 +35,7 @@
    */
   const survey_url = "/api/surveys/"
   const create_response_url = "/api/responses/"
+  const origin_url = "http://localhost:3000"
   const data = ref([])
   const route = useRoute()
 
@@ -43,18 +44,29 @@
   const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
     console.log("function called")
+    const csrfResponse = await fetch('/api/csrf/', {
+      mode: 'cors',
+      headers: {
+        Origin: origin_url
+      }
+    })
+    const csrfJson = await csrfResponse.json()
+    const csrfToken = csrfJson.csrf_token
+    // console.log(csrfToken)
 
-    // await fetch(create_response_url, {
+    // Make a POST request to the endpoint
     const response = await fetch(create_response_url, {
       method: 'POST',
+      mode: 'cors',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        Origin: origin_url
       },
       // Pass the data for the new Response object as the request body
+      // TODO: have the respondent set to the logged in user
       body: JSON.stringify({
-        created: "2022-10-24T10:37:11.911108Z",
-        updated: "2022-10-24T10:37:11.911108Z",
-        survey: "/api/surveys/2/",
+        survey: survey_url + route.params._id + "/",
         interview_uuid: "123",
         respondent: "/api/users/1/"
       })
@@ -67,7 +79,6 @@
     // Navigate to the /survey/${survey.id}/1 page after the response is created
     return navigateTo('/survey/' + route.params._id + '/1')
   }
-
 
 </script>
 
