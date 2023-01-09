@@ -1,6 +1,7 @@
 <template>
     <NuxtLayout name="default">
 
+
         <div class="q-pa-md row items-start q-gutter-md">
           <!-- Question card: number & text -->
           <q-card class="my-card">
@@ -17,13 +18,13 @@
                   style="min-width: 600px;" class="my-card col">
             <q-card-section>
                 <div style="height:300px; width:600px">
-                  <l-map ref="map" v-model:zoom="zoom" :center="center" :minZoom="1" :maxZoom="18">
+                  <l-map ref="map" v-model:zoom="zoom" :center="center" :minZoom="1" :maxZoom="18" @click="addCircle">
                     <l-tile-layer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       layer-type="base"
                       name="OpenStreetMap"
                     ></l-tile-layer>
-                    <l-circle v-for="circle, index in circles""
+                    <l-circle v-for="circle, index in circles" @click="removeCircle(index)"
                               :lat-lng="circle"
                               :radius="circleSettings.radius"
                               :color="circleSettings.circleColor"
@@ -36,6 +37,7 @@
           <!-- Answer card-->
           <q-card style="min-width: 300px;" class="my-card col">
             <q-card-section>
+
               <p> Answer here </p>
             </q-card-section>
           </q-card>
@@ -63,6 +65,7 @@
 
   import { ref } from "vue"
   import {navigateTo} from "nuxt/app";
+  import leaflet from "leaflet"
   import "leaflet/dist/leaflet.css";
   import { LMap, LTileLayer, LCircle} from "@vue-leaflet/vue-leaflet";
 
@@ -73,7 +76,9 @@
   const question_url = "/api/questions/"
   const data = ref([])
   const route = useRoute()
+
   const { data: survey } = await useAsyncData(() => $fetch(survey_url + route.params._id));
+
   // TODO: use an API to get n'th question of the selected survey
   // for demo only, I will use (5 + question id).
   let demo_question = parseInt(route.params._question, 10) + 5
@@ -91,6 +96,9 @@
         L.latLng(47.413220, -1.219482),
         L.latLng(47.414, -1.22),
       ])
+  // circleClickedAndRemoved is a boolean we use to keep track of whether a circle was just clicked
+  // if that is the case, we will not call the addCircle function
+  let circleClickedAndRemoved = false
 
   // to navigate from one question to the previous/next
   const prevQuestion = async () => {
@@ -102,11 +110,29 @@
       return navigateTo('/survey/' + route.params._id)
     }
   }
+
   const nextQuestion = async () => {
     // if this is not the last question:
     return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
   }
 
+  // inspired by Roy J's solution on Stack Overflow:
+  // https://stackoverflow.com/questions/54499070/leaflet-and-vuejs-how-to-add-a-new-marker-onclick-in-the-map
+  const removeCircle = async (index) => {
+    console.log("removeCircle function called")
+    circles._value.splice(index, 1)
+    circleClickedAndRemoved = true
+  }
+  const addCircle = async (event) => {
+    if(circleClickedAndRemoved) {
+      circleClickedAndRemoved = false
+    } else{
+      console.log("addCircle function called")
+      circles._value.push(
+        L.latLng(event.latlng.lat, event.latlng.lng)
+      )
+    }
+  }
 
 </script>
 
