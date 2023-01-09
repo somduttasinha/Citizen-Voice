@@ -29,6 +29,12 @@
                               :radius="circleSettings.radius"
                               :color="circleSettings.circleColor"
                     ></l-circle>
+                    <l-control position="bottomleft" >
+                      <button @click="resetMap">
+                        Reset
+                      </button>
+                    </l-control>
+
                   </l-map>
                 </div>
             </q-card-section>
@@ -67,7 +73,7 @@
   import {navigateTo} from "nuxt/app";
   import leaflet from "leaflet"
   import "leaflet/dist/leaflet.css";
-  import { LMap, LTileLayer, LCircle} from "@vue-leaflet/vue-leaflet";
+  import { LMap, LTileLayer, LCircle, LControl} from "@vue-leaflet/vue-leaflet";
 
   /**
    * All `/api/**` are proxies pointing to the local or production server of the backend.
@@ -110,7 +116,6 @@
       return navigateTo('/survey/' + route.params._id)
     }
   }
-
   const nextQuestion = async () => {
     // if this is not the last question:
     return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
@@ -133,6 +138,10 @@
       )
     }
   }
+  const resetMap = async () => {
+    // TODO: reset map based on map_view
+  }
+
 
 </script>
 
