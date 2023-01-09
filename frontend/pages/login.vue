@@ -31,7 +31,6 @@
 <script setup>
 import CenterDiv from "../layouts/centerDiv";
 import { useUserStore } from "~/stores/user"
-import { useQuasar } from 'quasar'
 
 const email = ref(null)
 const password = ref(null)

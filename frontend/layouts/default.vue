@@ -64,8 +64,6 @@
 <script>
 import { ref } from 'vue'
 import { useUserStore } from "~/stores/user"
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
 
 export default {
     setup() {

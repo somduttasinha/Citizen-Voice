@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useQuasar } from 'quasar'
 
 export const useGlobalStore = defineStore('global', {
     state: () => {
@@ -35,8 +36,9 @@ export const useGlobalStore = defineStore('global', {
                 message: message
             })
         },
-        setQNotify(notify) {
-            this.QNotify = notify
+        initalizeNotify() {
+            const $q = useQuasar()
+            this.QNotify = $q.notify
         },
     }
 })
