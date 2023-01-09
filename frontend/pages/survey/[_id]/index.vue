@@ -9,7 +9,7 @@
             <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
             <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
 
-            <q-btn :to="`/survey/${survey.id}/1`" color="primary">
+            <q-btn @click="createResponse" color="primary">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start survey</span>
             </q-btn>
@@ -28,14 +28,45 @@
 
 <script setup>
   import { ref } from "vue"
+  import {navigateTo} from "nuxt/app";
+
   /**
    * All `/api/**` are proxies pointing to the local or production server of the backend.
    */
-  const url = "/api/surveys/"
+  const survey_url = "/api/surveys/"
+  const create_response_url = "/api/responses/"
   const data = ref([])
   const route = useRoute()
 
-  const { data: survey } = await useAsyncData(() => $fetch(url + route.params._id));
+  const { data: survey } = await useAsyncData(() => $fetch(survey_url + route.params._id));
+
+  const createResponse = async () => {
+    // Make a POST request to your Django API endpoint to create a new Response object
+    console.log("function called")
+
+    // await fetch(create_response_url, {
+    const response = await fetch(create_response_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      // Pass the data for the new Response object as the request body
+      body: JSON.stringify({
+        created: "2022-10-24T10:37:11.911108Z",
+        updated: "2022-10-24T10:37:11.911108Z",
+        survey: "/api/surveys/2/",
+        interview_uuid: "123",
+        respondent: "/api/users/1/"
+      })
+    })
+
+    const responseJson = await response.json()
+    console.log(responseJson)
+    console.log("function ended")
+
+    // Navigate to the /survey/${survey.id}/1 page after the response is created
+    return navigateTo('/survey/' + route.params._id + '/1')
+  }
 
 
 </script>
