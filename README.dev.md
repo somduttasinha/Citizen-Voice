@@ -84,10 +84,10 @@ To get an valid authentication token you need to have an account and then login 
 Example using postman:
 Create a new POST request to `http://127.0.0.1:8000/api/auth/login/` in the body add the next key value pairs in `from-data`:
 
-| key      | value        |
-| -------- | ------------ |
-| email    | <your email> |
-| password | <your pass>  |
+| key      | value         |
+| -------- | ------------- |
+| email    | `<you email>` |
+| password | `<your pass>` |
 
 As a response you will receive:
 ```json
@@ -105,9 +105,9 @@ As a response you will receive:
 Use the token string to fetch authenticated API's:
 Create a new GET request in postman to `http://127.0.0.1:8000/api/auth/me`. In the `Headers` add the key value pair:
 
-| key           | value         |
-| ------------- | ------------- |
-| Authorization | Token <token> |
+| key           | value           |
+| ------------- | --------------- |
+| Authorization | Token `<token>` |
 
 Make sure your using the same capitals and have a space between `Token` and `<token>`.
 
