@@ -23,11 +23,14 @@ import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
 import { formatDate } from "~/utils/formatData"
+
+// Make sure the user is authenticated or trigger the reroute to login
+definePageMeta({ middleware: 'authorization' })
+
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
 const url = "/api/surveys/"
-const { data: surveys } = await useAsyncData(() => $fetch(url));
 
 </script>
 
@@ -98,6 +101,7 @@ export default {
     }
   }
 }
+const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 </script>
 
 <style lang="scss" scoped>
