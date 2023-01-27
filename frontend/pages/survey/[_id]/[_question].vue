@@ -42,7 +42,6 @@
                         Reset
                       </button>
                     </l-control>
-
                   </l-map>
                 </div>
             </q-card-section>
@@ -110,6 +109,7 @@
   // circleClickedAndRemoved is a boolean we use to keep track of whether a circle was just clicked
   // if that is the case, we will not call the addCircle function
   let circleClickedAndRemoved = false
+  let resetClicked = false
 
   // to navigate from one question to the previous/next
   const prevQuestion = async () => {
@@ -136,6 +136,8 @@
   const addCircle = async (event) => {
     if(circleClickedAndRemoved) {
       circleClickedAndRemoved = false
+    } else if(resetClicked) {
+      resetClicked = false
     } else{
       console.log("addCircle function called")
       circles._value.push(
@@ -144,7 +146,10 @@
     }
   }
   const resetMap = async () => {
-    // TODO: reset map based on map_view
+    console.log("resetMap function called")
+    circles._value.splice(0, circles._value.length)
+    // TODO: reset map center and zoom level based on map_view
+    resetClicked = true
   }
 
 
