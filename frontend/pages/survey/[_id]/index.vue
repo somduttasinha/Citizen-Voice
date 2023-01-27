@@ -8,7 +8,6 @@
             <p>{{ survey.description }} </p>
             <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
             <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
-
             <q-btn @click="createResponse" color="primary">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start survey</span>
@@ -29,6 +28,8 @@
 <script setup>
   import { ref } from "vue"
   import {navigateTo} from "nuxt/app";
+  import { mapMutations } from 'vuex'
+  // import { store } from './store'
 
   /**
    * All `/api/**` are proxies pointing to the local or production server of the backend.
@@ -75,6 +76,8 @@
     const responseJson = await response.json()
     console.log(responseJson)
     console.log("function ended")
+
+    // const response_state = this.$store.state.response
 
     // Navigate to the /survey/${survey.id}/1 page after the response is created
     return navigateTo('/survey/' + route.params._id + '/1')
