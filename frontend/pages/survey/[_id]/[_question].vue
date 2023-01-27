@@ -18,16 +18,24 @@
                   style="min-width: 600px;" class="my-card col">
             <q-card-section>
                 <div style="height:300px; width:600px">
-                  <l-map ref="map" v-model:zoom="zoom" :center="center" :minZoom="1" :maxZoom="18" @click="addCircle">
+                  <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center"
+                         :minZoom="1" :maxZoom="18" @click="addCircle">
                     <l-tile-layer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       layer-type="base"
                       name="OpenStreetMap"
                     ></l-tile-layer>
+                    <l-circle v-for="circle, index in map_view.options.points"
+                              :lat-lng="circle"
+                              :radius="map_view.options.radius"
+                              :color="map_view.options.color"
+                              :fillColor="map_view.options.fillColor"
+                    ></l-circle>
                     <l-circle v-for="circle, index in circles" @click="removeCircle(index)"
                               :lat-lng="circle"
-                              :radius="circleSettings.radius"
-                              :color="circleSettings.circleColor"
+                              :radius="map_view.options.radius"
+                              :color="map_view.options.color"
+                              :fillColor="map_view.options.fillColor"
                     ></l-circle>
                     <l-control position="bottomleft" >
                       <button @click="resetMap">
@@ -80,28 +88,25 @@
    */
   const survey_url = "/api/surveys/"
   const question_url = "/api/questions/"
+  const mapview_url = "/api/map_views/"
   const data = ref([])
   const route = useRoute()
 
   const { data: survey } = await useAsyncData(() => $fetch(survey_url + route.params._id));
 
   // TODO: use an API to get n'th question of the selected survey
-  // for demo only, I will use (5 + question id).
-  let demo_question = parseInt(route.params._question, 10) + 5
+  let demo_question = parseInt(route.params._question, 10) + 5 // for demo only, I will use (5 + question id)
   let { data: question } = await useAsyncData(() => $fetch(question_url + demo_question));
+  // TODO: get question.map_view once APIs are configured
+  const { data: map_view } = await useAsyncData(() => $fetch(mapview_url + 5)); // for demo only, I will use 5th
 
   // to set up the map
-  // these values will be replaced as soon as API for map_view is configured
-  const zoom = ref(4)
-  const center = ref([47.41322, -1.219482])
-  const circleSettings = ref(
-    {circleColor: 'red', radius: 3000}
-  )
-  const circles = ref([
-        L.latLng(47.412, -1.218),
-        L.latLng(47.413220, -1.219482),
-        L.latLng(47.414, -1.22),
-      ])
+  // const center = ref([47.41322, -1.219482])
+  // const circleSettings = ref(
+  //   {circleColor: 'red', radius: 3000}
+  // )
+  const circles = ref([]) // this is what user will add
+  // L.latLng(47.414, -1.22),
   // circleClickedAndRemoved is a boolean we use to keep track of whether a circle was just clicked
   // if that is the case, we will not call the addCircle function
   let circleClickedAndRemoved = false
@@ -134,7 +139,7 @@
     } else{
       console.log("addCircle function called")
       circles._value.push(
-        L.latLng(event.latlng.lat, event.latlng.lng)
+        [event.latlng.lat, event.latlng.lng]
       )
     }
   }
