@@ -11,6 +11,9 @@ export default defineNuxtConfig({
             vue: {
                 prettify: false // this is to make the nuxt application run
             }
+        },
+        resolve: {
+            extensions: ['.js', '.vue']
         }
     },
     app: {
