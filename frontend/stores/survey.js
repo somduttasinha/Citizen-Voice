@@ -21,6 +21,9 @@ export const useSurveyStore = defineStore('survey', {
         * @param {id} id 
         */
 
+        /**
+         * Create a new survey based on the passed parameters
+         */
         async createSurvey(
             name,
             description,
@@ -71,6 +74,9 @@ export const useSurveyStore = defineStore('survey', {
 
         },
 
+        /**
+         * Delete an existing survey based on the passed ID
+         */
         async deleteSurvey(
             id
         ) {

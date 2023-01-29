@@ -44,31 +44,10 @@ const textDescription = ref(null)
 expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
 
+// Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {
   await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
 }
-</script>
-
-<script submit>
-
-
-// Get the CSRF token in the cookie stored in the browser
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
-      }
-    }
-  }
-  return cookieValue;
-}
-
 </script>
 
 <style lang="scss" scoped>

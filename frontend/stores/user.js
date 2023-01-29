@@ -203,7 +203,9 @@ export const useUserStore = defineStore('user', {
         async resetUser() {
             this.$reset()
         },
-        // Get the CSRF token in the cookie stored in the browser
+        /**
+         * Get the CSRF token in the cookie stored in the browser
+         *  */
         async getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
