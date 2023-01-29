@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'survey_design.apps.SurveyDesignConfig',
     'respondent.apps.RespondentConfig',
-    'corsheaders'
+    'corsheaders',
     'knox',
     'knox_allauth',
     'allauth',

@@ -11,7 +11,7 @@
           </q-list>
           <q-input v-model="textName" label="Name" />
           <q-input v-model="textDescription" label="Description" />
-          <q-btn color="white" text-color="black" label="Add survey" @click="AddSurvey" />
+          <q-btn color="white" text-color="black" label="Add survey" @click="addNewSurvey" />
         </div>
       </div>
     </q-page>
@@ -23,6 +23,7 @@ import { ref } from 'vue'
 import BaseButton from "../components/BaseButton";
 import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
 import { formatDate } from "~/utils/formatData"
+import { useSurveyStore } from "~/stores/survey"
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
@@ -30,12 +31,26 @@ definePageMeta({ middleware: 'authorization' })
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
-const url = "/api/surveys/"
 
+const url = "/api/surveys/"
+const surveyStore = useSurveyStore()
+const { data: surveys } = await useAsyncData(() => $cmsApi(url));
+var expire_date = new Date();
+var current_date = new Date();
+const textName = ref(null)
+const textDescription = ref(null)
+
+// set default expire date 100 days after current day
+expire_date.setDate(expire_date.getDate() + 100);
+current_date.setDate(current_date.getDate());
+
+const addNewSurvey = async () => {
+  await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+}
 </script>
 
 <script submit>
-const add_url = "/api/surveys/";
+
 
 // Get the CSRF token in the cookie stored in the browser
 function getCookie(name) {
@@ -53,55 +68,7 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-const csrftoken = getCookie('csrftoken');
-var expire_date = new Date();
-var current_date = new Date();
 
-// set default expire date 100 days after current day
-expire_date.setDate(expire_date.getDate() + 100);
-current_date.setDate(current_date.getDate());
-
-export default {
-  data() {
-    return {
-      textName: '',
-      textDescription: '',
-    }
-  },
-  methods: {
-    AddSurvey() {
-      // POST request using fetch with error handling
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrftoken },
-        body: JSON.stringify({
-          name: this.textName,
-          description: this.textDescription,
-          publish_date: current_date,
-          expire_date: expire_date
-        })
-      };
-      fetch(add_url, requestOptions)
-        .then(async response => {
-          const data = await response.json();
-
-          // check for error response
-          if (!response.ok) {
-            // get error message from body or default to response status
-            const error = (data && data.message) || response.status;
-            return Promise.reject(error);
-          }
-
-          this.postId = data.id;
-        })
-        .catch(error => {
-          this.errorMessage = error;
-          console.error('There was an error!', error);
-        });
-    }
-  }
-}
-const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 </script>
 
 <style lang="scss" scoped>
