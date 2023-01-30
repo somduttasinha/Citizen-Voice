@@ -76,19 +76,30 @@ export const useUserStore = defineStore('user', {
                 body
             }
 
-            const { data: register, pending, error } = await useAsyncData('register', () => $cmsApi('/api/auth/register/', config))
+            let res
 
-            if (error.value) {
+            try {
+                res = await $cmsApi('/api/auth/register/', config)
+            }
+            catch (e) {
+                // For debugging
+                // console.error('statusCode:', e.statusCode)
+                // console.error('statusMessage:', e.statusMessage)
+                // console.error('data:', e.data)
+
                 let warnMessage = null
-                for (const [key, value] of Object.entries(error._value.data)) {
+                for (const [key, value] of Object.entries(e.data.data)) {
                     warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
                 }
-                this.register.succes = false
+
+                // this.userData.error = err
+                this.userData.isAuthenticated = false
+
                 // Notification
                 global.negativeNotify(warnMessage)
-
             }
-            if (register?.value) {
+
+            if (res?.token) {
                 this.register.succes = true
                 // Notification
                 global.succesNotify('Register complete')
@@ -118,29 +129,30 @@ export const useUserStore = defineStore('user', {
                 },
             }
 
-            const { data: login, pending, error } = await useAsyncData('login', () => $cmsApi('/api/auth/login/', config))
+            let res
 
-            if (error.value) {
-                console.log('error: ', error.value)
-                let warnMessage = null
-                for (const [key, value] of Object.entries(error._value.data)) {
-                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
-                }
+            try {
+                res = await $cmsApi('/api/auth/login/', config)
+            }
+            catch (e) {
+                // For debugging
+                // console.error('statusCode:', e.statusCode)
+                // console.error('statusMessage:', e.statusMessage)
+                // console.error('data:', e.data.data.non_field_errors)
 
                 // this.userData.error = err
                 this.userData.isAuthenticated = false
 
                 // Notification
-                global.negativeNotify(warnMessage)
-
+                global.negativeNotify(e.data.data.non_field_errors[0])
             }
-            if (login?.value) {
-                console.log('login //> ', login.value)
+
+            if (res?.token) {
                 this.userData = {
                     ...this.userData,
                     isAuthenticated: true,
-                    token: login?.value.token,
-                    user: login?.value.user,
+                    token: res.token,
+                    user: res.user,
                     // ...res
                 }
                 localStorage.setItem('token', this.userData.token)
