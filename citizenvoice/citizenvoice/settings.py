@@ -72,8 +72,7 @@ INSTALLED_APPS = [
     'knox_allauth',
     'allauth',
     'allauth.account',
-    # 'corsheaders'
-
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
