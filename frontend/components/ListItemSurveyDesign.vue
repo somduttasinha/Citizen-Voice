@@ -1,11 +1,15 @@
+<style scoped>
+
+</style>
+
 <template>
   <q-item clickable>
     <q-item-section avatar top>
       <q-icon name="description" color="black" size="30px" />
     </q-item-section>
 
-    <q-item-section top class="col-2 gt-sm">
-      <q-item-label class="q-mt-sm">{{survey_object.name}}</q-item-label>
+    <q-item-section top class="col-2">
+      <q-item-label class="q-mt-sm">{{ props.survey_object.name }}</q-item-label>
     </q-item-section>
 
     <q-item-section top>
@@ -25,21 +29,31 @@
       <div class="text-grey-8 q-gutter-xs">
         <q-btn class="gt-xs" size="12px" flat dense round icon="done" />
         <q-btn size="12px" flat dense round icon="more_vert" />
-        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" />
+        <q-btn class="gt-xs" size="12px" flat dense round icon="delete" @click="deleteHandler" />
       </div>
     </q-item-section>
   </q-item>
 </template>
 
-<script>
+<script setup>
 import { matAllInbox } from '@quasar/extras/material-icons'
-export default {
-  name: "ListItemSurveyDesign",
-  props: {
-    survey_object: Object
-  }
+import { useSurveyStore } from "~/stores/survey"
+
+const props = defineProps({
+  survey_object: Object
+})
+
+
+const surveyStore = useSurveyStore()
+
+const deleteHandler = async () => {
+  // DELETE request using the surveyStore with error handling
+  const survey_object = props.survey_object;
+  await surveyStore.deleteSurvey(survey_object.id)
 }
+
 </script>
 
 <style scoped>
+
 </style>

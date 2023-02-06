@@ -26,6 +26,7 @@
     "@vueuse/nuxt": "^9.6.0",
     "dayjs": "^1.11.6",
     "jsdom": "^20.0.3",
+    "package.json": "^2.0.1",
     "leaflet": "^1.9.3",
     "nuxt-api-party": "^0.7.0",
     "pinia": "^2.0.28",

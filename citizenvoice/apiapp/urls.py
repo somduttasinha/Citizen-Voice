@@ -6,8 +6,14 @@
 # ====================================================================================================================
 
 from django.urls import include, path
-from rest_framework import routers
+from rest_framework import routers, renderers
 from . import views
+
+# Render viewsets
+# survey_list = views.SurveyViewSet.as_view({
+#     'get': 'list',
+#     'post': 'create'
+# })
 
 # Create a router object and point it to the model viewsets, allowing the API to be called through the given URL addresses
 router = routers.DefaultRouter()
@@ -25,5 +31,6 @@ router.register(r'map_views', views.MapViewViewSet, basename='map_view')
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    # path('newsurvey/', views.SurveyViewSet.CreateSurvey)
 ]
