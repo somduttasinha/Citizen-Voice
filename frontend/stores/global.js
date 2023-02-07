@@ -1,14 +1,13 @@
 import { defineStore } from 'pinia'
-import { useQuasar } from 'quasar'
 
 export const useGlobalStore = defineStore('global', {
     state: () => {
         return {
-            QNotify: null
+            notify: null
         }
     },
     getters: {
-        getQNotify: (state) => state.QNotify
+        getQNotify: (state) => state.notify
     },
     actions: {
         succesNotify(message = 'Succes') {
@@ -37,8 +36,12 @@ export const useGlobalStore = defineStore('global', {
             })
         },
         initalizeNotify() {
-            const $q = useQuasar()
-            this.QNotify = $q.notify
+            (async () => {
+                const { useToast } = await import("vue-toastification")
+                this.notify = useToast()
+                // or with options
+                this.notify.success("My toast content");
+            })()
         },
     }
 })

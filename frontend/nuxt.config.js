@@ -1,12 +1,13 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
-import { quasar } from "@quasar/vite-plugin"
+import vuetify from "vite-plugin-vuetify";
 
 const ONE_DAY = 60 * 60 * 24 * 1000
 const ONE_WEEK = ONE_DAY * 7
 
 export default defineNuxtConfig({
+    mode: '',
     build: {
-        transpile: ["quasar"],
+        transpile: ["vuetify", "vue-toastification/nuxt"],
         loaders: {
             vue: {
                 prettify: false // this is to make the nuxt application run
@@ -33,10 +34,8 @@ export default defineNuxtConfig({
         }
     },
     css: [
-        "@quasar/extras/roboto-font/roboto-font.css",
-        "@quasar/extras/material-icons/material-icons.css",
-        "@quasar/extras/fontawesome-v6/fontawesome-v6.css",
-        "~/assets/styles/quasar.sass",
+        'vuetify/lib/styles/main.sass',
+        '@mdi/font/css/materialdesignicons.min.css',
     ],
     imports: {
         dirs: [
@@ -48,23 +47,23 @@ export default defineNuxtConfig({
             'composables/**'
         ]
     },
-    plugins: [],
+    // plugins: [''],
     vite: {
         define: {
             'process.env.DEBUG': false,
         },
-        plugins: [
-            /* vue({
-              template: { transformAssetUrls }
-            }), */
-            quasar({
-                sassVariables: "~/assets/styles/quasar.variables.sass",
-            }),
-        ],
+        ssr: {
+            noExternal: ["vuetify", "vue-toastification"],
+        },
 
     },
     modules: [
         '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-api-party',
+        // this adds the vuetify vite plugin
+        // also produces type errors in the current beta release
+        async (options, nuxt) => {
+            nuxt.hooks.hook("vite:extendConfig", (config) => config.plugins.push(vuetify()));
+        },
     ],
     runtimeConfig: {
         cookieName: process.env.COOKIE_NAME || '__session',
