@@ -62,12 +62,12 @@ export const useSurveyStore = defineStore('survey', {
                     warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
                 }
                 // Notification
-                global.negativeNotify(warnMessage)
+                global.warning(warnMessage)
 
             }
             if (register?.value) {
                 // Notification
-                global.succesNotify('createSurvey complete')
+                global.succes('createSurvey complete')
                 this.id = 1
                 await navigateTo('/design')
             }
@@ -106,12 +106,12 @@ export const useSurveyStore = defineStore('survey', {
                     warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
                 }
                 // Notification
-                global.negativeNotify(warnMessage)
+                global.warning(warnMessage)
 
             }
             else {
                 // Notification
-                global.succesNotify('deleteSurvey complete')
+                global.succes('deleteSurvey complete')
                 this.id = 1
                 await navigateTo('/design')
             }

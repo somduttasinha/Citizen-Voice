@@ -96,13 +96,13 @@ export const useUserStore = defineStore('user', {
                 this.userData.isAuthenticated = false
 
                 // Notification
-                global.negativeNotify(warnMessage)
+                global.warning(warnMessage)
             }
 
             if (res?.token) {
                 this.register.succes = true
                 // Notification
-                global.succesNotify('Register complete')
+                global.succes('Register complete')
                 await navigateTo('/login')
             }
 
@@ -144,7 +144,7 @@ export const useUserStore = defineStore('user', {
                 this.userData.isAuthenticated = false
 
                 // Notification
-                global.negativeNotify(e.data.data.non_field_errors[0])
+                global.warning(e.data.data.non_field_errors[0])
             }
 
             if (res?.token) {
@@ -157,7 +157,7 @@ export const useUserStore = defineStore('user', {
                 }
                 localStorage.setItem('token', this.userData.token)
                 // Notification
-                global.succesNotify('Login complete')
+                global.succes('Login complete')
                 // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
                 // See: https://nuxt.com/docs/api/composables/use-route
                 await navigateTo('/design')
@@ -181,7 +181,7 @@ export const useUserStore = defineStore('user', {
                     message: 'You are already logged-out'
                 })
                 // Notification
-                global.infoNotify('You are already logged-out')
+                global.info('You are already logged-out')
                 return
             }
 
@@ -200,10 +200,10 @@ export const useUserStore = defineStore('user', {
                 localStorage.removeItem('token')
                 this.$reset()
                 // Notification
-                global.succesNotify('Logged-out successfully')
+                global.succes('Logged-out successfully')
                 await navigateTo('/')
             }).catch(err => {
-                global.negativeNotify('Something went wrong')
+                global.warning('Something went wrong')
             }).finally(() => {
                 return
             })
