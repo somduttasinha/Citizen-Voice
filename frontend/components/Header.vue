@@ -1,0 +1,111 @@
+<template>
+    <v-card>
+        <v-app-bar color="primary">
+            <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
+
+            <v-app-bar-title><img class="full-height q-py-sm" height="30" width="100"
+                    src="~/assets/icons/civo-logo.svg" /></v-app-bar-title>
+
+            <v-spacer></v-spacer>
+
+            <!-- <v-btn icon>
+                <v-icon>mdi-magnify</v-icon>
+            </v-btn> -->
+
+            <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                    <v-btn class="text-none" color="white" v-bind="props">
+                        <v-icon size="x-large">mdi-account</v-icon>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item v-if="isAuthenticated" to="/user">
+                        <v-list-item-title>Profile</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="!isAuthenticated" to="/login">
+                        <v-list-item-title>Login</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="!isAuthenticated" to="/register">
+                        <v-list-item-title>Register</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="isAuthenticated" @click="logoutHandler($q)">
+                        <v-list-item-title>Logout</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+
+            <template v-slot:extension>
+                <v-tabs v-model="tab" align-tabs="title">
+                    <v-tab v-for="item in items" :key="item.label" :value="item.value" :to="item.link">
+                        {{ item.label }}
+                    </v-tab>
+                </v-tabs>
+            </template>
+        </v-app-bar>
+    </v-card>
+
+</template>
+
+<script>
+import { useUserStore } from "~/stores/user"
+
+export default {
+    data() {
+        return {
+            tab: null,
+            items: [
+                {
+                    label: 'Home',
+                    link: '/'
+                },
+                {
+                    label: 'Surveys',
+                    link: '/surveys'
+                },
+                {
+                    label: 'Design survey',
+                    link: '/design'
+                },
+                {
+                    label: 'About',
+                    link: '/about'
+                }
+            ],
+            itemsAccount: [
+                {
+                    label: 'Profile',
+                    link: '/user'
+                },
+                {
+                    label: 'Login',
+                    link: '/login'
+                },
+                {
+                    label: 'Profile',
+                    link: '/user'
+                },
+                {
+                    label: 'Profile',
+                    link: '/user'
+                }
+            ]
+        }
+    },
+    setup() {
+        const userStore = useUserStore()
+
+        const logoutHandler = async ($q) => {
+            await userStore.logout($q)
+            if (!userStore.isAuthenticated) {
+                await navigateTo('/')
+            }
+        }
+
+        return {
+            isAuthenticated: userStore.isAuthenticated,
+            logoutHandler,
+        }
+    }
+}
+</script>
