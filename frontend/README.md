@@ -55,6 +55,8 @@ For the linting to work, install these plugins in your editor:
 ## Libraries
 
 - [Vuetify](https://vuetifyjs.com/) a an component library. (Think of Bootstrap css but then with Vue component)
+- [VeeValidate](https://vee-validate.logaretm.com/v4/) for form validation
+- [Yup](https://github.com/jquense/yup) for from validation schema
 
 ## Authentication
 
