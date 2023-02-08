@@ -8,10 +8,6 @@
 
             <v-spacer></v-spacer>
 
-            <!-- <v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
-            </v-btn> -->
-
             <v-menu open-on-hover>
                 <template v-slot:activator="{ props }">
                     <v-btn class="text-none" color="white" v-bind="props">
