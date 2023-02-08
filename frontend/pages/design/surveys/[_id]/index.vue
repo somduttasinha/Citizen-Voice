@@ -1,19 +1,15 @@
 <template>
     <NuxtLayout name="default">
         <q-page>
-            <div class="padding-16">
-                <h2>My Surveys</h2>
-                <div class="custom-sub-container">
-                    <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
-                        <!--          <q-item-label header>Google Inbox style</q-item-label>-->
-                        <list-item-survey-design v-for="survey in surveys" :survey_object="survey" :refresh="refresh">
-                        </list-item-survey-design>
-                        <!--          <q-separator/>-->
-                    </q-list>
-                    <q-input v-model="textName" label="Name" />
-                    <q-input v-model="textDescription" label="Description" />
-                    <q-btn color="white" text-color="black" label="Add survey" @click="addNewSurvey" />
+            <div class="padding-16 container">
+                <div class="content">
+                    <h2>{{ textName || '[Untitled]' }}</h2>
+                    <q-input class="input" v-model="textName" label="Name" />
+                    <q-input class="input" v-model="textDescription" type="textarea" label="Description" />
                 </div>
+                <aside class="aside">
+                    <q-btn color="white" text-color="black" label="Save survey" @click="addNewSurvey" />
+                </aside>
             </div>
         </q-page>
     </NuxtLayout>
@@ -21,10 +17,16 @@
 
 <script setup>
 import { ref } from 'vue'
-import BaseButton from "../components/BaseButton";
-import ListItemSurveyDesign from "../components/ListItemSurveyDesign";
+import BaseButton from "~/components/BaseButton";
+import ListItemSurveyDesign from "~/components/ListItemSurveyDesign";
 import { formatDate } from "~/utils/formatData"
 import { useSurveyStore } from "~/stores/survey"
+const route = useRoute()
+
+const survey_url = 'api/surveys/'
+const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
+
+console.log(survey);
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
@@ -32,13 +34,14 @@ definePageMeta({ middleware: 'authorization' })
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
+
 const url = "/api/surveys/"
 const surveyStore = useSurveyStore()
-const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
+const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 var expire_date = new Date();
 var current_date = new Date();
-const textName = ref(null)
-const textDescription = ref(null)
+const textName = ref(survey.value.name)
+const textDescription = ref(survey.value.description)
 
 // set default expire date 100 days after current day
 expire_date.setDate(expire_date.getDate() + 100);
@@ -47,7 +50,6 @@ current_date.setDate(current_date.getDate());
 // Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {
     await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
-    refresh()
 }
 </script>
 
@@ -88,18 +90,28 @@ const addNewSurvey = async () => {
     background: #b02a37;
 }
 
-.custom-sub-container {
+.content {
+    width: 100%;
+}
+
+.container {
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: flex-start;
+    max-width: 975px;
+    margin: 0 auto;
+    padding: 32px 16px;
+}
+
+.aside {
+    min-width: 200px;
+    padding-top: 24px;
+    padding-left: 32px;
 }
 
 .custom-width-60-pc {
     width: 60%;
 }
 
-.padding-16 {
-    padding: 16px;
+.input {
+    margin-bottom: 24px;
 }
 </style>

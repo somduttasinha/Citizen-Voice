@@ -3,7 +3,7 @@
 </style>
 
 <template>
-    <q-item clickable>
+    <q-item clickable :to="`/design/surveys/${props.survey_object.id}`">
         <q-item-section avatar top>
             <q-icon name="description" color="black" size="30px" />
         </q-item-section>
