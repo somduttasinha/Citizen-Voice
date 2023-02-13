@@ -152,3 +152,6 @@ dmypy.json
  .idea/misc.xml
  *.ipr
  *.iws
+
+# OS
+.DS_Store
