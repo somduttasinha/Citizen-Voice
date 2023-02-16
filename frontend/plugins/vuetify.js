@@ -1,10 +1,7 @@
 // Vuetify
-import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 // import * as components from 'vuetify/components'
 // import * as directives from 'vuetify/directives'
-import "vuetify/lib/components/VCode/VCode.css";
-
 
 /**
  * A few defaults
@@ -29,7 +26,7 @@ export const defaults = {
 export default defineNuxtPlugin((nuxtApp) => {
     const vuetify = createVuetify({
         ssr: true,
-        defaults
+        defaults,
     })
 
     nuxtApp.vueApp.use(vuetify)

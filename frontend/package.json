@@ -12,6 +12,7 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@kevinmarrec/nuxt-pwa": "^0.16.2",
     "eslint": "^8.27.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "nuxt": "npm:nuxt3@latest",
@@ -29,6 +30,7 @@
     "nuxt-api-party": "^0.7.0",
     "package.json": "^2.0.1",
     "pinia": "^2.0.28",
+    "ramda": "^0.28.0",
     "vee-validate": "^4.7.4",
     "vite-plugin-vuetify": "^1.0.2",
     "vue-toastification": "^2.0.0-rc.5",

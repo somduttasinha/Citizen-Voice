@@ -5,14 +5,17 @@ const ONE_DAY = 60 * 60 * 24 * 1000
 const ONE_WEEK = ONE_DAY * 7
 
 export default defineNuxtConfig({
-    mode: '',
+    ssr: true,
     build: {
         transpile: ["vuetify", "vue-toastification/nuxt"],
-        loaders: {
-            vue: {
-                prettify: false // this is to make the nuxt application run
-            }
-        }
+    },
+    // For speeding up load time in development, loading in all components from external packages increases the loading time, here we disabling to auto imports
+    // components: false,
+    experimental: {
+        inlineSSRStyles: false
+    },
+    nitro: {
+        compressPublicAssets: true,
     },
     app: {
         head: {
@@ -53,12 +56,12 @@ export default defineNuxtConfig({
             'process.env.DEBUG': false,
         },
         ssr: {
-            noExternal: ["vuetify", "vue-toastification"],
+            noExternal: ["vuetify"],
         },
-
     },
     modules: [
-        '@vueuse/nuxt', '@pinia/nuxt', 'nuxt-api-party',
+        '@pinia/nuxt', 'nuxt-api-party', '@kevinmarrec/nuxt-pwa',
+        //    '@vueuse/nuxt', 
         // this adds the vuetify vite plugin
         // also produces type errors in the current beta release
         async (options, nuxt) => {

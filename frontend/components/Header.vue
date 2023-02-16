@@ -1,46 +1,44 @@
 <template>
-    <v-card>
-        <v-app-bar color="primary">
-            <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
-            <v-app-bar-title><img class="full-height q-py-sm" height="30" width="100"
-                    src="~/assets/icons/civo-logo.svg" /></v-app-bar-title>
+    <v-app-bar absolute density="default" style="width: 100%; height: 112px" color="primary">
+        <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
-            <v-spacer></v-spacer>
+        <v-app-bar-title><img class="full-height q-py-sm" height="30" width="100"
+                src="~/assets/icons/civo-logo.svg" /></v-app-bar-title>
 
-            <v-menu open-on-hover>
-                <template v-slot:activator="{ props }">
-                    <v-btn class="text-none" color="white" v-bind="props">
-                        <v-icon size="x-large">mdi-account</v-icon>
-                    </v-btn>
-                </template>
+        <v-spacer></v-spacer>
 
-                <v-list>
-                    <v-list-item v-if="isAuthenticated" to="/user">
-                        <v-list-item-title>Profile</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item v-if="!isAuthenticated" to="/login">
-                        <v-list-item-title>Login</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item v-if="!isAuthenticated" to="/register">
-                        <v-list-item-title>Register</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item v-if="isAuthenticated" @click="logoutHandler($q)">
-                        <v-list-item-title>Logout</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
-
-            <template v-slot:extension>
-                <v-tabs v-model="tab" align-tabs="title">
-                    <v-tab v-for="item in items" :key="item.label" :value="item.value" :to="item.link">
-                        {{ item.label }}
-                    </v-tab>
-                </v-tabs>
+        <v-menu open-on-hover>
+            <template v-slot:activator="{ props }">
+                <v-btn class="text-none" color="white" v-bind="props">
+                    <v-icon size="x-large">mdi-account</v-icon>
+                </v-btn>
             </template>
-        </v-app-bar>
-    </v-card>
 
+            <v-list>
+                <v-list-item v-if="isAuthenticated" to="/user">
+                    <v-list-item-title>Profile</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="!isAuthenticated" to="/login">
+                    <v-list-item-title>Login</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="!isAuthenticated" to="/register">
+                    <v-list-item-title>Register</v-list-item-title>
+                </v-list-item>
+                <v-list-item v-if="isAuthenticated" @click="logoutHandler($q)">
+                    <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+
+        <template v-slot:extension>
+            <v-tabs v-model="tab" align-tabs="title">
+                <v-tab v-for="item in items" :key="item.label" :value="item.value" :to="item.link">
+                    {{ item.label }}
+                </v-tab>
+            </v-tabs>
+        </template>
+    </v-app-bar>
 </template>
 
 <script>
