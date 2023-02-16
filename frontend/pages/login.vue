@@ -13,12 +13,11 @@
                         <v-text-field name="password" v-model="password" :error-messages="errorPassword"
                             label="Password"></v-text-field>
 
-
                         <VBtn variant="outlined" class="me-4" type="submit">
                             submit
                         </VBtn>
 
-                        <v-btn @click="resetForm">
+                        <v-btn variant="outlined" @click="resetForm">
                             clear
                         </v-btn>
                     </form>
