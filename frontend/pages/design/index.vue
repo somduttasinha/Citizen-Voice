@@ -1,27 +1,59 @@
 <template>
     <NuxtLayout name="default">
-        <q-page>
-            <div class="padding-16">
+        <div class="padding-16">
+            <v-container>
+                <div class="flex flex-row">
+                    <h2 class="inline-block">Surveys</h2>
+                    <v-btn variant="outlined" href="/design/surveys/create">Add
+                        survey</v-btn>
+                </div>
 
-                <div class="container">
-                    <div class="">
-                        <h2 class="inline-block">My Surveys test</h2>
-                        <q-btn class="button" color="white" text-color="black" label="Add survey"
-                            to="/design/surveys/create" />
-                    </div>
-                    <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
-                        <!--          <q-item-label header>Google Inbox style</q-item-label>-->
+                <v-card>
+                    <v-list>
+                        <v-hover v-slot="{ isHovering }" open-delay="200">
+                            <v-list-item :link="true" :href="`design/surveys/${item.id}`"
+                                :class="{ 'text-red': isHovering }" v-for="(item, i) in surveys" :key="i" :value="item"
+                                active-color="primary">
+                                <template v-slot:append>
+                                    <v-icon icon="mdi-delete"></v-icon>
+                                    <v-icon icon="mdi-dots-vertical"></v-icon>
+                                </template>
+                                <template v-slot:prepend>
+                                    <v-icon icon="mdi-file"></v-icon>
+                                </template>
+
+                                <v-list-item-title v-text="item.name"></v-list-item-title>
+                            </v-list-item>
+                        </v-hover>
+                    </v-list>
+
+                    <v-list :items="surveys">
+
+                        <v-btn icon>
+                            <v-icon>mdi-magnify</v-icon>
+                        </v-btn>
+
+                        <v-btn icon>
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+
+                        <v-btn icon>
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                    </v-list>
+                </v-card>
+
+                <v-list :items="items" item-title="name" item-value="id"></v-list>
+                <!-- <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
                         <list-item-survey-design v-for="survey in surveys" :survey_object="survey">
                         </list-item-survey-design>
-                        <!--          <q-separator/>-->
-                    </q-list>
-                    <!-- <q-input v-model="textName" label="Name" />
+                    </q-list> -->
+                <!-- <q-input v-model="textName" label="Name" />
                     <q-input v-model="textDescription" label="Description" />
                     <q-btn class="h-min" color="white" text-color="black" label="Add survey" @click="addNewSurvey" /> -->
-
-                </div>
-            </div>
-        </q-page>
+                <pre>{{ surveys }}</pre>
+            </v-container>
+        </div>
     </NuxtLayout>
 </template>
 
@@ -34,10 +66,6 @@ import { useSurveyStore } from "~/stores/survey"
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
-
-/**
- * All `/api/**` are proxies pointing to the local or production server of the backend.
- */
 
 const url = "/api/surveys/"
 const surveyStore = useSurveyStore()
