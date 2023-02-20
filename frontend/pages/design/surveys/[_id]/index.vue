@@ -33,8 +33,6 @@ definePageMeta({ middleware: 'authorization' })
 var expire_date = new Date();
 var current_date = new Date();
 
-console.log('survey //> ', R.pathOr('', ['name'], survey.value))
-
 const textName = ref(R.pathOr('', ['value', 'name'], survey))
 const textDescription = ref(R.pathOr('', ['value', 'description'], survey))
 
