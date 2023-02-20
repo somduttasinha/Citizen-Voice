@@ -1,3 +1,4 @@
+import path from "path"
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 import vuetify from "vite-plugin-vuetify";
 
@@ -85,6 +86,16 @@ export default defineNuxtConfig({
             'cms-api': { // Becomes `$cmsApi()`
                 url: process.env.API_PARTY_CMS_URL,
             }
+        }
+    },
+    hooks: {
+        'pages:extend'(routes) {
+            routes.push({
+                name: "survey-design",
+                path: "/design/surveys/create",
+                file: path.resolve(__dirname, './pages/design/surveys/[_id]/index.vue')
+            });
+            return routes
         }
     },
 })

@@ -63,15 +63,16 @@ export const useSurveyStore = defineStore('survey', {
                 }
                 // Notification
                 global.warning(warnMessage)
+                return null
 
             }
             if (register?.value) {
                 // Notification
                 global.succes('createSurvey complete')
                 this.id = 1
-                await navigateTo('/design')
+                return register.value
             }
-
+            return null
         },
 
         /**

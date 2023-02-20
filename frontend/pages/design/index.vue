@@ -1,59 +1,32 @@
 <template>
     <NuxtLayout name="default">
-        <div class="padding-16">
-            <v-container>
-                <div class="flex flex-row">
-                    <h2 class="inline-block">Surveys</h2>
-                    <v-btn variant="outlined" href="/design/surveys/create">Add
-                        survey</v-btn>
-                </div>
-
-                <v-card>
-                    <v-list>
-                        <v-hover v-slot="{ isHovering }" open-delay="200">
-                            <v-list-item :link="true" :href="`design/surveys/${item.id}`"
-                                :class="{ 'text-red': isHovering }" v-for="(item, i) in surveys" :key="i" :value="item"
-                                active-color="primary">
-                                <template v-slot:append>
-                                    <v-icon icon="mdi-delete"></v-icon>
-                                    <v-icon icon="mdi-dots-vertical"></v-icon>
-                                </template>
-                                <template v-slot:prepend>
-                                    <v-icon icon="mdi-file"></v-icon>
-                                </template>
-
-                                <v-list-item-title v-text="item.name"></v-list-item-title>
-                            </v-list-item>
-                        </v-hover>
-                    </v-list>
-
-                    <v-list :items="surveys">
-
-                        <v-btn icon>
-                            <v-icon>mdi-magnify</v-icon>
-                        </v-btn>
-
-                        <v-btn icon>
-                            <v-icon>mdi-heart</v-icon>
-                        </v-btn>
-
-                        <v-btn icon>
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </v-list>
-                </v-card>
-
-                <v-list :items="items" item-title="name" item-value="id"></v-list>
-                <!-- <q-list bordered class="rounded-borders custom-width-60-pc" style="max-width: 800px">
-                        <list-item-survey-design v-for="survey in surveys" :survey_object="survey">
-                        </list-item-survey-design>
-                    </q-list> -->
-                <!-- <q-input v-model="textName" label="Name" />
-                    <q-input v-model="textDescription" label="Description" />
-                    <q-btn class="h-min" color="white" text-color="black" label="Add survey" @click="addNewSurvey" /> -->
-                <pre>{{ surveys }}</pre>
-            </v-container>
+        <div class="flex flex-row">
+            <h2 class="inline-block">Surveys</h2>
+            <v-btn variant="outlined" @click="addNewSurvey" href="/design/surveys/create">Add
+                survey</v-btn>
         </div>
+
+        <v-card>
+            <v-list>
+                <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
+                    <template v-slot:prepend>
+                        <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
+                        </v-btn>
+                    </template>
+                    <template v-slot:append>
+                        <div>
+                            <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
+                            </v-btn>
+                            <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`"
+                                icon="mdi-dots-vertical">
+                            </v-btn>
+                        </div>
+                    </template>
+
+                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-card>
     </NuxtLayout>
 </template>
 
@@ -65,11 +38,14 @@ import { formatDate } from "~/utils/formatData"
 import { useSurveyStore } from "~/stores/survey"
 
 // Make sure the user is authenticated or trigger the reroute to login
-definePageMeta({ middleware: 'authorization' })
+definePageMeta({
+    middleware: 'authorization',
+    alias: '/design/surveys'
+})
 
 const url = "/api/surveys/"
 const surveyStore = useSurveyStore()
-const { data: surveys } = await useAsyncData(() => $cmsApi(url));
+const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
 var expire_date = new Date();
 var current_date = new Date();
 const textName = ref(null)
@@ -82,6 +58,13 @@ current_date.setDate(current_date.getDate());
 // Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {
     await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+}
+
+const deleteHandler = async (id) => {
+    console.log('id //> ', id)
+    // DELETE request using the surveyStore with error handling
+    await surveyStore.deleteSurvey(id)
+    refresh()
 }
 
 </script>

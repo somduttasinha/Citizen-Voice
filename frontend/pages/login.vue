@@ -1,28 +1,27 @@
 <template>
     <NuxtLayout name="default">
-        <div class="padding-16">
-            <center-div>
-                <div class="custom-login-form">
-                    <h1 class="text-h6">Login or create an
-                        <NuxtLink to="/register"> account</NuxtLink>
-                    </h1>
+        <div class="custom-login-form">
+            <h1 class="text-h6">Login or create an
+                <NuxtLink to="/register"> account</NuxtLink>
+            </h1>
 
-                    <form class="mt-4" @submit.prevent="onSubmit">
-                        <v-text-field name="email" v-model="email" @keyup="blurHandler" :error-messages="errorEmail"
-                            label="E-mail"></v-text-field>
-                        <v-text-field name="password" v-model="password" :error-messages="errorPassword"
+            <form class="mt-4" @submit.prevent="onSubmit">
+                <v-text-field name="email" v-model="email" :error-messages="errorEmail"
+                    label="E-mail"></v-text-field>
+                <!-- <v-text-field name="password" v-model="password" :error-messages="errorPassword"
+                    label="Password"></v-text-field> -->
+
+                <v-text-field class="mb-2" name="password"  @click:append="showPass = !showPass" :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'" :type="showPass ? 'text' : 'password'" v-model="password" :error-messages="errorPassword"
                             label="Password"></v-text-field>
 
-                        <VBtn variant="outlined" class="me-4" type="submit">
-                            submit
-                        </VBtn>
+                <VBtn variant="outlined" class="me-4" type="submit">
+                    submit
+                </VBtn>
 
-                        <v-btn variant="outlined" @click="resetForm">
-                            clear
-                        </v-btn>
-                    </form>
-                </div>
-            </center-div>
+                <v-btn variant="outlined" @click="resetForm">
+                    clear
+                </v-btn>
+            </form>
         </div>
     </NuxtLayout>
 </template>
@@ -33,10 +32,7 @@ import CenterDiv from "../layouts/centerDiv";
 import { useUserStore } from "~/stores/user"
 import * as yup from 'yup'
 
-const errorMessages = ref({
-    email: "",
-    password: ""
-})
+const showPass = ref(false)
 
 const schema = yup.object({
     email: yup.string().email().required(),
@@ -56,11 +52,6 @@ const userStore = useUserStore()
 const onSubmit = handleSubmit((values) => {
     userStore.loginUser(values.email, values.password)
 });
-
-const blurHandler = () => {
-    errorMessages.value = errors.value
-    console.log(errorMessages.value);
-}
 
 </script>
 

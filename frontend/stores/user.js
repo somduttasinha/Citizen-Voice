@@ -174,12 +174,6 @@ export const useUserStore = defineStore('user', {
             if (!token) {
                 // Resets all stores to initial data
                 this.resetUser()
-                $q.notify({
-                    color: 'blue-5',
-                    textColor: 'white',
-                    // icon: 'warning',
-                    message: 'You are already logged-out'
-                })
                 // Notification
                 global.info('You are already logged-out')
                 return

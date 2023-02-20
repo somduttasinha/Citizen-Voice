@@ -26,6 +26,7 @@ export const defaults = {
 export default defineNuxtPlugin((nuxtApp) => {
     const vuetify = createVuetify({
         ssr: true,
+        
         defaults,
     })
 

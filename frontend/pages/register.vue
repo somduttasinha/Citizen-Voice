@@ -9,7 +9,7 @@
                             label="Username"></v-text-field>
                         <v-text-field class="mb-2" name="email" v-model="email" :error-messages="errorEmail"
                             label="E-mail"></v-text-field>
-                        <v-text-field class="mb-2" name="password" v-model="password" :error-messages="errorPassword"
+                        <v-text-field class="mb-2" name="password"  @click:append="showPass = !showPass" :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'" :type="showPass ? 'text' : 'password'" v-model="password" :error-messages="errorPassword"
                             label="Password"></v-text-field>
 
                         <div class="flex flex-row mt-4">
@@ -35,6 +35,7 @@ import CenterDiv from "../layouts/centerDiv";
 import { useUserStore } from "~/stores/user"
 import * as yup from 'yup'
 
+const showPass = ref(false)
 const userStore = useUserStore()
 
 const schema = yup.object({

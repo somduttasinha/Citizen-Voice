@@ -1,6 +1,5 @@
 <template>
-
-    <v-app-bar absolute density="default" style="width: 100%; height: 112px" color="primary">
+    <v-app-bar density="default" style="width: 100%; height: 112px; position: relative" color="primary">
         <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
         <v-app-bar-title><img class="full-height q-py-sm" height="30" width="100"
@@ -25,7 +24,7 @@
                 <v-list-item v-if="!isAuthenticated" to="/register">
                     <v-list-item-title>Register</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="isAuthenticated" @click="logoutHandler($q)">
+                <v-list-item v-if="isAuthenticated" @click="logoutHandler()">
                     <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item>
             </v-list>
@@ -59,7 +58,7 @@ export default {
                 },
                 {
                     label: 'Design survey',
-                    link: '/design'
+                    link: '/design/surveys'
                 },
                 {
                     label: 'About',
@@ -89,8 +88,8 @@ export default {
     setup() {
         const userStore = useUserStore()
 
-        const logoutHandler = async ($q) => {
-            await userStore.logout($q)
+        const logoutHandler = async () => {
+            await userStore.logout()
             if (!userStore.isAuthenticated) {
                 await navigateTo('/')
             }

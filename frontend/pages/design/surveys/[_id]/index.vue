@@ -1,47 +1,42 @@
 <template>
     <NuxtLayout name="default">
-        <q-page>
-            <div class="padding-16 container">
-                <div class="content">
-                    <h2>{{ textName || '[Untitled]' }}</h2>
-                    <q-input class="input" v-model="textName" label="Name" />
-                    <q-input class="input" v-model="textDescription" type="textarea" label="Description" />
-                </div>
-                <aside class="aside">
-                    <q-btn color="white" text-color="black" label="Save survey" @click="addNewSurvey" />
-                </aside>
+        <form class="mt-4" @submit.prevent="addNewSurvey">
+            <div class="content">
+                <h2>{{ textName || '[ Untitled ]' }}</h2>
+                <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
+                <v-textarea name="title" v-model="textDescription" type="textarea" label="Description"></v-textarea>
             </div>
-        </q-page>
+            <aside class="aside">
+                <VBtn variant="outlined" class="me-4" type="submit" @click="addNewSurvey">
+                    Save survey
+                </VBtn>
+            </aside>
+        </form>
     </NuxtLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import BaseButton from "~/components/BaseButton";
-import ListItemSurveyDesign from "~/components/ListItemSurveyDesign";
-import { formatDate } from "~/utils/formatData"
+// import BaseButton from "~/components/BaseButton";
 import { useSurveyStore } from "~/stores/survey"
+import * as R from 'ramda'
 const route = useRoute()
 
-const survey_url = 'api/surveys/'
-const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
+const surveyStore = useSurveyStore()
 
-console.log(survey);
+const survey_url = 'api/surveys/'
+const { data: survey, refresh } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
 
-/**
- * All `/api/**` are proxies pointing to the local or production server of the backend.
- */
-
-const url = "/api/surveys/"
-const surveyStore = useSurveyStore()
-const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 var expire_date = new Date();
 var current_date = new Date();
-const textName = ref(survey.value.name)
-const textDescription = ref(survey.value.description)
+
+console.log('survey //> ', R.pathOr('', ['name'], survey.value))
+
+const textName = ref(R.pathOr('', ['value', 'name'], survey))
+const textDescription = ref(R.pathOr('', ['value', 'description'], survey))
 
 // set default expire date 100 days after current day
 expire_date.setDate(expire_date.getDate() + 100);
@@ -49,7 +44,16 @@ current_date.setDate(current_date.getDate());
 
 // Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {
-    await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+    const { id } = await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+
+    // Check if the id is already in the url parameter, if not redirect the page to that url
+    if (id) {
+        await navigateTo('/design/surveys/' + id)
+    }  else {
+        refresh()
+    }
+
+
 }
 </script>
 
