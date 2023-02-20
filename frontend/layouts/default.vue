@@ -1,9 +1,11 @@
 <template>
     <v-app>
         <Header />
-        <v-main>
-            <v-container fluid>
-                <slot />
+        <v-main style="padding-top: 0">
+            <v-container>
+                <div class="pt-10">
+                    <slot />
+                </div>
             </v-container>
         </v-main>
         <v-footer>
