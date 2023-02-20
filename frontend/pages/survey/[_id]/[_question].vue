@@ -1,47 +1,34 @@
 <template>
     <NuxtLayout name="default">
-
-
-        <div class="q-pa-md row items-start q-gutter-md">
+        <div class="">
             <!-- Question card: number & text -->
-            <q-card class="my-card">
-                <q-card-section>
-                    <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
-                    <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-                </q-card-section>
-            </q-card>
+            <v-card class="my-card">
+                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
+                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
+            </v-card>
         </div>
 
-        <div class="q-pa-md row items-start q-gutter-md">
+        <div class="">
             <!-- Map card
           real v-if statement = (question.map_view != null || question.is_geospatial)-->
-            <q-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">
-                <q-card-section>
-                    <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>
-                    <div id="map"></div>
-                </q-card-section>
-            </q-card>
-
-            <!-- Answer card-->
-            <q-card style="min-width: 300px;" class="my-card col">
-                <q-card-section>
-
-                </q-card-section>
-            </q-card>
+            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">
+                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>
+                <div id="map"></div>
+            </v-card>
         </div>
 
 
         <!-- Navigation -->
         <div class="q-pa-md row">
-            <q-btn @click="prevQuestion" color="primary">
+            <v-btn @click="prevQuestion" color="primary">
                 <i class="fa-solid fa-arrow-left"></i>
                 <!-- <span class="q-pa-sm">Previous</span> -->
-            </q-btn>
-            <q-space />
-            <q-btn @click="nextQuestion" color="primary">
+            </v-btn>
+            <v-space />
+            <v-btn @click="nextQuestion" color="primary">
                 <i class="fa-solid fa-arrow-right"></i>
                 <!-- <span class="q-pa-sm">Next</span> -->
-            </q-btn>
+            </v-btn>
         </div>
 
     </NuxtLayout>
@@ -51,7 +38,7 @@
 <script setup>
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
-import leaflet from "leaflet"
+
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */

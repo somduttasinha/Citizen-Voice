@@ -1,46 +1,62 @@
 <template>
     <NuxtLayout name="default">
-        <q-page style="display: flex;justify-content: center;align-items: center">
-            <div class="padding-16">
-                <center-div>
-                    <div class="q-pa-md custom-login-form">
+        <div class="padding-16">
+            <center-div>
+                <div class="q-pa-md custom-login-form">
+                    <h1 class="text-h6">Register</h1>
+                    <form class="mt-4" @submit="onSubmit">
+                        <v-text-field class="mb-2" name="username" v-model="username" :error-messages="errorUsername"
+                            label="Username"></v-text-field>
+                        <v-text-field class="mb-2" name="email" v-model="email" :error-messages="errorEmail"
+                            label="E-mail"></v-text-field>
+                        <v-text-field class="mb-2" name="password"  @click:append="showPass = !showPass" :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'" :type="showPass ? 'text' : 'password'" v-model="password" :error-messages="errorPassword"
+                            label="Password"></v-text-field>
 
-                        <q-form ref="myForm" class="q-gutter-md">
-                            <h1 class="text-h6">Register</h1>
+                        <div class="flex flex-row mt-4">
+                            <v-btn class="mr-4" variant="outlined" type="submit">
+                                submit
+                            </v-btn>
 
-                            <q-input filled v-model="username" label="Username *" lazy-rules
-                                :rules="[val => val && val.length > 0 || 'Please type something']" />
-
-                            <q-input filled v-model="email" label="Email *" lazy-rules
-                                :rules="[val => val && val.length > 0 || 'Please type something']" />
-
-                            <q-input filled v-model="password" label="Password *" lazy-rules
-                                :rules="[val => val !== null && val !== '' || 'Please enter your password']" />
-
-                        </q-form>
-                        <div class="q-mt-md">
-                            <q-btn label="Submit" @click="onSubmit" color="primary" />
+                            <v-btn variant="outlined" @click="resetForm">
+                                clear
+                            </v-btn>
                         </div>
-                    </div>
-                </center-div>
-            </div>
-        </q-page>
+                    </form>
+
+                </div>
+            </center-div>
+        </div>
     </NuxtLayout>
 </template>
 
 <script setup>
+import { Form, useForm, useField } from 'vee-validate';
 import CenterDiv from "../layouts/centerDiv";
 import { useUserStore } from "~/stores/user"
+import * as yup from 'yup'
 
+const showPass = ref(false)
 const userStore = useUserStore()
 
-const username = ref(null)
-const email = ref(null)
-const password = ref(null)
+const schema = yup.object({
+    email: yup.string().min(4).email().required(),
+    password: yup.string().required().min(8),
+    username: yup.string().min(4).required(),
+});
 
-const onSubmit = async () => {
-    await userStore.registerUser({ username: username.value, email: email.value, password: password.value })
-}
+const { handleSubmit, resetForm } = useForm({
+    validationSchema: schema,
+});
+
+// Use useField and not useFieldModel for error messages because it doesn't get trickerd on mount
+const { value: username, errorMessage: errorUsername } = useField('username')
+const { value: email, errorMessage: errorEmail } = useField('email')
+const { value: password, errorMessage: errorPassword } = useField('password')
+
+const onSubmit = handleSubmit(async (values) => {
+    await userStore.registerUser({ username: values.username, email: values.email, password: values.password })
+});
+
 </script>
 
 <style lang="scss" scoped>
