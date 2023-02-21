@@ -1,24 +1,17 @@
 <template>
     <NuxtLayout name="default">
-        <q-page style="display: flex;justify-content: center;align-items: center">
-            <div class="padding-16">
-                <center-div>
-                    <div>
-                        <h1 class="text-h6">User details</h1>
-                        <p style="color: black">Username: {{ user.userData.user.username }}</p>
-                        <p style="color: black">Email: {{ user.userData.user.email }}</p>
-                        <span>TODO: add edit button</span>
-                    </div>
-                </center-div>
-            </div>
-        </q-page>
+        <div>
+            <h1 class="text-h6">User details</h1>
+            <p style="color: black">Username: {{ user.userData.user.username }}</p>
+            <p style="color: black">Email: {{ user.userData.user.email }}</p>
+            <span>TODO: add edit button</span>
+        </div>
     </NuxtLayout>
 </template>
 
 <script setup>
 
 import { useUserStore } from '~/stores/user'
-import CenterDiv from "../layouts/centerDiv";
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
@@ -27,9 +20,6 @@ const user = useUserStore()
 onMounted(async () => {
     await user.loadUser()
 })
-
-
-
 </script>
 
 <style lang="scss" scoped>

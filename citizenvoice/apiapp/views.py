@@ -4,19 +4,23 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.middleware import csrf
-from rest_framework import viewsets
+from django.http import HttpResponse
+from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import action
 
 
 @api_view(['GET'])
 def get_csrf_token(request):
-  token = csrf.get_token(request)
-  return Response({'csrf_token': token})
+    token = csrf.get_token(request)
+    return Response({'csrf_token': token})
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -146,9 +150,21 @@ class SurveyViewSet(viewsets.ModelViewSet):
         Return:
             queryset: containing all Survey instances
         """
-
         queryset = Survey.objects.all().order_by('name')
+
         return queryset
+
+    # @action(detail=True, methods=['post'])
+    # def CreateSurvey(response):
+    #     """
+    #     Create a survey
+    #     """
+    #     data = JSONParser().parse(response)
+    #     survey_serializer = SurveySerializer(data=data, context={'request': response})
+    #     if survey_serializer.is_valid():
+    #         survey_serializer.save()
+    #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED)
+    #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def GetSurveyByID(id):

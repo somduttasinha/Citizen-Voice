@@ -1,9 +1,7 @@
 <template>
-  <NuxtLayout name="default">
-    <q-page>
-      <h1>Home</h1>
-    </q-page>
-  </NuxtLayout>
+    <NuxtLayout name="default">
+        <h1>Home</h1>
+    </NuxtLayout>
 </template>
 
 <script setup>
@@ -12,6 +10,6 @@
 
 <style lang="scss" scoped>
 .custom-bg-white {
-  background-color: #fff;
+    background-color: #fff;
 }
 </style>

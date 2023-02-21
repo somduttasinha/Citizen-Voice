@@ -54,7 +54,9 @@ For the linting to work, install these plugins in your editor:
 
 ## Libraries
 
-- [Quasar](https://quasar.dev/) a an component library. (Think of Bootstrap css but then with Vue component)
+- [Vuetify](https://vuetifyjs.com/) a an component library. (Think of Bootstrap css but then with Vue component)
+- [VeeValidate](https://vee-validate.logaretm.com/v4/) for form validation
+- [Yup](https://github.com/jquense/yup) for from validation schema
 
 ## Authentication
 
@@ -63,3 +65,13 @@ When a page needs authentication, make sure you this method to the page:
 ```
 definePageMeta({ middleware: 'authorization' })
 ```
+
+## Folders
+
+### Helpers Folder
+
+The helper folder contains the custom stuff for the Vuetify plugin.
+
+### Stores Folder
+
+This is where the global state management happens.

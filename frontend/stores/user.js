@@ -76,22 +76,33 @@ export const useUserStore = defineStore('user', {
                 body
             }
 
-            const { data: register, pending, error } = await useAsyncData('register', () => $cmsApi('/api/auth/register/', config))
+            let res
 
-            if (error.value) {
+            try {
+                res = await $cmsApi('/api/auth/register/', config)
+            }
+            catch (e) {
+                // For debugging
+                // console.error('statusCode:', e.statusCode)
+                // console.error('statusMessage:', e.statusMessage)
+                // console.error('data:', e.data)
+
                 let warnMessage = null
-                for (const [key, value] of Object.entries(error._value.data)) {
+                for (const [key, value] of Object.entries(e.data.data)) {
                     warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
                 }
-                this.register.succes = false
-                // Notification
-                global.negativeNotify(warnMessage)
 
+                // this.userData.error = err
+                this.userData.isAuthenticated = false
+
+                // Notification
+                global.warning(warnMessage)
             }
-            if (register?.value) {
+
+            if (res?.token) {
                 this.register.succes = true
                 // Notification
-                global.succesNotify('Register complete')
+                global.succes('Register complete')
                 await navigateTo('/login')
             }
 
@@ -118,34 +129,35 @@ export const useUserStore = defineStore('user', {
                 },
             }
 
-            const { data: login, pending, error } = await useAsyncData('login', () => $cmsApi('/api/auth/login/', config))
+            let res
 
-            if (error.value) {
-                console.log('error: ', error.value)
-                let warnMessage = null
-                for (const [key, value] of Object.entries(error._value.data)) {
-                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
-                }
+            try {
+                res = await $cmsApi('/api/auth/login/', config)
+            }
+            catch (e) {
+                // For debugging
+                // console.error('statusCode:', e.statusCode)
+                // console.error('statusMessage:', e.statusMessage)
+                // console.error('data:', e.data.data.non_field_errors)
 
                 // this.userData.error = err
                 this.userData.isAuthenticated = false
 
                 // Notification
-                global.negativeNotify(warnMessage)
-
+                global.warning(e.data.data.non_field_errors[0])
             }
-            if (login?.value) {
-                console.log('login //> ', login.value)
+
+            if (res?.token) {
                 this.userData = {
                     ...this.userData,
                     isAuthenticated: true,
-                    token: login?.value.token,
-                    user: login?.value.user,
+                    token: res.token,
+                    user: res.user,
                     // ...res
                 }
                 localStorage.setItem('token', this.userData.token)
                 // Notification
-                global.succesNotify('Login complete')
+                global.succes('Login complete')
                 // NICETOHAVE: It mees like with the route `redirectedFrom` api you can get the previous link, you can use this to pass in the navigateTo function
                 // See: https://nuxt.com/docs/api/composables/use-route
                 await navigateTo('/design')
@@ -162,14 +174,8 @@ export const useUserStore = defineStore('user', {
             if (!token) {
                 // Resets all stores to initial data
                 this.resetUser()
-                $q.notify({
-                    color: 'blue-5',
-                    textColor: 'white',
-                    // icon: 'warning',
-                    message: 'You are already logged-out'
-                })
                 // Notification
-                global.infoNotify('You are already logged-out')
+                global.info('You are already logged-out')
                 return
             }
 
@@ -188,10 +194,10 @@ export const useUserStore = defineStore('user', {
                 localStorage.removeItem('token')
                 this.$reset()
                 // Notification
-                global.succesNotify('Logged-out successfully')
+                global.succes('Logged-out successfully')
                 await navigateTo('/')
             }).catch(err => {
-                global.negativeNotify('Something went wrong')
+                global.warning('Something went wrong')
             }).finally(() => {
                 return
             })
@@ -202,6 +208,24 @@ export const useUserStore = defineStore('user', {
           */
         async resetUser() {
             this.$reset()
+        },
+        /**
+         * Get the CSRF token in the cookie stored in the browser
+         *  */
+        async getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
         }
     },
 })

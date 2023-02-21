@@ -1,22 +1,20 @@
 <template>
     <NuxtLayout name="default">
-        <q-page>
-            <div class="padding-16">
-                <h2>{{ survey.name }}</h2>
+        <div class="padding-16">
+            <h2>{{ survey.name }}</h2>
 
-                <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
-                <p>{{ survey.description }} </p>
-                <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
-                <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
-                <q-btn @click="createResponse" color="primary">
-                    <i class="fa-solid fa-play"></i>
-                    <span class="q-pa-sm">Start survey</span>
-                </q-btn>
+            <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
+            <p>{{ survey.description }} </p>
+            <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
+            <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
+            <v-btn @click="createResponse" color="primary">
+                <i class="fa-solid fa-play"></i>
+                <span class="q-pa-sm">Start survey</span>
+            </v-btn>
 
-                <!--{{ $route.params.id }}
-            <pre>{{ survey }}</pre>-->
-            </div>
-        </q-page>
+            <!--{{ $route.params.id }}
+                <pre>{{ survey }}</pre>-->
+        </div>
     </NuxtLayout>
 </template>
 

@@ -1,64 +1,56 @@
 <template>
     <NuxtLayout name="default">
-
-
-        <div class="q-pa-md row items-start q-gutter-md">
+        <div class="">
             <!-- Question card: number & text -->
-            <q-card class="my-card">
-                <q-card-section>
-                    <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
-                    <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-                </q-card-section>
-            </q-card>
+            <v-card class="my-card">
+                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
+                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
+            </v-card>
         </div>
 
         <div class="q-pa-md row items-start q-gutter-md">
             <!-- Map card -->
-            <q-card v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
+            <v-card v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                 class="my-card col">
-                <q-card-section>
-                    <div style="height:300px; width:600px">
-                        <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center"
-                            :minZoom="1" :maxZoom="18" @click="addCircle">
-                            <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
-                                name="OpenStreetMap"></l-tile-layer>
-                            <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
-                                :radius="map_view.options.radius" :color="map_view.options.color"
-                                :fillColor="map_view.options.fillColor"></l-circle>
-                            <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"
-                                :radius="map_view.options.radius" :color="map_view.options.color"
-                                :fillColor="map_view.options.fillColor"></l-circle>
-                            <l-control position="bottomleft">
-                                <button @click="resetMap">
-                                    Reset
-                                </button>
-                            </l-control>
-                        </l-map>
-                    </div>
-                </q-card-section>
-            </q-card>
+                <div style="height:300px; width:600px">
+                    <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
+                        :maxZoom="18" @click="addCircle">
+                        <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
+                            name="OpenStreetMap"></l-tile-layer>
+                        <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
+                            :radius="map_view.options.radius" :color="map_view.options.color"
+                            :fillColor="map_view.options.fillColor"></l-circle>
+                        <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"
+                            :radius="map_view.options.radius" :color="map_view.options.color"
+                            :fillColor="map_view.options.fillColor"></l-circle>
+                        <l-control position="bottomleft">
+                            <button @click="resetMap">
+                                Reset
+                            </button>
+                        </l-control>
+                    </l-map>
+                </div>
+            </v-card>
 
             <!-- Answer card-->
-            <q-card style="min-width: 300px;" class="my-card col">
-                <q-card-section>
+            <v-card style="min-width: 300px;" class="my-card col">
+                <p> Answer here </p>
+            </v-card>
 
-                    <p> Answer here </p>
-                </q-card-section>
-            </q-card>
+
         </div>
-
 
         <!-- Navigation -->
         <div class="q-pa-md row">
-            <q-btn @click="prevQuestion" color="primary">
+            <v-btn @click="prevQuestion" color="primary">
                 <i class="fa-solid fa-arrow-left"></i>
                 <!-- <span class="q-pa-sm">Previous</span> -->
-            </q-btn>
-            <q-space />
-            <q-btn @click="nextQuestion" color="primary">
+            </v-btn>
+            <v-space />
+            <v-btn @click="nextQuestion" color="primary">
                 <i class="fa-solid fa-arrow-right"></i>
                 <!-- <span class="q-pa-sm">Next</span> -->
-            </q-btn>
+            </v-btn>
         </div>
 
     </NuxtLayout>
