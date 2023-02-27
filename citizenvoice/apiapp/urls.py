@@ -35,5 +35,6 @@ router.register(r'map_views', views.MapViewViewSet, basename='map_view')
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('csrf/', views.get_csrf_token, name='get_csrf_token'),
     # path('newsurvey/', views.SurveyViewSet.CreateSurvey)
 ]
