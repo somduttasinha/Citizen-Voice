@@ -1,10 +1,52 @@
 <template>
     <NuxtLayout name="default">
-        <form class="mt-4" @submit.prevent="addNewSurvey">
+        <form class="mt-4 flex flex-row" @submit.prevent="addNewSurvey">
             <div class="content">
-                <h2>{{ textName || '[ Untitled ]' }}</h2>
+                <h2 class="mb-4 font-bold">{{ textName || '[ Untitled ]' }}</h2>
                 <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
                 <v-textarea name="title" v-model="textDescription" type="textarea" label="Description"></v-textarea>
+                <div class="">
+                    <h3 class="mb-6">Questions</h3>
+
+                    <div v-for="(item, i) in questions">
+                        <component :is="item.comp" :type="item.type"></component>
+                    </div>
+
+                    <v-menu>
+                        <template v-slot:activator="{ props }">
+                            <v-btn class="cursor-pointer" v-bind="props">
+                                <v-icon>mdi-plus-circle</v-icon> Add Question
+                            </v-btn>
+                        </template>
+
+                        <v-list>
+                            <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i" @click="addQuestion(item)">
+                                <v-list-item-title>{{ item.title }}</v-list-item-title>
+                            </v-list-item>
+                        </v-list>
+                    </v-menu>
+
+
+
+
+
+                    <!-- <v-overlay v-model="overlay" contained class="align-center justify-center items-center">
+                        <div class="max-w-2xl py-4 px-5 bg-white w-[80vw] h-[40vh]">
+                            <div class="w-full flex justify-between">
+                                <h3 class="text-2xl font-bold">Add Question</h3>
+                                <v-btn size="22px" icon="mdi-close" @click="overlay = false">
+                                </v-btn>
+                            </div>
+                            <div class="w-full mt-2">
+                                <div v-for="question in questionTypes">
+                                    <p></p>
+                                    <img src="/assets/img/ui-placeholder.svg" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                    </v-overlay> -->
+                </div>
             </div>
             <aside class="aside">
                 <VBtn variant="outlined" class="me-4" type="submit" @click="addNewSurvey">
@@ -17,10 +59,29 @@
 
 <script setup>
 import { ref } from 'vue'
+import { TEXT, SHORT_TEXT } from "~/constants/questions"
+import { TextArea, TextShort } from "@/components/questionBlocks"
 // import BaseButton from "~/components/BaseButton";
 import { useSurveyStore } from "~/stores/survey"
 import * as R from 'ramda'
 const route = useRoute()
+const overlay = ref(false)
+// probably better to store this in the store
+const questions = ref([])
+
+const questionTypes = [
+    {
+        type: TEXT,
+        title: "Text area",
+        comp: TextArea
+    },
+    {
+        type: SHORT_TEXT,
+        title: "Text Short",
+        comp: TextShort
+    },
+]
+
 
 const surveyStore = useSurveyStore()
 
@@ -47,12 +108,18 @@ const addNewSurvey = async () => {
     // Check if the id is already in the url parameter, if not redirect the page to that url
     if (id) {
         await navigateTo('/design/surveys/' + id)
-    }  else {
+    } else {
         refresh()
     }
 
-
 }
+
+// Add Question handler
+const addQuestion = (item) => {
+    console.log('item //> ', item)
+    questions.value.push(item)
+}
+
 </script>
 
 <style lang="scss" scoped>
