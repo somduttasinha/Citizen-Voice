@@ -38,7 +38,6 @@ export default defineNuxtConfig({
         }
     },
     css: [
-        'vuetify/lib/styles/main.sass',
         '@mdi/font/css/materialdesignicons.min.css',
     ],
     imports: {
@@ -61,8 +60,19 @@ export default defineNuxtConfig({
         },
     },
     modules: [
-        '@pinia/nuxt', 'nuxt-api-party', '@kevinmarrec/nuxt-pwa',
-        //    '@vueuse/nuxt', 
+        // We are using @pinia/nuxt for the store
+        '@pinia/nuxt',
+
+        // Nuxt api party is used for the proxy API
+        'nuxt-api-party',
+
+        // We are not using this now but maybe in the future
+        // '@kevinmarrec/nuxt-pwa',
+
+        // We are using tailwind utility classes instead of the Vuetify utility css classes
+        // More info: https://tailwindcss.nuxtjs.org/
+        '@nuxtjs/tailwindcss',
+
         // this adds the vuetify vite plugin
         // also produces type errors in the current beta release
         async (options, nuxt) => {
