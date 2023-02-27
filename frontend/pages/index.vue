@@ -1,6 +1,6 @@
 <template>
     <NuxtLayout name="default">
-        <h1>Home</h1>
+        <h1 class="pt-10">Home</h1>
     </NuxtLayout>
 </template>
 

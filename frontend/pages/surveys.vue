@@ -1,10 +1,10 @@
 <template>
     <NuxtLayout name="default">
         <div class="padding-16">
-            <h2>Surveys</h2>
+            <h2 class="h2">Surveys</h2>
             <div class="row q-col-gutter-sm">
                 <v-card v-for="survey in surveys" style="min-width: 300px;" class="my-card col" flat bordered>
-                    <v-card-section class="q-pt-xs flex column space-between ">
+                    <v-card-section class="">
                         <div class="text-h5 q-mt-sm q-mb-xs">{{
                             survey.name
                         }}</div>
@@ -16,16 +16,16 @@
                             <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
-                            <q-btn :to="`/survey/${survey.id}`" color="primary">
+                            <v-btn :to="`/survey/${survey.id}`" color="primary">
                                 <i class="fa-solid fa-play"></i>
                                 Start survey
-                            </q-btn>
+                            </v-btn>
                         </v-card-actions>
                     </v-card-section>
 
-                    <q-card-section class="col flex flex-center">
+                    <!-- <q-card-section class="col flex flex-center">
                         <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
-                    </q-card-section>
+                    </q-card-section> -->
                 </v-card>
             </div>
         </div>
