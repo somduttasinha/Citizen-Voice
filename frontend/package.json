@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "@kevinmarrec/nuxt-pwa": "^0.16.2",
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
     "eslint": "^8.27.0",
     "eslint-plugin-nuxt": "^4.0.0",
     "nuxt": "npm:nuxt3@latest",
@@ -23,6 +24,7 @@
     "@nuxt-alt/auth": "^2.1.9",
     "@nuxt-alt/http": "^1.5.5",
     "@pinia/nuxt": "^0.4.6",
+    "@vue-leaflet/vue-leaflet": "^0.8.4",
     "@vueuse/nuxt": "^9.6.0",
     "dayjs": "^1.11.6",
     "jsdom": "^20.0.3",

@@ -61,26 +61,28 @@
 
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
-import leaflet from "leaflet"
+import { useStoreResponse } from '~/stores/response'
+// import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
-const survey_url = "/api/surveys/"
+const responseStore = useStoreResponse()
 const question_url = "/api/questions/"
 const mapview_url = "/api/map_views/"
 const data = ref([])
 const route = useRoute()
 
-const { data: survey } = await useAsyncData(() => $fetch(survey_url + route.params._id));
+const survey = await responseStore.getResponse(route.params._id)
 
 // TODO: use an API to get n'th question of the selected survey
 let demo_question = parseInt(route.params._question, 10) + 5 // for demo only, I will use (5 + question id)
-let { data: question } = await useAsyncData(() => $fetch(question_url + demo_question));
+console.log('demo_question //> ', demo_question)
+let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 // TODO: get question.map_view once APIs are configured
-const { data: map_view } = await useAsyncData(() => $fetch(mapview_url + 5)); // for demo only, I will use 5th
+const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 5)); // for demo only, I will use 5th
 
 // to set up the map
 // const center = ref([47.41322, -1.219482])
