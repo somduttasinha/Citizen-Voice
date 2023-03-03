@@ -1,40 +1,48 @@
 <template>
     <NuxtLayout name="default">
         <div class="padding-16">
+            <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
             <h2>{{ survey.name }}</h2>
 
-            <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
             <p>{{ survey.description }} </p>
             <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
             <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
 
-            <v-btn :to="`/survey/${survey.id}/1`" color="primary">
+            <v-btn @click="createResponse" color="primary">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start survey</span>
             </v-btn>
 
             <!--{{ $route.params.id }}
-        <pre>{{ survey }}</pre>-->
+                <pre>{{ survey }}</pre> -->
         </div>
     </NuxtLayout>
 </template>
 
-
 <script setup>
+import { ref } from "vue"
+import { navigateTo } from "nuxt/app";
+import { useStoreResponse } from '~/stores/response'
 
-</script>
+const storeResponse = useStoreResponse()
+const survey_url = "/api/surveys/"
+const create_response_url = "/api/responses/"
+const origin_url = "http://localhost:3000"
+const data = ref([])
+const route = useRoute()
 
-<script setup>
-  import { ref } from "vue"
-  /**
-   * All `/api/**` are proxies pointing to the local or production server of the backend.
-   */
-  const url = "/api/surveys/"
-  const data = ref([])
-  const route = useRoute()
+const survey = await storeResponse.getResponse({ id: route.params._id })
+console.log('survey //> ', survey)
 
-  const { data: survey } = await useAsyncData(() => $cmsApi(url + route.params._id));
+const createResponse = async () => {
+    // Make a POST request to your Django API endpoint to create a new Response object
+    console.log("function called")
 
+    await storeResponse.createResponse({ id: route.params._id })
+
+    // Navigate to the /survey/${survey.id}/1 page after the response is created
+    return navigateTo('/survey/' + route.params._id + '/1')
+}
 
 </script>
 

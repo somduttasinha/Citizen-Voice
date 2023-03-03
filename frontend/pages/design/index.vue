@@ -38,14 +38,20 @@ import { formatDate } from "~/utils/formatData"
 import { useSurveyStore } from "~/stores/survey"
 
 // Make sure the user is authenticated or trigger the reroute to login
+definePageMeta({ middleware: 'authorization' })
+
+// Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({
     middleware: 'authorization',
     alias: '/design/surveys'
 })
 
-const url = "/api/surveys/"
+// Init Survey store
 const surveyStore = useSurveyStore()
-const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
+
+// Get Surveys
+const { data: surveys, refresh } = await surveyStore.getSurveys()
+
 var expire_date = new Date();
 var current_date = new Date();
 const textName = ref(null)

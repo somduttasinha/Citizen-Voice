@@ -64,6 +64,10 @@ import { TextArea, TextShort } from "@/components/questionBlocks"
 // import BaseButton from "~/components/BaseButton";
 import { useSurveyStore } from "~/stores/survey"
 import * as R from 'ramda'
+
+// Make sure the user is authenticated or trigger the reroute to login
+definePageMeta({ middleware: 'authorization' })
+
 const route = useRoute()
 const overlay = ref(false)
 // probably better to store this in the store
@@ -82,14 +86,8 @@ const questionTypes = [
     },
 ]
 
-
 const surveyStore = useSurveyStore()
-
-const survey_url = 'api/surveys/'
-const { data: survey, refresh } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
-
-// Make sure the user is authenticated or trigger the reroute to login
-definePageMeta({ middleware: 'authorization' })
+const { data: survey, refresh } = await surveyStore.getSurvey(route.params._id)
 
 var expire_date = new Date();
 var current_date = new Date();

@@ -12,6 +12,46 @@ export const useSurveyStore = defineStore('survey', {
 
     },
     actions: {
+        async getSurvey(id) {
+            const user = useUserStore()
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'GET',
+            }
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const data = await useAsyncData(() => $cmsApi('api/surveys/' + id, config));
+            console.log('data //> ', data)
+            return data
+        },
+        async getSurveys() {
+            const user = useUserStore()
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'GET',
+            }
+
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const data = await useAsyncData(() => $cmsApi("/api/surveys/", config));
+            console.log('data //> ', data)
+            return data
+        },
+
         /**
         * Create survey
         * @param {*} name 
@@ -33,7 +73,7 @@ export const useSurveyStore = defineStore('survey', {
             const user = useUserStore()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.userData.token
+            const token = user.getAuthToken
 
             const config = {
                 headers: {
@@ -84,7 +124,7 @@ export const useSurveyStore = defineStore('survey', {
             const user = useUserStore()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.userData.token
+            const token = user.getAuthToken
 
             const config = {
                 headers: {
