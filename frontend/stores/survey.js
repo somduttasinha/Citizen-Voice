@@ -14,11 +14,11 @@ export const useSurveyStore = defineStore('survey', {
     actions: {
         /**
         * Create survey
-        * @param {*} name 
-        * @param {*} description 
-        * @param {*} publish_date 
-        * @param {*} expire_date 
-        * @param {id} id 
+        * @param {*} name
+        * @param {*} description
+        * @param {*} publish_date
+        * @param {*} expire_date
+        * @param {id} id
         */
 
         /**
@@ -35,6 +35,8 @@ export const useSurveyStore = defineStore('survey', {
             const csrftoken = user.getCookie('csrftoken');
             const token = user.userData.token
 
+            const userEmail = user.userData.user.email
+
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +47,8 @@ export const useSurveyStore = defineStore('survey', {
                     name,
                     description,
                     publish_date,
-                    expire_date
+                    expire_date,
+                    userEmail
                 },
             }
 
@@ -70,6 +73,9 @@ export const useSurveyStore = defineStore('survey', {
                 // Notification
                 global.succes('createSurvey complete')
                 this.id = 1
+              // for debug
+                console.log(config.body)
+                console.log(user.userData.user.email)
                 return register.value
             }
             return null
