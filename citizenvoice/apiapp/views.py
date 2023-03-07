@@ -10,7 +10,8 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework.decorators import action 
+from rest_framework.decorators import action, api_view
+
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -132,7 +133,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Survey instances in the database.
 
@@ -140,8 +141,19 @@ class SurveyViewSet(viewsets.ModelViewSet):
             queryset: containing all Survey instances
         """
         queryset = Survey.objects.all().order_by('name')
+        print("get_queryset invoked")
 
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        print("reached create survey")
+        data = JSONParser().parse(request)
+        survey_serializer = SurveySerializer(data=data, context={'request': request})
+        print("data: " + str(data))
+        if survey_serializer.is_valid():
+            survey_serializer.save()
+            return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
     # @action(detail=True, methods=['post'])
