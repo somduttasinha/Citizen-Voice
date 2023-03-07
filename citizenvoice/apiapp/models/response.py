@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 # Represents all the answers given by one user for the compiled set of questions
 class Response(models.Model):
     """
-    This class epresents the collection of all answers by Respondent per survey. 
+    This class represents the collection of all answers by Respondent per survey.
     Every Answer is thus linked to a response based on
     the respondent (user) that created the answer and for which survey.
     """
