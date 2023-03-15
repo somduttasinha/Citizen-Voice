@@ -23,7 +23,7 @@
                         </div>
                     </template>
 
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-card>
@@ -38,19 +38,29 @@ import { formatDate } from "~/utils/formatData"
 import { useSurveyStore } from "~/stores/survey"
 
 // Make sure the user is authenticated or trigger the reroute to login
-definePageMeta({ middleware: 'authorization' })
-
-// Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({
     middleware: 'authorization',
     alias: '/design/surveys'
 })
 
+/**
+ * Fetch surveys
+ */
+const surveys = ref(null)
+let refresh;
+
 // Init Survey store
 const surveyStore = useSurveyStore()
 
-// Get Surveys
-const { data: surveys, refresh } = await surveyStore.getSurveys()
+onMounted(async () => {
+    // Get Surveys
+    const { data, execute, refresh } = await surveyStore.getSurveys()
+    await execute()
+    surveys.value = data.value;
+    refresh()
+})
+
+
 
 var expire_date = new Date();
 var current_date = new Date();

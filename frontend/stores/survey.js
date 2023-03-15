@@ -45,11 +45,18 @@ export const useSurveyStore = defineStore('survey', {
 
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
+                // console.log('config //> ', config)
+                // const response = await useCmsApiData("/api/surveys/", config);
+
+
+                // console.log('response //> ', data.data)
+                // return data
             }
 
-            const data = await useAsyncData(() => $cmsApi("/api/surveys/", config));
-            console.log('data //> ', data)
+            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
+
             return data
+
         },
 
         /**

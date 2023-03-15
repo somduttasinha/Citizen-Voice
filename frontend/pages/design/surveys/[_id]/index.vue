@@ -4,7 +4,8 @@
             <div class="content">
                 <h2 class="mb-4 font-bold">{{ textName || '[ Untitled ]' }}</h2>
                 <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
-                <v-textarea name="title" v-model="textDescription" type="textarea" label="Description"></v-textarea>
+                <v-textarea name="title" variant="outlined" v-model="textDescription" type="textarea"
+                    label="Description"></v-textarea>
                 <div class="">
                     <h3 class="mb-6">Questions</h3>
 
@@ -86,8 +87,19 @@ const questionTypes = [
     },
 ]
 
+const survey = ref({})
+let refresh;
+
 const surveyStore = useSurveyStore()
-const { data: survey, refresh } = await surveyStore.getSurvey(route.params._id)
+
+onMounted(async () => {
+    const res = await surveyStore.getSurvey(route.params._id)
+    console.log('res //> ', res)
+    survey.value = res.data.value
+    refresh = res.refresh
+})
+
+
 
 var expire_date = new Date();
 var current_date = new Date();

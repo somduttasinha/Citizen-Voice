@@ -10,7 +10,8 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework.decorators import action 
+from rest_framework.decorators import action
+
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -129,7 +130,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     Survey ViewSet used internally to query data from database.
 
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
     def get_queryset(response):
@@ -143,7 +144,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-
     # @action(detail=True, methods=['post'])
     # def CreateSurvey(response):
     #     """
@@ -153,7 +153,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     #     survey_serializer = SurveySerializer(data=data, context={'request': response})
     #     if survey_serializer.is_valid():
     #         survey_serializer.save()
-    #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
+    #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED)
     #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod

@@ -31,7 +31,7 @@
     "dayjs": "^1.11.6",
     "jsdom": "^20.0.3",
     "leaflet": "^1.9.3",
-    "nuxt-api-party": "^0.7.0",
+    "nuxt-api-party": "^0.9.4",
     "package.json": "^2.0.1",
     "pinia": "^2.0.28",
     "ramda": "^0.28.0",
