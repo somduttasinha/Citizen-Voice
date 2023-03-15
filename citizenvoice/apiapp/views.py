@@ -37,7 +37,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         Parameters:
             question_id (int): Question ID to be used for finding related Answers
 
-        Return: 
+        Return:
             queryset: containing all Answer instances with this question_id
         """
         queryset = Answer.objects.filter(question=question_id)
@@ -51,7 +51,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         Parameters:
             response_id (int): Response ID to be used for finding related Answers
 
-        Return: 
+        Return:
             queryset: containing all Answer instances with this response_id
         """
         queryset = Answer.objects.filter(response=response_id)
@@ -85,7 +85,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         Parameters:
             id (int): Question ID to be used for finding this Question.
 
-        Return: 
+        Return:
             queryset: containing the Question instance with this id
         """
 
@@ -100,7 +100,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         Parameters:
             survey_id (int): Survey ID to be used for finding related Questions.
 
-        Return: 
+        Return:
             queryset: containing the Question instance related to this survey
         """
 
@@ -116,7 +116,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
             survey_id (int): Survey ID to be used for finding related Questions.
             question_order (int): The order in which the questions in the Survey are to be displayed.
 
-        Return: 
+        Return:
             queryset: containing the Question instance related to this survey, of a given order
         """
         queryset = Question.objects.filter(
@@ -143,18 +143,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-
-    # @action(detail=True, methods=['post'])
-    # def CreateSurvey(response):
-    #     """
-    #     Create a survey
-    #     """
-    #     data = JSONParser().parse(response)
-    #     survey_serializer = SurveySerializer(data=data, context={'request': response})
-    #     if survey_serializer.is_valid():
-    #         survey_serializer.save()
-    #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED) 
-    #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def GetSurveyByID(id):
