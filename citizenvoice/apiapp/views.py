@@ -11,6 +11,7 @@ from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import action 
+from rest_framework.response import Response as rf_response
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -143,6 +144,20 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    @action(detail=False, methods=['GET'], url_path='my-surveys')
+    def my_surveys(self, request, *args, **kwargs):
+        print("Getting my surveys...")
+
+        user = self.request.user
+        print(type(user))
+        if(type(user) == User):
+            surveys_of_user = Survey.objects.all().filter(designer=user.id).order_by('name')
+            survey_serializer = self.get_serializer(surveys_of_user, many=True)
+            print("User Id: ", user.id)
+            print(survey_serializer.data)
+            return rf_response(survey_serializer.data)
+
+        return rf_response({})
 
     @staticmethod
     def GetSurveyByID(id):
