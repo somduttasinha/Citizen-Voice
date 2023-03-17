@@ -178,6 +178,25 @@ class SurveyViewSet(viewsets.ModelViewSet):
             print("User was anonymous")
         return rf_response(None)
 
+    @action(detail=True, methods=['GET'], url_path='questions')
+    def get_questions_of_survey(self, request, pk=None):
+        print("Retreiving questions of survey...")
+
+        user = self.request.user
+        if type(user) is User:
+            survey = Survey.objects.get(id=pk)
+            if(survey.designer != user.id):
+                print("The User is not the designer of the survey")
+                print(f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+                rf_response(None)
+
+            questions = Question.objects.all().filter(survey_id=pk).order_by('order')
+            question_serializer = QuestionSerializer(questions, many=True, context={'request': request})
+            return rf_response(question_serializer.data)
+        else:
+            print("User was anonymous")
+        return rf_response(None)
+
     @staticmethod
     def GetSurveyByID(id):
         """
