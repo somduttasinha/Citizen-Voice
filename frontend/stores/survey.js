@@ -35,7 +35,7 @@ export const useSurveyStore = defineStore('survey', {
             const csrftoken = user.getCookie('csrftoken');
             const token = user.userData.token
 
-            const userEmail = user.userData.user.email
+            const designer = user.userData.user.id
 
             const config = {
                 headers: {
@@ -48,7 +48,7 @@ export const useSurveyStore = defineStore('survey', {
                     description,
                     publish_date,
                     expire_date,
-                    userEmail
+                    designer
                 },
             }
 
