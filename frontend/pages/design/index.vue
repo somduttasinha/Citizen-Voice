@@ -43,11 +43,7 @@ definePageMeta({
     alias: '/design/surveys'
 })
 
-const url = "/api/surveys/"
 const surveyStore = useSurveyStore()
-// const { data: surveys, refresh } = await useAsyncData(() => $cmsApi(url));
-const { data : surveys, refresh } = await surveyStore.getSurveysOfCurrentUser()
-
 
 var expire_date = new Date();
 var current_date = new Date();
@@ -57,6 +53,16 @@ const textDescription = ref(null)
 // set default expire date 100 days after current day
 expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
+
+let response = ref({})
+let refresh = ref(() => {})
+let surveys = ref ({})
+
+onMounted(async () => {
+  const response_ = await surveyStore.getSurveysOfCurrentUser()
+  response.value = response_
+  surveys.value = response_.data.value
+});
 
 // Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {

@@ -79,6 +79,7 @@ export const useSurveyStore = defineStore('survey', {
          */
         async getSurveysOfCurrentUser() {
             const user = useUserStore()
+            await user.loadUser()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
             const token = user.userData.token
@@ -94,26 +95,10 @@ export const useSurveyStore = defineStore('survey', {
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
             }
-            // ,  pending, refresh, error}
-            // const response = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/my-surveys', config))
-            // console.log("Response: ")
-            // console.log(response)
-            // console.log(response.data.value._value)
-            // console.log(response.error.value)
-            const { data, pending, error, refresh } = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/my-surveys', config))
-            console.log("Data:")
-            console.log(data.value)
-            console.log(pending.value)
-            console.log(error.value)
-            console.log(refresh.value)
-            console.log(data)
-            console.log(pending)
-            console.log(error)
-            console.log(refresh)
 
-            // console.log("Target: ")
-            // console.log(data.value)
-            // console.log(error.value)
+            const response = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/my-surveys', config))
+
+            const error = response.error
             if (error.value) {
                 let warnMessage = null
                 for (const [key, value] of Object.entries(error._value.data)) {
@@ -121,20 +106,11 @@ export const useSurveyStore = defineStore('survey', {
                 }
                 // Notification
                 global.warning(warnMessage)
-
             }
             else {
-                Notification
-                global.succes('retrieving Surveys complete')
-                // global.succes(response.value)
-                // this.id = 1
-                // await navigateTo('/design')
             }
 
-            // alert(response[0])
-            // return response
-          // return data
-          return data.value, refresh
+          return response
         },
 
       /**
