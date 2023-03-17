@@ -159,6 +159,25 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
         return rf_response({})
 
+    @action(detail=False, methods=['POST'], url_path='create-survey')
+    def create_survey(self, request, *args, **kwargs):
+        print("Creating a new survey...")
+
+        user = self.request.user
+        if type(user) is User:
+            survey_name = self.request.data["name"]
+            survey_description = self.request.data["description"]
+            once_up_a_time = datetime.now()
+            req = request
+
+            survey = Survey(name=survey_name, description=survey_description,
+             publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+            survey.save()
+            print(survey)
+        else:
+            print("User was anonymous")
+        return rf_response(None)
+
     @staticmethod
     def GetSurveyByID(id):
         """

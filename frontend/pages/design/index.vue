@@ -2,7 +2,7 @@
     <NuxtLayout name="default">
         <div class="flex flex-row">
             <h2 class="inline-block">Surveys</h2>
-            <v-btn variant="outlined" @click="addNewSurvey" href="/design/surveys/create">Add
+            <v-btn variant="outlined" href="/design/surveys/create">Add
                 survey</v-btn>
         </div>
 
