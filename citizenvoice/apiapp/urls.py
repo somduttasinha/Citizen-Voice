@@ -28,7 +28,7 @@ router.register(r'polygonlocations', views.PolygonLocationViewSet,
                 basename='polygonlocation')
 router.register(r'linestringlocations',
                 views.LineStringLocationViewSet, basename='linestringlocation')
-router.register(r'map_views', views.MapViewViewSet, basename='map_view')
+router.register(r'map_views', views.MapViewViewSet, basename='mapview')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
