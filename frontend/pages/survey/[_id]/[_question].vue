@@ -2,15 +2,15 @@
     <NuxtLayout name="default">
         <div class="">
             <!-- Question card: number & text -->
-            <v-card class="my-card">
+            <div class="my-card">
                 <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
                 <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-            </v-card>
+            </div>
         </div>
 
         <div class="q-pa-md row items-start q-gutter-md">
             <!-- Map card -->
-            <v-card v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
+            <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                 class="my-card col">
                 <div style="height:300px; width:600px">
                     <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
@@ -24,18 +24,18 @@
                             :radius="map_view.options.radius" :color="map_view.options.color"
                             :fillColor="map_view.options.fillColor"></l-circle>
                         <l-control position="bottomleft">
-                            <button @click="resetMap">
+                            <v-btn @click="resetMap">
                                 Reset
-                            </button>
+                            </v-btn>
                         </l-control>
                     </l-map>
                 </div>
-            </v-card>
+            </div>
 
             <!-- Answer card-->
-            <v-card style="min-width: 300px;" class="my-card col">
-                <p> Answer here </p>
-            </v-card>
+            <div class="my-card col">
+                <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>
+            </div>
 
 
         </div>
@@ -44,12 +44,12 @@
         <div class="q-pa-md row">
             <v-btn @click="prevQuestion" color="primary">
                 <i class="fa-solid fa-arrow-left"></i>
-                <!-- <span class="q-pa-sm">Previous</span> -->
+                <span class="q-pa-sm">Previous</span>
             </v-btn>
             <v-space />
             <v-btn @click="nextQuestion" color="primary">
                 <i class="fa-solid fa-arrow-right"></i>
-                <!-- <span class="q-pa-sm">Next</span> -->
+                <span class="q-pa-sm">Next</span>
             </v-btn>
         </div>
 
@@ -66,23 +66,19 @@ import { useStoreResponse } from '~/stores/response'
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-/**
- * All `/api/**` are proxies pointing to the local or production server of the backend.
- */
 const responseStore = useStoreResponse()
 const question_url = "/api/questions/"
 const mapview_url = "/api/map_views/"
-const data = ref([])
+
 const route = useRoute()
 
 const survey = await responseStore.getResponse(route.params._id)
 
 // TODO: use an API to get n'th question of the selected survey
-let demo_question = parseInt(route.params._question, 10) + 5 // for demo only, I will use (5 + question id)
-console.log('demo_question //> ', demo_question)
+let demo_question = 3 // This is a hardcoded value for now
 let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 // TODO: get question.map_view once APIs are configured
-const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 5)); // for demo only, I will use 5th
+const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
 
 // to set up the map
 // const center = ref([47.41322, -1.219482])
@@ -136,8 +132,6 @@ const resetMap = async () => {
     // TODO: reset map center and zoom level based on map_view
     resetClicked = true
 }
-
-
 </script>
 
 <style lang="scss">
