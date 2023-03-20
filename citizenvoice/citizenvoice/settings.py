@@ -72,8 +72,7 @@ INSTALLED_APPS = [
     'knox',
     'knox_allauth',
     'allauth',
-    'allauth.account'
-
+    'allauth.account',
 ]
 
 MIDDLEWARE = [
@@ -88,6 +87,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 ROOT_URLCONF = 'citizenvoice.urls'
 
@@ -206,7 +211,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'var/static_root/'
-STATICFILES_DIRS = ['static_vue']
+# STATICFILES_DIRS = ['static_vue']
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 

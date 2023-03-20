@@ -12,7 +12,7 @@
                             {{ survey.description }}
                         </p>
                         <div class=" text-caption">
-                            <span class="">Publish date: {{ formatDate(survey.publish_date) }}</span><br />
+                            <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br />
                             <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
@@ -22,10 +22,6 @@
                             </v-btn>
                         </v-card-actions>
                     </v-card-section>
-
-                    <!-- <q-card-section class="col flex flex-center">
-                        <q-img class="rounded-borders" src="https://cdn.quasar.dev/img/parallax2.jpg" />
-                    </q-card-section> -->
                 </v-card>
             </div>
         </div>

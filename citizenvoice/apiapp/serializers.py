@@ -9,9 +9,10 @@ from rest_framework import serializers
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.contrib.auth.models import User
 
-#=============================================
+# =============================================
 # Create serializer classes that allow for exposing certain model fields to be used in the API
-#=============================================
+# =============================================
+
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -22,6 +23,7 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
         model = Answer
         fields = ('response', 'question', 'created', 'updated', 'body')
 
+
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'text', 'order', 'required', 'question_type', 'choices', 'is_geospatial', 'map_view'
@@ -29,8 +31,8 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Question
-        fields = ('text', 'order', 'required', 'question_type', 'choices', 'survey', 'is_geospatial') # 'map_view')
-        #TODO: map_view is commented out for now because it was causing "ImproperlyConfigured" error
+        fields = ('text', 'order', 'required', 'question_type',
+                  'choices', 'survey', 'is_geospatial', 'map_view')
 
 
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,7 +42,9 @@ class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Response
-        fields = ('created', 'updated', 'survey', 'interview_uuid', 'respondent')
+        fields = ('created', 'updated', 'survey',
+                  'interview_uuid', 'respondent')
+
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -51,7 +55,8 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Survey
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers',
-         'publish_date', 'expire_date', 'public_url', 'designer')
+                  'publish_date', 'expire_date', 'public_url', 'designer')
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -62,6 +67,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
+
 class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'location', 'name', 'question', 'answer' fields of the PointLocation model for the API.
@@ -69,6 +75,7 @@ class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PointLocation
         fields = ('location', 'name', 'question', 'answer')
+
 
 class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -78,6 +85,7 @@ class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
         model = PolygonLocation
         fields = ('location', 'name', 'question', 'answer')
 
+
 class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'location', 'name', 'question', 'answer' fields of the LineStringLocation model for the API.
@@ -85,6 +93,7 @@ class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = LineStringLocation
         fields = ('location', 'name', 'question', 'answer')
+
 
 class MapViewSerializer(serializers.HyperlinkedModelSerializer):
     """
