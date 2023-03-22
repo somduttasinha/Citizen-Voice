@@ -108,5 +108,11 @@ export default defineNuxtConfig({
             return routes
         }
     },
+    routeRules: {
+        // Render these routes with SPA // See: https://nuxt.com/docs/guide/concepts/rendering#route-rules
+        '/design/**': { ssr: false },
+        '/user/**': { ssr: false },
+        '/survey/**': { ssr: false },
+    },
 })
 
