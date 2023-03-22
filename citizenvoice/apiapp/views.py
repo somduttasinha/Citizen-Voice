@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from django.shortcuts import render
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.middleware import csrf
 from django.http import HttpResponse
 from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
@@ -11,6 +15,12 @@ from datetime import datetime
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import action
+
+
+@api_view(['GET'])
+def get_csrf_token(request):
+    token = csrf.get_token(request)
+    return Response({'csrf_token': token})
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
