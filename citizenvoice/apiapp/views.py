@@ -72,10 +72,18 @@ class AnswerViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet):
     """
     Question ViewSet used internally to query data from database.
-
+    The `create` method is overwritten to accept one data object or a array of objects.
     """
-
+    queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, many=isinstance(request.data, list))
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def get_queryset(response):
         """
