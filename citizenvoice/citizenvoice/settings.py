@@ -218,7 +218,8 @@ STATIC_ROOT = 'var/static_root/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if os.name == 'nt':
-    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+    GDAL_LIBRARY_VERSION = os.getenv("GDAL_LIBRARY_VERSION", "gdal305.dll")
+    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin' + "\\" + GDAL_LIBRARY_VERSION
 
 LOGIN_REDIRECT_URL = 'survey-home'
 LOGIN_URL = 'survey-design-index'
