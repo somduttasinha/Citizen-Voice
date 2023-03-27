@@ -98,21 +98,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
         queryset = Question.objects.all()
         return queryset
 
-    @staticmethod
-    def GetQuestionByID(id):
-        """
-        Get a specific Question based on its ID.
-
-        Parameters:
-            id (int): Question ID to be used for finding this Question.
-
-        Return:
-            queryset: containing the Question instance with this id
-        """
-
-        queryset = Question.objects.filter(id=id)
-        return queryset
-
     @action(detail=True, methods=['get'])
     def ordered_questions(self, request, pk=None):
         """
