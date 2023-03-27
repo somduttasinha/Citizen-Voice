@@ -29,6 +29,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     serializer_class = AnswerSerializer
 
+
     def get_queryset(response):
         """
         Returns a set of all Answer instances in the database.
@@ -41,7 +42,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetAnswerByQuestion(question_id):
+    def get_answer_by_question(question_id):
         """
         Get all answers by filtering based either on their related Question.
 
@@ -55,7 +56,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetAnswerByResponse(response_id):
+    def get_answer_by_response(response_id):
         """
         Get all answers by filtering based either on their related Response.
 
@@ -77,7 +78,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
 
     serializer_class = QuestionSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Question instances in the database.
 
@@ -88,8 +89,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         queryset = Question.objects.all()
         return queryset
 
-    @staticmethod
-    def GetQuestionByID(id):
+    def get_question_by_id(id):
         """
         Get a specific Question based on its ID.
 
@@ -104,7 +104,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetQuestionBySurvey(survey_id):
+    def get_question_by_survey(survey_id):
         """
         Get specific Questions based on its survey_id.
 
@@ -119,7 +119,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetOrderedQuestionBySurvey(survey_id, question_order):
+    def get_ordered_questions_by_survey(survey_id, question_order):
         """
         Get specific Questions based on its survey_id, and a specific order.
 
@@ -143,7 +143,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     # permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Survey instances in the database.
 
@@ -167,21 +167,21 @@ class SurveyViewSet(viewsets.ModelViewSet):
     #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
-    def GetSurveyByID(id):
+    def get_survey_by_id(survey_id):
         """
         Get a specific Survey based on its ID.
 
         Parameters:
-            id (int): Survey ID to be used for finding this Survey.
+            survey_id (int): Survey ID to be used for finding this Survey.
 
         Return: 
             queryset: containing the Survey instance with this id
         """
-        queryset = Survey.objects.filter(id=id)
+        queryset = Survey.objects.filter(id=survey_id)
         return queryset
 
     @staticmethod
-    def GetSurveyByDesigner(designer, unexpired_only=False):
+    def get_surveys_by_designer(designer, unexpired_only=False):
         """
         Get a specific Survey based on its author.
 
@@ -205,7 +205,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     @staticmethod
     def GetSurveyByAvailable():
         """
-        Get a all Surveys that are still available (current date is not past expiration date).
+        Get all Surveys that are still available (current date is not past expiration date).
 
         Return: 
             queryset: containing the Survey instances that have not expired yet
@@ -223,7 +223,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
     serializer_class = ResponseSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Response instances in the database.
 
@@ -235,7 +235,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetResponseByID(id):
+    def get_response_by_id(id):
         """
         Get a specific Response based on its ID.
 
@@ -249,7 +249,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetResponseBySurvey(survey_id):
+    def get_responses_by_survey(survey_id):
         """
         Get a specific Response based on its survey.
 
@@ -264,7 +264,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetResponseByRespondent(respondent):
+    def get_responses_by_respondent(respondent):
         """
         Get a specific Response based on its respondent.
 
@@ -286,7 +286,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     serializer_class = UserSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all User instances in the database.
 
@@ -305,7 +305,7 @@ class PointLocationViewSet(viewsets.ModelViewSet):
 
     serializer_class = PointLocationSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all PointLocation instances in the database.
 
@@ -317,7 +317,7 @@ class PointLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByQuestion(question):
+    def get_locations_by_question(question):
         """
         Get a list of Point Locations associated to this question.
 
@@ -332,7 +332,7 @@ class PointLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByAnswer(answer):
+    def get_locations_by_answer(answer):
         """
         Get a list of Point Locations associated to this answer.
 
@@ -354,7 +354,7 @@ class PolygonLocationViewSet(viewsets.ModelViewSet):
 
     serializer_class = PolygonLocationSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all PolygonLocation instances in the database.
 
@@ -366,7 +366,7 @@ class PolygonLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByQuestion(question):
+    def get_locations_by_question(question):
         """
         Get a list of PolygonLocations associated to this question.
 
@@ -381,7 +381,7 @@ class PolygonLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByAnswer(answer):
+    def get_locations_by_answer(answer):
         """
         Get a list of PolygonLocations associated to this answer.
 
@@ -403,7 +403,7 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
 
     serializer_class = LineStringLocationSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all LineStringLocation instances in the database.
 
@@ -415,7 +415,7 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByQuestion(question):
+    def get_locations_by_question(question):
         """
         Get a list of LineStringLocations associated to this question.
 
@@ -430,7 +430,7 @@ class LineStringLocationViewSet(viewsets.ModelViewSet):
         return queryset
 
     @staticmethod
-    def GetLocationsByAnswer(answer):
+    def get_locations_by_answer(answer):
         """
         Get a list of LineStringLocations associated to this answer.
 
