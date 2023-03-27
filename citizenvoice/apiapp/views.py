@@ -13,6 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http.response import JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import action
 
@@ -29,7 +30,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     serializer_class = AnswerSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Answer instances in the database.
 
@@ -48,7 +49,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         Parameters:
             question_id (int): Question ID to be used for finding related Answers
 
-        Return: 
+        Return:
             queryset: containing all Answer instances with this question_id
         """
         queryset = Answer.objects.filter(question=question_id)
@@ -62,7 +63,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         Parameters:
             response_id (int): Response ID to be used for finding related Answers
 
-        Return: 
+        Return:
             queryset: containing all Answer instances with this response_id
         """
         queryset = Answer.objects.filter(response=response_id)
@@ -83,9 +84,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        print(kwargs)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Question instances in the database.
 
@@ -104,43 +106,46 @@ class QuestionViewSet(viewsets.ModelViewSet):
         Parameters:
             id (int): Question ID to be used for finding this Question.
 
-        Return: 
+        Return:
             queryset: containing the Question instance with this id
         """
 
         queryset = Question.objects.filter(id=id)
         return queryset
 
-    @staticmethod
-    def GetQuestionBySurvey(survey_id):
+    @action(detail=True, methods=['get'])
+    def ordered_questions(self, request, pk=None):
         """
-        Get specific Questions based on its survey_id.
+        Retrieve a list of questions for a given survey, ordered by the 'order' field.
+        API url: `/api/questions/{survey_id}/ordered_questions`
 
         Parameters:
-            survey_id (int): Survey ID to be used for finding related Questions.
+            request (Request): The request object used to make the API call.
+            pk = survey_id (int): The primary key of the Survey instance to retrieve questions for.
 
-        Return: 
-            queryset: containing the Question instance related to this survey
+        Returns:
+            Response: A JSON response containing a list of serialized Question instances.
         """
+        survey = get_object_or_404(Survey, pk=pk)
+        questions = survey.question_set.all().order_by('order')
+        serializer = self.get_serializer(questions, many=True)
+        return Response(serializer.data)
 
-        queryset = Question.objects.filter(survey=survey_id)
-        return queryset
+    # @staticmethod
+    # def GetOrderedQuestionBySurvey(survey_id, question_order):
+    #     """
+    #     Get specific Questions based on its survey_id, and a specific order.
 
-    @staticmethod
-    def GetOrderedQuestionBySurvey(survey_id, question_order):
-        """
-        Get specific Questions based on its survey_id, and a specific order.
+    #     Parameters:
+    #         survey_id (int): Survey ID to be used for finding related Questions.
+    #         question_order (int): The order in which the questions in the Survey are to be displayed.
 
-        Parameters:
-            survey_id (int): Survey ID to be used for finding related Questions.
-            question_order (int): The order in which the questions in the Survey are to be displayed.
-
-        Return: 
-            queryset: containing the Question instance related to this survey, of a given order
-        """
-        queryset = Question.objects.filter(
-            survey=survey_id, order=question_order)
-        return queryset
+    #     Return:
+    #         queryset: containing the Question instance related to this survey, of a given order
+    #     """
+    #     queryset = Question.objects.filter(
+    #         survey=survey_id).order_by('order')
+    #     return queryset
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
