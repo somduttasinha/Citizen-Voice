@@ -5,7 +5,8 @@ import { useGlobalStore } from './global'
 export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
-            id: null
+            id: null,
+            currentSurveyDesign: []
         }
     },
     getters: {
@@ -28,7 +29,7 @@ export const useSurveyStore = defineStore('survey', {
             }
 
             const data = await useAsyncData(() => $cmsApi('api/surveys/' + id, config));
-            console.log('data //> ', data)
+
             return data
         },
         async getSurveys() {
@@ -95,7 +96,6 @@ export const useSurveyStore = defineStore('survey', {
                     expire_date
                 },
             }
-
 
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
@@ -165,5 +165,15 @@ export const useSurveyStore = defineStore('survey', {
             }
 
         },
+
+        /**
+         * Survey design
+         */
+        addNewQuestion(newQuestion) {
+            this.currentSurveyDesign.push(newQuestion)
+        },
+        removeQuestion(index) {
+
+        }
     }
 })

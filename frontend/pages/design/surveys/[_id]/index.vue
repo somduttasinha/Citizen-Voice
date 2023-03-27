@@ -1,37 +1,66 @@
 <template>
     <NuxtLayout name="default">
-        <form class="mt-4 flex flex-row" @submit.prevent="addNewSurvey">
-            <div class="content">
-                <h2 class="mb-4 font-bold">{{ textName || '[ Untitled ]' }}</h2>
-                <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
-                <v-textarea name="title" variant="outlined" v-model="textDescription" type="textarea"
-                    label="Description"></v-textarea>
-                <div class="">
-                    <h3 class="mb-6">Questions</h3>
+        <client-only placeholder="Loading...">
+            <form class="mt-4 flex flex-row" @submit.prevent="saveSurvey">
+                <div class="content">
+                    <h2 class="mb-4 font-bold">{{ textName || '[ Untitled ]' }}</h2>
+                    <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
+                    <v-textarea name="title" variant="outlined" v-model="textDescription" type="textarea"
+                        label="Description"></v-textarea>
+                    <div class="">
+                        <h3 class="mb-6">Questions</h3>
 
-                    <div v-for="(item, i) in questions">
-                        <component :is="item.comp" :type="item.type"></component>
-                    </div>
+                        <h3>Draggable {{ draggingInfo }}</h3>
 
-                    <v-menu>
-                        <template v-slot:activator="{ props }">
-                            <v-btn class="cursor-pointer" v-bind="props">
-                                <v-icon>mdi-plus-circle</v-icon> Add Question
-                            </v-btn>
-                        </template>
+                        <!-- Modulair question types -->
+                        <!-- <pre>{{ R.find(R.propEq('question_type', item.question_type), questionTypes).comp }}</pre> -->
+                        <!-- <draggable v-model="currentQuestions" tag="ul"  class="list-group" handle=".handle" item-key="order">
+                            <template #item="{ item, index }">
+                                <pre>{{ questionTypes[item.question_type] }}</pre>
 
-                        <v-list>
-                            <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i" @click="addQuestion(item)">
-                                <v-list-item-title>{{ item.title }}</v-list-item-title>
-                            </v-list-item>
-                        </v-list>
-                    </v-menu>
+                                <component v-if="questionTypes[item.question_type]" :is="questionTypes[item.question_type]"
+                                    :type="item.question_type"></component>
+                            </template>
+                        </draggable> -->
+                        
+                        <!-- <div> -->
+                        <!-- <component v-if="questionTypes[element.question_type]" :is="questionTypes[element.question_type]"
+                            :type="element.question_type"></component> -->
+                        <!-- </div> -->
+                        <draggable v-model="currentQuestions" item-key="id">
+                            <template #item="{ element }">
+                                <div>{{ element.text }}</div>
+                            </template>
+                        </draggable>
+
+
+                        <!-- <div v-for="(item, i) in ">
+                            <component :is="item.comp" :type="item.type"></component>
+                        </div> -->
+
+                        <pre>{{ JSON.stringify(currentQuestions, 0 ,4 ) }}</pre>
+
+                        <v-menu>
+                            <template v-slot:activator="{ props }">
+                                <v-btn class="cursor-pointer" v-bind="props">
+                                    <v-icon>mdi-plus-circle</v-icon> Add Question
+                                </v-btn>
+                            </template>
+
+                            <v-list>
+                                <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i"
+                                    @click="addQuestion(item)">
+                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                            
+                        </v-menu>
 
 
 
 
 
-                    <!-- <v-overlay v-model="overlay" contained class="align-center justify-center items-center">
+                        <!-- <v-overlay v-model="overlay" contained class="align-center justify-center items-center">
                         <div class="max-w-2xl py-4 px-5 bg-white w-[80vw] h-[40vh]">
                             <div class="w-full flex justify-between">
                                 <h3 class="text-2xl font-bold">Add Question</h3>
@@ -47,59 +76,68 @@
                         </div>
 
                     </v-overlay> -->
+                    </div>
                 </div>
-            </div>
-            <aside class="aside">
-                <VBtn variant="outlined" class="me-4" type="submit" @click="addNewSurvey">
-                    Save survey
-                </VBtn>
-            </aside>
-        </form>
+                <aside class="aside">
+                    <VBtn variant="outlined" class="me-4" type="submit" @click="saveSurvey">
+                        Save survey
+                    </VBtn>
+                </aside>
+            </form>
+        </client-only>
     </NuxtLayout>
 </template>
 
 <script setup>
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { TEXT, SHORT_TEXT } from "~/constants/questions"
-import { TextArea, TextShort } from "@/components/questionBlocks"
+import { TextArea, TextShort } from "@/components/question-blocks"
 // import BaseButton from "~/components/BaseButton";
 import { useSurveyStore } from "~/stores/survey"
+import { useQuestionDesignStore } from "~/stores/questionDesign"
 import * as R from 'ramda'
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
 
+/**
+ * States
+ */
+
+const dragging = ref(false)
 const route = useRoute()
-const overlay = ref(false)
-// probably better to store this in the store
-const questions = ref([])
 
-const questionTypes = [
-    {
-        type: TEXT,
-        title: "Text area",
-        comp: TextArea
-    },
-    {
-        type: SHORT_TEXT,
-        title: "Text Short",
-        comp: TextShort
-    },
-]
 
-const survey = ref({})
-let refresh;
+const draggingInfo = computed(() => {
+    return dragging.value ? "under drag" : "";
+});
+
+
+// const questionTypes = [
+
+//     {
+//         question_type: TEXT,
+//         title: "Text area",
+//         comp: shallowRef(TextArea)
+//     },
+//     {
+//         question_type: SHORT_TEXT,
+//         title: "Text Short",
+//         comp: shallowRef(TextShort)
+//     },
+// ]
+
+const questionTypes = {
+    [TEXT]: TextArea,
+}
+
+/**
+ * Survey
+ */
 
 const surveyStore = useSurveyStore()
-
-onMounted(async () => {
-    const res = await surveyStore.getSurvey(route.params._id)
-    console.log('res //> ', res)
-    survey.value = res.data.value
-    refresh = res.refresh
-})
-
-
+const { data: survey, refresh } = await surveyStore.getSurvey(route.params._id)
 
 var expire_date = new Date();
 var current_date = new Date();
@@ -112,7 +150,7 @@ expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
 
 // Add a new survey using the surveyStore, based on what is entered in the field.
-const addNewSurvey = async () => {
+const saveSurvey = async () => {
     const { id } = await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
 
     // Check if the id is already in the url parameter, if not redirect the page to that url
@@ -123,6 +161,16 @@ const addNewSurvey = async () => {
     }
 
 }
+
+/**
+ * Questions
+ */
+const questionStore = useQuestionDesignStore()
+// Get and set the questions
+await questionStore.setOrderedQuestionBySurvey(3)
+const { currentQuestions } = storeToRefs(questionStore)
+
+console.log('currentQuestions //> ', currentQuestions)
 
 // Add Question handler
 const addQuestion = (item) => {

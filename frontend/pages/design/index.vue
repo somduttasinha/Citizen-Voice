@@ -1,32 +1,34 @@
 <template>
     <NuxtLayout name="default">
-        <div class="flex flex-row">
-            <h2 class="inline-block">Surveys</h2>
-            <v-btn variant="outlined" @click="addNewSurvey" href="/design/surveys/create">Add
-                survey</v-btn>
-        </div>
+        <client-only placeholder="Loading...">
+            <div class="flex flex-row">
+                <h2 class="inline-block">Surveys</h2>
+                <v-btn variant="outlined" @click="addNewSurvey" href="/design/surveys/create">Add
+                    survey</v-btn>
+            </div>
 
-        <v-card>
-            <v-list>
-                <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
-                    <template v-slot:prepend>
-                        <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
-                        </v-btn>
-                    </template>
-                    <template v-slot:append>
-                        <div>
-                            <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
+            <v-card>
+                <v-list>
+                    <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
+                        <template v-slot:prepend>
+                            <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
                             </v-btn>
-                            <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`"
-                                icon="mdi-dots-vertical">
-                            </v-btn>
-                        </div>
-                    </template>
+                        </template>
+                        <template v-slot:append>
+                            <div>
+                                <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
+                                </v-btn>
+                                <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`"
+                                    icon="mdi-dots-vertical">
+                                </v-btn>
+                            </div>
+                        </template>
 
-                    <v-list-item-title>{{ item.name }}</v-list-item-title>
-                </v-list-item>
-            </v-list>
-        </v-card>
+                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-card>
+        </client-only>
     </NuxtLayout>
 </template>
 
