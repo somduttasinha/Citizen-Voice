@@ -2,21 +2,20 @@
     <NuxtLayout name="default">
         <div class="">
             <!-- Question card: number & text -->
-
             <v-card v-for="question in questions" class="my-card">
-              <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}</div>
-              <div class="text-h5 q-mt-sm q-mb-xs">{{question.text}}</div>
+                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}</div>
+                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
             </v-card>
-        </div>
 
-        <div class="">
-            <!-- Map card
+
+            <div class="">
+                <!-- Map card
           real v-if statement = (question.map_view != null || question.is_geospatial)-->
-<!--            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">-->
-<!--                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>-->
-<!--                <div id="map"></div>-->
-<!--            </v-card>-->
-        </div>
+                <!--            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">-->
+                <!--                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>-->
+                <!--                <div id="map"></div>-->
+                <!--            </v-card>-->
+            </div>
 
             <div class="my-card">
                 <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
@@ -60,12 +59,12 @@
         <div class="q-pa-md row">
             <v-btn @click="prevQuestion" color="primary">
                 <i class="fa-solid fa-arrow-left"></i>
-              <span class="q-pa-sm">Previous Question</span>
+                <span class="q-pa-sm">Previous Question</span>
             </v-btn>
             <v-space />
             <v-btn @click="nextQuestion" color="primary">
                 <i class="fa-solid fa-arrow-right"></i>
-              <span class="q-pa-sm">Next Question</span>
+                <span class="q-pa-sm">Next Question</span>
             </v-btn>
         </div>
 
@@ -88,10 +87,10 @@ const mapview_url = "/api/map_views/"
 
 const route = useRoute()
 // Fixme: Cleanup these functions
-import {useSurveyStore} from "~/stores/survey.js";
+import { useSurveyStore } from "~/stores/survey.js";
 const survey_store = useSurveyStore()
 // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
-const { data : questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
+const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
 var current_question_index = 0
 
 const survey = await responseStore.getResponse(route.params._id)
@@ -118,10 +117,10 @@ let resetClicked = false
 
 // to navigate from one question to the previous/next
 const prevQuestion = async () => {
-// TODO: Implement
+    // TODO: Implement
 }
 const nextQuestion = async () => {
-// TODO: Implement
+    // TODO: Implement
 }
 
 // inspired by Roy J's solution on Stack Overflow:
