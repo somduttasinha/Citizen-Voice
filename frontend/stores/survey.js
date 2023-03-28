@@ -62,11 +62,11 @@ export const useSurveyStore = defineStore('survey', {
 
         /**
         * Create survey
-        * @param {*} name 
-        * @param {*} description 
-        * @param {*} publish_date 
-        * @param {*} expire_date 
-        * @param {id} id 
+        * @param {*} name
+        * @param {*} description
+        * @param {*} publish_date
+        * @param {*} expire_date
+        * @param {id} id
         */
 
         /**
@@ -101,7 +101,7 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/', config))
+            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
 
             if (error.value) {
                 let warnMessage = null
@@ -110,6 +110,7 @@ export const useSurveyStore = defineStore('survey', {
                 }
                 // Notification
                 global.warning(warnMessage)
+                console.log(warnMessage)
                 return null
 
             }
@@ -119,7 +120,47 @@ export const useSurveyStore = defineStore('survey', {
                 this.id = 1
                 return register.value
             }
-            return null
+            // TODO: Return the id of the created survey
+            return 1
+        },
+
+        /**
+         * Get surveys of the current user
+         */
+        async getSurveysOfCurrentUser() {
+            const user = useUserStore()
+            await user.loadUser()
+            const global = useGlobalStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                method: 'GET'
+            }
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const response = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/my-surveys', config))
+
+            const error = response.error
+            if (error.value) {
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
+                // Notification
+                global.warning(warnMessage)
+            }
+            else {
+            }
+
+            return response
         },
 
         /**
@@ -131,7 +172,7 @@ export const useSurveyStore = defineStore('survey', {
             const user = useUserStore()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.getAuthToken
+            const token = user.userData.token
 
             const config = {
                 headers: {
@@ -166,14 +207,27 @@ export const useSurveyStore = defineStore('survey', {
 
         },
 
-        /**
-         * Survey design
-         */
-        addNewQuestion(newQuestion) {
-            this.currentSurveyDesign.push(newQuestion)
-        },
-        removeQuestion(index) {
+        async getQuestionsOfSurvey(id) {
+            const user = useUserStore()
+            const global = useGlobalStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken
 
-        }
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                method: 'GET'
+            }
+
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/' + id + '/questions', config))
+            return res
+        },
     }
 })

@@ -15,7 +15,9 @@ from datetime import datetime
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.parsers import JSONParser
+
 from rest_framework.decorators import action
+from rest_framework.response import Response as rf_response
 
 
 @api_view(['GET'])
@@ -116,22 +118,6 @@ class QuestionViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(questions, many=True)
         return Response(serializer.data)
 
-    # @staticmethod
-    # def GetOrderedQuestionBySurvey(survey_id, question_order):
-    #     """
-    #     Get specific Questions based on its survey_id, and a specific order.
-
-    #     Parameters:
-    #         survey_id (int): Survey ID to be used for finding related Questions.
-    #         question_order (int): The order in which the questions in the Survey are to be displayed.
-
-    #     Return:
-    #         queryset: containing the Question instance related to this survey, of a given order
-    #     """
-    #     queryset = Question.objects.filter(
-    #         survey=survey_id).order_by('order')
-    #     return queryset
-
 
 class SurveyViewSet(viewsets.ModelViewSet):
     """
@@ -151,6 +137,62 @@ class SurveyViewSet(viewsets.ModelViewSet):
         queryset = Survey.objects.all().order_by('name')
 
         return queryset
+
+    @action(detail=False, methods=['GET'], url_path='my-surveys')
+    def my_surveys(self, request, *args, **kwargs):
+        print("Getting my surveys...")
+
+        user = self.request.user
+        print(type(user))
+        if (type(user) == User):
+            surveys_of_user = Survey.objects.all().filter(designer=user.id).order_by('name')
+            survey_serializer = self.get_serializer(surveys_of_user, many=True)
+            print("User Id: ", user.id)
+            print(survey_serializer.data)
+            return rf_response(survey_serializer.data)
+
+        return rf_response({})
+
+    @action(detail=False, methods=['POST'], url_path='create-survey')
+    def create_survey(self, request, *args, **kwargs):
+        print("Creating a new survey...")
+
+        user = self.request.user
+        if type(user) is User:
+            survey_name = self.request.data["name"]
+            survey_description = self.request.data["description"]
+            once_up_a_time = datetime.now()
+            req = request
+
+            survey = Survey(name=survey_name, description=survey_description,
+                            publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+            survey.save()
+            print(survey)
+        else:
+            print("User was anonymous")
+        return rf_response(None)
+
+    @action(detail=True, methods=['GET'], url_path='questions')
+    def get_questions_of_survey(self, request, pk=None):
+        print("Retreiving questions of survey...")
+        user = self.request.user
+        survey = Survey.objects.get(id=pk)
+        if (survey.is_published):
+            if type(user) is User:
+                survey = Survey.objects.get(id=pk)
+                if (survey.designer != user.id):
+                    print("uses is not the designer")
+                    print(
+                        f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+                    rf_response([])
+                questions = Question.objects.all().filter(survey_id=pk).order_by('order')
+                question_serializer = QuestionSerializer(
+                    questions, many=True, context={'request': request})
+                print(question_serializer.data)
+                return rf_response(question_serializer.data)
+            else:
+                print("User was anonymous")
+        return rf_response([])
 
     # @action(detail=True, methods=['post'])
     # def CreateSurvey(response):

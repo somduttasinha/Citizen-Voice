@@ -1,34 +1,33 @@
 <template>
     <NuxtLayout name="default">
-        <client-only placeholder="Loading...">
-            <div class="flex flex-row">
-                <h2 class="inline-block">Surveys</h2>
-                <v-btn variant="outlined" @click="addNewSurvey" href="/design/surveys/create">Add
-                    survey</v-btn>
-            </div>
+        <div class="flex flex-row">
+            <h2 class="inline-block">Surveys</h2>
+            <v-btn variant="outlined" href="/design/surveys/create">Add
+                survey</v-btn>
+        </div>
 
-            <v-card>
-                <v-list>
-                    <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
-                        <template v-slot:prepend>
-                            <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
+        <v-card>
+            <v-list>
+                <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
+                    <template v-slot:prepend>
+                        <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
+                        </v-btn>
+                    </template>
+
+                    <template v-slot:append>
+                        <div>
+                            <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
                             </v-btn>
-                        </template>
-                        <template v-slot:append>
-                            <div>
-                                <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
-                                </v-btn>
-                                <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`"
-                                    icon="mdi-dots-vertical">
-                                </v-btn>
-                            </div>
-                        </template>
+                            <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`"
+                                icon="mdi-dots-vertical">
+                            </v-btn>
+                        </div>
+                    </template>
 
-                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-card>
-        </client-only>
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-card>
     </NuxtLayout>
 </template>
 
@@ -45,24 +44,7 @@ definePageMeta({
     alias: '/design/surveys'
 })
 
-/**
- * Fetch surveys
- */
-const surveys = ref(null)
-let refresh;
-
-// Init Survey store
 const surveyStore = useSurveyStore()
-
-onMounted(async () => {
-    // Get Surveys
-    const { data, execute, refresh } = await surveyStore.getSurveys()
-    await execute()
-    surveys.value = data.value;
-    refresh()
-})
-
-
 
 var expire_date = new Date();
 var current_date = new Date();
@@ -72,6 +54,16 @@ const textDescription = ref(null)
 // set default expire date 100 days after current day
 expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
+
+let response = ref({})
+let refresh = ref(() => { })
+let surveys = ref({})
+
+onMounted(async () => {
+    const response_ = await surveyStore.getSurveysOfCurrentUser()
+    response.value = response_
+    surveys.value = response_.data.value
+});
 
 // Add a new survey using the surveyStore, based on what is entered in the field.
 const addNewSurvey = async () => {
