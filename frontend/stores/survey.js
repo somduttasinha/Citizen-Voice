@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './user'
 import { useGlobalStore } from './global'
+import setRequestConfig from './utils/setRequestConfig';
 
 export const useSurveyStore = defineStore('survey', {
     state: () => {
@@ -46,12 +47,6 @@ export const useSurveyStore = defineStore('survey', {
 
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
-                // console.log('config //> ', config)
-                // const response = await useCmsApiData("/api/surveys/", config);
-
-
-                // console.log('response //> ', data.data)
-                // return data
             }
 
             const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
@@ -99,6 +94,7 @@ export const useSurveyStore = defineStore('survey', {
 
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
+
             }
 
             const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
@@ -124,6 +120,35 @@ export const useSurveyStore = defineStore('survey', {
             return 1
         },
 
+        /**
+                * Create a new survey based on the passed parameters
+                */
+        async updateSurvey(
+            id,
+            body
+        ) {
+            const global = useGlobalStore()
+            const config = setRequestConfig({ method: 'PATCH', body: { ...body } })
+
+            const { data: register, pending, error } = await useAsyncData('updateSurvey', () => $cmsApi(`/api/surveys/${id}/`, config))
+
+            if (error.value) {
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
+                // Notification
+                global.warning(warnMessage)
+                console.log(warnMessage)
+                return null
+
+            }
+            if (register?.value) {
+                // Notification
+                global.succes('Updated')
+                return register.value
+            }
+        },
         /**
          * Get surveys of the current user
          */

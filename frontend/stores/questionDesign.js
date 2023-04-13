@@ -1,32 +1,60 @@
-import { defineStore } from 'pinia'
+import { defineStore, } from 'pinia'
 import setRequestConfig from './utils/setRequestConfig';
+import { sortBy, path } from 'ramda'
+
+// UTILS
+const sortByOrder = sortBy(path(['order']))
+
+const questionPlaceholder = {
+    choices: "",
+    is_geospatial: false,
+    map_view: null,
+    order: 0,
+    question_type: "",
+    required: true,
+    survey: "",
+    text: ""
+}
+
 
 export const useQuestionDesignStore = defineStore('question', {
-    state: () => {
-        return {
-            id: null,
-            currentQuestions: []
-        }
-    },
+    state: () => ({
+        id: null,
+        currentQuestions: []
+    }),
     getters: {
-        currentQuestion: (state) => state.currentQuestion
+        getCurrentQuestions: (state) => state.currentQuestions
     },
     actions: {
+        // async setCurrentQuestions(id) {
+        //     await 
+        // },
+        async saveCurrentQuestions() {
+            console.log(' this.getCurrentQuestions //> ', this.currentQuestions)
+            const config = setRequestConfig({ method: 'POST', body: [...this.currentQuestions] })
+            const { data, refresh, error } = await useAsyncData(() => $cmsApi(`api/questions/`, config));
+            console.log('error //> ', error)
+            this.currentQuestions = sortByOrder(data.value)
+            refresh()
+        },
         async setOrderedQuestionBySurvey(id) {
-            console.log('id //> ', id)
             const config = setRequestConfig({ method: 'GET', survey_id: id })
-            const { data } = await useAsyncData(() => $cmsApi('api/questions/', config));
+            const { data } = await useAsyncData(() => $cmsApi(`api/questions/${id}/ordered_questions`, config));
 
-            this.currentQuestions = data
+            // this.currentQuestions = data
+            this.$patch({ currentQuestions: data })
         },
         addNewQuestion(newQuestion) {
-            this.currentQuestions.push(newQuestion)
+            this.$patch({ currentQuestions: [...this.currentQuestions, newQuestion] })
         },
         removeQuestion(index) {
 
         },
-        // setCurrentQuestionsDesign(currentQuestions) {
-        //     this.currentQuestions = currentQuestions
-        // },
-    }
+        setCurrentQuestionValue(index, value) {
+            const tempCurrentQuestions = this.currentQuestions
+            tempCurrentQuestions[index] = value
+            this.$patch({ currentQuestions: tempCurrentQuestions })
+        }
+    },
+
 })

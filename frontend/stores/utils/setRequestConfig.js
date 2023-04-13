@@ -10,7 +10,7 @@ const setRequestConfig = (params = { method: "GET" }) => {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
         },
-        params,
+        ...params,
     }
 
     if (token) {
