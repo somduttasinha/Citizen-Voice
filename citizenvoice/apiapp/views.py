@@ -2,10 +2,11 @@ from django.shortcuts import render
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
@@ -72,33 +73,68 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
-    Question ViewSet used internally to query data from database.
+    Question ViewSet used to query data from database.
     The `create` method is overwritten to accept one data object or a array of objects.
     """
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(
-            data=request.data, many=isinstance(request.data, list))
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        """
+        Here we are overwriting the default create method from the Django REST framework to update or create Questions by list or by single instances
+        """
+        # Checks if the request data is a list, and if not it wraps it in a list
+        data = request.data if isinstance(
+            request.data, list) else [request.data]
+        questions = []
+        # Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        for question_data in data:
+            if 'id' in question_data:
+                question = Question.objects.filter(
+                    pk=question_data['id']).first()
+                if question is None:
+                    continue
+                serializer = self.get_serializer(
+                    question, data=question_data, partial=True, context={'request': request})
+            else:
+                serializer = self.get_serializer(
+                    data=question_data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            question = serializer.save()
+            questions.append(question)
+
+        update_fields = ['text', 'order', 'required', 'question_type',
+                         'choices', 'survey', 'is_geospatial', 'map_view']
+
+        # update or create multiple questions in bulk
+        Question.objects.bulk_update_or_create(questions, update_fields, match_field='id')
+
+        serializer = self.get_serializer(questions, many=True)
         headers = self.get_success_headers(serializer.data)
-        print(kwargs)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        # survey = get_object_or_404(Survey, pk=pk)
+        # questions = survey.question_set.all().order_by('order')
+        # serializer = self.get_serializer(questions, many=True)
+        # return Response(serializer.data)
 
-    def get_queryset(self):
-        """
-        Returns a set of all Question instances in the database.
+    def perform_create(self, serializer):
+        update_fields = ['text', 'order', 'required', 'question_type',
+                         'choices', 'survey', 'is_geospatial', 'map_view']
+        serializer.save(update_fields=update_fields)
 
-        Return:
-            queryset: containing all Question instances
-        """
-
-        queryset = Question.objects.all()
-        return queryset
+    def perform_update(self, serializer):
+        serializer.save(update_fields=['text', 'order', 'required', 'question_type', 'choices', 'survey', 'is_geospatial', 'map_view'], update_conflicts={
+                        'text': 'keep',
+                        'order': 'keep',
+                        'required': 'keep',
+                        'question_type': 'keep',
+                        'choices': 'keep',
+                        'survey': 'keep',
+                        'is_geospatial': 'keep',
+                        'map_view': 'keep'
+                        })
 
     @action(detail=True, methods=['get'])
     def ordered_questions(self, request, pk=None):
