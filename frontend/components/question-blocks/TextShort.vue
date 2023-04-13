@@ -1,16 +1,18 @@
 <template>
-    <Wrapper :type="question_type">
-        <v-text-field v-model="value" label="Label"></v-text-field>
+    <Wrapper v-if="question" v-model="question" :question-type="question.question_type" >
+        <v-textarea v-if="question" v-model="question.text" label="Text of the Question" variant="outlined"></v-textarea>
     </Wrapper>
 </template>
 
-
 <script setup>
+import questionProxy from "./questionProxy"
 import Wrapper from "./Wrapper.vue"
 
-defineProps({
-    question_type: String,
-    title: String
+const props = defineProps({
+    index: Number,
 })
-const value = ref("")
+
+const question = questionProxy(props)
+
 </script>
+

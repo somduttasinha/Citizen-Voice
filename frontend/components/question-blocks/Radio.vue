@@ -1,6 +1,7 @@
 <template>
     <Wrapper v-if="question" v-model="question" :question-type="question.question_type" >
         <v-textarea v-if="question" v-model="question.text" label="Text of the Question" variant="outlined"></v-textarea>
+        <v-textarea v-if="question" v-model="question.choices " label="Add select options and separate them with comma" variant="outlined"></v-textarea>
     </Wrapper>
 </template>
 
