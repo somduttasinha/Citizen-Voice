@@ -89,7 +89,9 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         data = request.data if isinstance(
             request.data, list) else [request.data]
         questions = []
-        # Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        """
+        Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        """
         for question_data in data:
             if 'id' in question_data:
                 question = Question.objects.filter(
@@ -114,10 +116,6 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         serializer = self.get_serializer(questions, many=True)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        # survey = get_object_or_404(Survey, pk=pk)
-        # questions = survey.question_set.all().order_by('order')
-        # serializer = self.get_serializer(questions, many=True)
-        # return Response(serializer.data)
 
     def perform_create(self, serializer):
         update_fields = ['text', 'order', 'required', 'question_type',
