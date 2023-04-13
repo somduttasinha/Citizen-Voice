@@ -14,24 +14,6 @@ from django.contrib.auth.models import User
 # =============================================
 
 
-class UpdateListSerializer(serializers.ListSerializer):
-    """
-    The list serializer allows us to submit a single request for multiple updates.
-    """
-
-    def update(self, instances, validated_data):
-
-        instance_hash = {index: instance for index,
-                         instance in enumerate(instances)}
-
-        result = [
-            self.child.update(instance_hash[index], attrs)
-            for index, attrs in enumerate(validated_data)
-        ]
-
-        return result
-
-
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serialises 'response', 'question', 'created', 'updated', 'body'
