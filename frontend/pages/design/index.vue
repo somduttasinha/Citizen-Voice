@@ -24,7 +24,7 @@
                         </div>
                     </template>
 
-                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                    <v-list-item-title>{{ item.name }} | #{{ item.id }}</v-list-item-title> 
                 </v-list-item>
             </v-list>
         </v-card>
