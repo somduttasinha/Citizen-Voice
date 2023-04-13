@@ -1,21 +1,17 @@
-from django.shortcuts import render
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
-from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404
-from rest_framework.parsers import JSONParser
 
 from rest_framework.decorators import action
 from rest_framework.response import Response as rf_response
