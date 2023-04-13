@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'knox_allauth',
     'allauth',
     'allauth.account',
+    'bulk_update_or_create'
 ]
 
 MIDDLEWARE = [
@@ -127,7 +128,7 @@ ALLOWED_HOSTS = [
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
-     'http://127.0.0.1:3000',
+    'http://127.0.0.1:3000',
     'http://145.94.193.168:3000'
 )
 CORS_ALLOWED_ORIGINS = [

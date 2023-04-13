@@ -73,9 +73,9 @@
 
 
 <script setup>
-
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
+import { useSurveyStore } from "~/stores/survey.js";
 import { useStoreResponse } from '~/stores/response'
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
@@ -87,7 +87,6 @@ const mapview_url = "/api/map_views/"
 
 const route = useRoute()
 // Fixme: Cleanup these functions
-import { useSurveyStore } from "~/stores/survey.js";
 const survey_store = useSurveyStore()
 // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
 const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
@@ -117,10 +116,17 @@ let resetClicked = false
 
 // to navigate from one question to the previous/next
 const prevQuestion = async () => {
-    // TODO: Implement
+    // if this is not the first question:
+    let question_to_navigate = (parseInt(route.params._question, 10) - 1)
+    if (question_to_navigate != 0) {
+        return navigateTo('/survey/' + route.params._id + '/' + question_to_navigate)
+    } else {
+        return navigateTo('/survey/' + route.params._id)
+    }
 }
 const nextQuestion = async () => {
-    // TODO: Implement
+    // if this is not the last question:
+    return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
 }
 
 // inspired by Roy J's solution on Stack Overflow:

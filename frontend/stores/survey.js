@@ -1,17 +1,60 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './user'
 import { useGlobalStore } from './global'
+import setRequestConfig from './utils/setRequestConfig';
 
 export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
-            id: null
+            id: null,
+            currentSurveyDesign: []
         }
     },
     getters: {
 
     },
     actions: {
+        async getSurvey(id) {
+            const user = useUserStore()
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'GET',
+            }
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const data = await useAsyncData(() => $cmsApi('api/surveys/' + id, config));
+
+            return data
+        },
+        async getSurveys() {
+            const user = useUserStore()
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: 'GET',
+            }
+
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
+
+            return data
+
+        },
+
         /**
         * Create survey
         * @param {*} name
@@ -33,7 +76,7 @@ export const useSurveyStore = defineStore('survey', {
             const user = useUserStore()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.userData.token
+            const token = user.getAuthToken
 
             const config = {
                 headers: {
@@ -51,6 +94,7 @@ export const useSurveyStore = defineStore('survey', {
 
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
+
             }
 
             const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
@@ -77,6 +121,35 @@ export const useSurveyStore = defineStore('survey', {
         },
 
         /**
+                * Create a new survey based on the passed parameters
+                */
+        async updateSurvey(
+            id,
+            body
+        ) {
+            const global = useGlobalStore()
+            const config = setRequestConfig({ method: 'PATCH', body: { ...body } })
+
+            const { data: register, pending, error } = await useAsyncData('updateSurvey', () => $cmsApi(`/api/surveys/${id}/`, config))
+
+            if (error.value) {
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
+                // Notification
+                global.warning(warnMessage)
+                console.log(warnMessage)
+                return null
+
+            }
+            if (register?.value) {
+                // Notification
+                global.succes('Updated')
+                return register.value
+            }
+        },
+        /**
          * Get surveys of the current user
          */
         async getSurveysOfCurrentUser() {
@@ -84,7 +157,7 @@ export const useSurveyStore = defineStore('survey', {
             await user.loadUser()
             const global = useGlobalStore()
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.userData.token
+            const token = user.getAuthToken
 
             const config = {
                 headers: {
@@ -112,74 +185,74 @@ export const useSurveyStore = defineStore('survey', {
             else {
             }
 
-          return response
+            return response
         },
 
-      /**
-       * Delete an existing survey based on the passed ID
-       */
-      async deleteSurvey(
-        id
-      ) {
-        const user = useUserStore()
-        const global = useGlobalStore()
-        const csrftoken = user.getCookie('csrftoken');
-        const token = user.userData.token
+        /**
+         * Delete an existing survey based on the passed ID
+         */
+        async deleteSurvey(
+            id
+        ) {
+            const user = useUserStore()
+            const global = useGlobalStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.userData.token
 
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-          },
-          method: 'DELETE'
-        }
-
-
-        if (token) {
-          config.headers['Authorization'] = `Token ${token}`
-        }
-
-        const { data: register, pending, error } = await useAsyncData('deleteSurvey', () => $cmsApi('/api/surveys/' + id, config))
-
-        if (error.value) {
-          let warnMessage = null
-          for (const [key, value] of Object.entries(error._value.data)) {
-            warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
-          }
-          // Notification
-          global.warning(warnMessage)
-
-        }
-        else {
-          // Notification
-          global.succes('deleteSurvey complete')
-          this.id = 1
-          await navigateTo('/design')
-        }
-
-      },
-
-      async getQuestionsOfSurvey(id) {
-        const user = useUserStore()
-        const global = useGlobalStore()
-        const csrftoken = user.getCookie('csrftoken');
-        const token = user.userData.token
-
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken
-          },
-          method: 'GET'
-        }
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                method: 'DELETE'
+            }
 
 
-        if (token) {
-          config.headers['Authorization'] = `Token ${token}`
-        }
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
 
-        const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/' + id + '/questions', config))
-        return res
-      },
+            const { data: register, pending, error } = await useAsyncData('deleteSurvey', () => $cmsApi('/api/surveys/' + id, config))
+
+            if (error.value) {
+                let warnMessage = null
+                for (const [key, value] of Object.entries(error._value.data)) {
+                    warnMessage = warnMessage ? `${warnMessage} \n\n ${key}: ${value}` : `${key}: ${value}`
+                }
+                // Notification
+                global.warning(warnMessage)
+
+            }
+            else {
+                // Notification
+                global.succes('deleteSurvey complete')
+                this.id = 1
+                await navigateTo('/design')
+            }
+
+        },
+
+        async getQuestionsOfSurvey(id) {
+            const user = useUserStore()
+            const global = useGlobalStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken
+
+            const config = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                method: 'GET'
+            }
+
+
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
+            }
+
+            const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/' + id + '/questions', config))
+            return res
+        },
     }
 })

@@ -13,6 +13,7 @@
                         <v-btn color="dark" variant="plain" :href="`/design/surveys/${item.id}`" icon="mdi-file">
                         </v-btn>
                     </template>
+
                     <template v-slot:append>
                         <div>
                             <v-btn color="dark" variant="plain" @click="deleteHandler(item.id)" icon="mdi-delete">
@@ -23,7 +24,7 @@
                         </div>
                     </template>
 
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
+                    <v-list-item-title>{{ item.name }} | #{{ item.id }}</v-list-item-title> 
                 </v-list-item>
             </v-list>
         </v-card>
@@ -55,13 +56,13 @@ expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
 
 let response = ref({})
-let refresh = ref(() => {})
-let surveys = ref ({})
+let refresh = ref(() => { })
+let surveys = ref({})
 
 onMounted(async () => {
-  const response_ = await surveyStore.getSurveysOfCurrentUser()
-  response.value = response_
-  surveys.value = response_.data.value
+    const response_ = await surveyStore.getSurveysOfCurrentUser()
+    response.value = response_
+    surveys.value = response_.data.value
 });
 
 // Add a new survey using the surveyStore, based on what is entered in the field.

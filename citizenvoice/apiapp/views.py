@@ -1,7 +1,6 @@
-from django.shortcuts import render
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
-from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
@@ -12,16 +11,17 @@ from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocat
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.http.response import JsonResponse
-from rest_framework.parsers import JSONParser
+from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import action 
+from rest_framework.decorators import action
 from rest_framework.response import Response as rf_response
+
 
 @api_view(['GET'])
 def get_csrf_token(request):
     token = csrf.get_token(request)
     return Response({'csrf_token': token})
+
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -29,7 +29,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     serializer_class = AnswerSerializer
 
-    def get_queryset(response):
+    def get_queryset(self):
         """
         Returns a set of all Answer instances in the database.
 
@@ -69,70 +69,84 @@ class AnswerViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
+class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
-    Question ViewSet used internally to query data from database.
-
+    Question ViewSet used to query data from database.
+    The `create` method is overwritten to accept one data object or a array of objects.
     """
-
+    queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
-    def get_queryset(response):
+    def create(self, request, *args, **kwargs):
         """
-        Returns a set of all Question instances in the database.
-
-        Return:
-            queryset: containing all Question instances
+        Here we are overwriting the default create method from the Django REST framework to update or create Questions by list or by single instances
         """
-
-        queryset = Question.objects.all()
-        return queryset
-
-    @staticmethod
-    def GetQuestionByID(id):
+        # Checks if the request data is a list, and if not it wraps it in a list
+        data = request.data if isinstance(
+            request.data, list) else [request.data]
+        questions = []
         """
-        Get a specific Question based on its ID.
+        Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        """
+        for question_data in data:
+            if 'id' in question_data:
+                question = Question.objects.filter(
+                    pk=question_data['id']).first()
+                if question is None:
+                    continue
+                serializer = self.get_serializer(
+                    question, data=question_data, partial=True, context={'request': request})
+            else:
+                serializer = self.get_serializer(
+                    data=question_data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            question = serializer.save()
+            questions.append(question)
+
+        update_fields = ['text', 'order', 'required', 'question_type',
+                         'choices', 'survey', 'is_geospatial', 'map_view']
+
+        # update or create multiple questions in bulk
+        Question.objects.bulk_update_or_create(questions, update_fields, match_field='id')
+
+        serializer = self.get_serializer(questions, many=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        update_fields = ['text', 'order', 'required', 'question_type',
+                         'choices', 'survey', 'is_geospatial', 'map_view']
+        serializer.save(update_fields=update_fields)
+
+    def perform_update(self, serializer):
+        serializer.save(update_fields=['text', 'order', 'required', 'question_type', 'choices', 'survey', 'is_geospatial', 'map_view'], update_conflicts={
+                        'text': 'keep',
+                        'order': 'keep',
+                        'required': 'keep',
+                        'question_type': 'keep',
+                        'choices': 'keep',
+                        'survey': 'keep',
+                        'is_geospatial': 'keep',
+                        'map_view': 'keep'
+                        })
+
+    @action(detail=True, methods=['get'])
+    def ordered_questions(self, request, pk=None):
+        """
+        Retrieve a list of questions for a given survey, ordered by the 'order' field.
+        API url: `/api/questions/{survey_id}/ordered_questions`
 
         Parameters:
-            id (int): Question ID to be used for finding this Question.
+            request (Request): The request object used to make the API call.
+            pk = survey_id (int): The primary key of the Survey instance to retrieve questions for.
 
-        Return:
-            queryset: containing the Question instance with this id
+        Returns:
+            Response: A JSON response containing a list of serialized Question instances.
         """
-
-        queryset = Question.objects.filter(id=id)
-        return queryset
-
-    @staticmethod
-    def GetQuestionBySurvey(survey_id):
-        """
-        Get specific Questions based on its survey_id.
-
-        Parameters:
-            survey_id (int): Survey ID to be used for finding related Questions.
-
-        Return:
-            queryset: containing the Question instance related to this survey
-        """
-
-        queryset = Question.objects.filter(survey=survey_id)
-        return queryset
-
-    @staticmethod
-    def GetOrderedQuestionBySurvey(survey_id, question_order):
-        """
-        Get specific Questions based on its survey_id, and a specific order.
-
-        Parameters:
-            survey_id (int): Survey ID to be used for finding related Questions.
-            question_order (int): The order in which the questions in the Survey are to be displayed.
-
-        Return:
-            queryset: containing the Question instance related to this survey, of a given order
-        """
-        queryset = Question.objects.filter(
-            survey=survey_id, order=question_order)
-        return queryset
+        survey = get_object_or_404(Survey, pk=pk)
+        questions = survey.question_set.all().order_by('order')
+        serializer = self.get_serializer(questions, many=True)
+        return Response(serializer.data)
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
@@ -140,7 +154,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     Survey ViewSet used internally to query data from database.
 
     """
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = SurveySerializer
 
     def get_queryset(response):
@@ -160,7 +174,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
 
         user = self.request.user
         print(type(user))
-        if(type(user) == User):
+        if (type(user) == User):
             surveys_of_user = Survey.objects.all().filter(designer=user.id).order_by('name')
             survey_serializer = self.get_serializer(surveys_of_user, many=True)
             print("User Id: ", user.id)
@@ -181,27 +195,30 @@ class SurveyViewSet(viewsets.ModelViewSet):
             req = request
 
             survey = Survey(name=survey_name, description=survey_description,
-             publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+                            publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
             survey.save()
             print(survey)
         else:
             print("User was anonymous")
         return rf_response(None)
 
+    # TODO: remove this one because we are now directly getting the questions from the QuestionViewSet
     @action(detail=True, methods=['GET'], url_path='questions')
     def get_questions_of_survey(self, request, pk=None):
         print("Retreiving questions of survey...")
         user = self.request.user
         survey = Survey.objects.get(id=pk)
-        if(survey.is_published):
+        if (survey.is_published):
             if type(user) is User:
                 survey = Survey.objects.get(id=pk)
-                if(survey.designer != user.id):
+                if (survey.designer != user.id):
                     print("uses is not the designer")
-                    print(f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+                    print(
+                        f"User id: {user.id} \nDesigner id: {survey.designer_id}")
                     rf_response([])
                 questions = Question.objects.all().filter(survey_id=pk).order_by('order')
-                question_serializer = QuestionSerializer(questions, many=True, context={'request': request})
+                question_serializer = QuestionSerializer(
+                    questions, many=True, context={'request': request})
                 print(question_serializer.data)
                 return rf_response(question_serializer.data)
             else:
@@ -219,7 +236,6 @@ class SurveyViewSet(viewsets.ModelViewSet):
     #         survey_serializer.save()
     #         return JsonResponse(survey_serializer.data, status=status.HTTP_201_CREATED)
     #     return JsonResponse(survey_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     @staticmethod
     def GetSurveyByID(id):

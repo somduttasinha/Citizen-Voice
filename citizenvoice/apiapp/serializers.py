@@ -31,8 +31,22 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = Question
-        fields = ('text', 'order', 'required', 'question_type',
+        fields = ('id', 'text', 'order', 'required', 'question_type',
                   'choices', 'survey', 'is_geospatial', 'map_view')
+        read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        question = Question.objects.create(
+            text=validated_data['text'],
+            order=validated_data['order'],
+            required=validated_data['required'],
+            question_type=validated_data['question_type'],
+            choices=validated_data.get('choices', None),
+            survey=validated_data['survey'],
+            is_geospatial=validated_data.get('is_geospatial', False),
+            map_view=validated_data.get('map_view', None),
+        )
+        return question
 
 
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
