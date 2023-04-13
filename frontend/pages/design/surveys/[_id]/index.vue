@@ -10,35 +10,15 @@
                     <div class="">
                         <h3 class="mb-6">Questions</h3>
 
-                        <h3>Draggable {{ draggingInfo }}</h3>
-
-                        <!-- Modulair question types -->
-                        <!-- <pre>{{ R.find(R.propEq('question_type', item.question_type), questionTypes).comp }}</pre> -->
-                        <!-- <draggable v-model="currentQuestions" tag="ul"  class="list-group" handle=".handle" item-key="order">
-                            <template #item="{ item, index }">
-                                <pre>{{ questionTypes[item.question_type] }}</pre>
-
-                                <component v-if="questionTypes[item.question_type]" :is="questionTypes[item.question_type]"
-                                    :type="item.question_type"></component>
-                            </template>
-                        </draggable> -->
-                        
-                        <!-- <div> -->
-                        <!-- <component v-if="questionTypes[element.question_type]" :is="questionTypes[element.question_type]"
-                            :type="element.question_type"></component> -->
-                        <!-- </div> -->
-                        <draggable v-model="currentQuestions" item-key="id">
-                            <template #item="{ element }">
-                                <div>{{ element.text }}</div>
+                        <draggable h="auto" v-model="questionStore.currentQuestions" item-key="id">
+                            <template #item="{ element, index }">
+                                <div>
+                                    <component v-if="questionTypes[element.question_type]"
+                                        :is="questionTypes[element.question_type].comp" v-bind="{ ...element, index }">
+                                    </component>
+                                </div>
                             </template>
                         </draggable>
-
-
-                        <!-- <div v-for="(item, i) in ">
-                            <component :is="item.comp" :type="item.type"></component>
-                        </div> -->
-
-                        <pre>{{ JSON.stringify(currentQuestions, 0 ,4 ) }}</pre>
 
                         <v-menu>
                             <template v-slot:activator="{ props }">
@@ -48,34 +28,23 @@
                             </template>
 
                             <v-list>
-                                <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i"
-                                    @click="addQuestion(item)">
-                                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                                <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i" @click="addQuestion({
+                                    choices: '',
+                                    text: '',
+                                    survey: `http://127.0.0.1:8000/api/surveys/${survey.id}/`,
+                                    order: questionStore.currentQuestions.length + 1,
+                                    required: false,
+                                    question_type: item.type,
+                                    is_geospatial: false,
+                                    map_view: null,
+                                })">
+
+
+                                    <v-list-item-title>{{ item.label }}</v-list-item-title>
                                 </v-list-item>
                             </v-list>
-                            
+
                         </v-menu>
-
-
-
-
-
-                        <!-- <v-overlay v-model="overlay" contained class="align-center justify-center items-center">
-                        <div class="max-w-2xl py-4 px-5 bg-white w-[80vw] h-[40vh]">
-                            <div class="w-full flex justify-between">
-                                <h3 class="text-2xl font-bold">Add Question</h3>
-                                <v-btn size="22px" icon="mdi-close" @click="overlay = false">
-                                </v-btn>
-                            </div>
-                            <div class="w-full mt-2">
-                                <div v-for="question in questionTypes">
-                                    <p></p>
-                                    <img src="/assets/img/ui-placeholder.svg" alt="">
-                                </div>
-                            </div>
-                        </div>
-
-                    </v-overlay> -->
                     </div>
                 </div>
                 <aside class="aside">
@@ -90,13 +59,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { storeToRefs } from 'pinia'
-import { TEXT, SHORT_TEXT } from "~/constants/questions"
-import { TextArea, TextShort } from "@/components/question-blocks"
-// import BaseButton from "~/components/BaseButton";
+import { TEXT, SHORT_TEXT, RADIO, SELECT, SELECT_MULTIPLE, FLOAT, DATE } from "~/constants/questions"
+import { TextArea, TextShort, Radio, Select, SelectMultiple, Number, Date as DateComp } from "@/components/question-blocks"
 import { useSurveyStore } from "~/stores/survey"
 import { useQuestionDesignStore } from "~/stores/questionDesign"
-import * as R from 'ramda'
+import { pathOr } from 'ramda'
+
 
 // Make sure the user is authenticated or trigger the reroute to login
 definePageMeta({ middleware: 'authorization' })
@@ -113,24 +81,49 @@ const draggingInfo = computed(() => {
     return dragging.value ? "under drag" : "";
 });
 
-
-// const questionTypes = [
-
-//     {
-//         question_type: TEXT,
-//         title: "Text area",
-//         comp: shallowRef(TextArea)
-//     },
-//     {
-//         question_type: SHORT_TEXT,
-//         title: "Text Short",
-//         comp: shallowRef(TextShort)
-//     },
-// ]
-
 const questionTypes = {
-    [TEXT]: TextArea,
+    [TEXT]: {
+        label: 'Text Area',
+        comp: TextArea,
+        type: TEXT
+    },
+    [SHORT_TEXT]: {
+        label: 'Text Short',
+        comp: TextShort,
+        type: SHORT_TEXT
+    },
+    [RADIO]: {
+        label: 'Radio Select',
+        comp: Radio,
+        type: RADIO
+    },
+    [SELECT]: {
+        label: 'Select',
+        comp: Select,
+        type: SELECT
+    },
+    [SELECT_MULTIPLE]: {
+        label: 'Select Multiple',
+        comp: SelectMultiple,
+        type: SELECT_MULTIPLE
+    },
+    [FLOAT]: {
+        label: 'Number',
+        comp: Number,
+        type: FLOAT
+    },
+    [DATE]: {
+        label: 'Date',
+        comp: DateComp,
+        type: DATE
+    },
+    // TODO: these are two more question types we might need later but for now leave them out for the MVP
+    // [SELECT_IMAGE]: SelectImage,
+    // [INTEGER]: Integer,
 }
+
+
+
 
 /**
  * Survey
@@ -142,41 +135,39 @@ const { data: survey, refresh } = await surveyStore.getSurvey(route.params._id)
 var expire_date = new Date();
 var current_date = new Date();
 
-const textName = ref(R.pathOr('', ['value', 'name'], survey))
-const textDescription = ref(R.pathOr('', ['value', 'description'], survey))
+const textName = ref(pathOr('', ['value', 'name'], survey))
+const textDescription = ref(pathOr('', ['value', 'description'], survey))
 
 // set default expire date 100 days after current day
 expire_date.setDate(expire_date.getDate() + 100);
 current_date.setDate(current_date.getDate());
 
-// Add a new survey using the surveyStore, based on what is entered in the field.
-const saveSurvey = async () => {
-    const { id } = await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
-
-    // Check if the id is already in the url parameter, if not redirect the page to that url
-    if (id) {
-        await navigateTo('/design/surveys/' + id)
-    } else {
-        refresh()
-    }
-
-}
-
 /**
  * Questions
  */
 const questionStore = useQuestionDesignStore()
-// Get and set the questions
-await questionStore.setOrderedQuestionBySurvey(3)
-const { currentQuestions } = storeToRefs(questionStore)
+if (route?.params?._id) await questionStore.setOrderedQuestionBySurvey(route.params._id)
 
-console.log('currentQuestions //> ', currentQuestions)
 
 // Add Question handler
 const addQuestion = (item) => {
-    console.log('item //> ', item)
-    questions.value.push(item)
+    questionStore.addNewQuestion(item)
 }
+
+// Add a new survey using the surveyStore, based on what is entered in the field.
+const saveSurvey = async () => {
+    // If the id route exists we can assume that the survey already exists too
+    if (route?.params?._id) {
+        await surveyStore.updateSurvey(route?.params?._id, {
+            name: textName.value,
+            description: textDescription.value,
+        })
+    } else {
+        const { id } = await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+    }
+    await questionStore.saveCurrentQuestions()
+}
+
 
 </script>
 
