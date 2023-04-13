@@ -26,14 +26,9 @@ export const useQuestionDesignStore = defineStore('question', {
         getCurrentQuestions: (state) => state.currentQuestions
     },
     actions: {
-        // async setCurrentQuestions(id) {
-        //     await 
-        // },
         async saveCurrentQuestions() {
-            console.log(' this.getCurrentQuestions //> ', this.currentQuestions)
             const config = setRequestConfig({ method: 'POST', body: [...this.currentQuestions] })
             const { data, refresh, error } = await useAsyncData(() => $cmsApi(`api/questions/`, config));
-            console.log('error //> ', error)
             this.currentQuestions = sortByOrder(data.value)
             refresh()
         },
@@ -41,12 +36,12 @@ export const useQuestionDesignStore = defineStore('question', {
             const config = setRequestConfig({ method: 'GET', survey_id: id })
             const { data } = await useAsyncData(() => $cmsApi(`api/questions/${id}/ordered_questions`, config));
 
-            // this.currentQuestions = data
             this.$patch({ currentQuestions: data })
         },
         addNewQuestion(newQuestion) {
             this.$patch({ currentQuestions: [...this.currentQuestions, newQuestion] })
         },
+        // TODO
         removeQuestion(index) {
 
         },
