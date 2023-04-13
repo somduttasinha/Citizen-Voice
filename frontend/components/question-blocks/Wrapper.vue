@@ -11,14 +11,14 @@
                 <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
 
-            <v-menu open-on-hover>
+            <!-- <v-menu open-on-hover>
             <template v-slot:activator="{ props }">
                 <v-btn class="text-none ml-auto" color="white">
                     <v-icon size="x-large">mdi-dots-vertical</v-icon>
                 </v-btn>
-            </template>
+            </template> -->
 
-            <v-list>
+            <!-- <v-list>
                 <v-list-item v-if="isAuthenticated" to="/user">
                     <v-list-item-title>Profile</v-list-item-title>
                 </v-list-item>
@@ -31,8 +31,8 @@
                 <v-list-item v-if="isAuthenticated" @click="logoutHandler()">
                     <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item>
-            </v-list>
-        </v-menu>
+            </v-list> -->
+        <!-- </v-menu> -->
 
         </v-toolbar>
         <div class="px-6 py-6">
