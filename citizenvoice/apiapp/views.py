@@ -202,6 +202,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
             print("User was anonymous")
         return rf_response(None)
 
+    # TODO: remove this one because we are now directly getting the questions from the QuestionViewSet
     @action(detail=True, methods=['GET'], url_path='questions')
     def get_questions_of_survey(self, request, pk=None):
         print("Retreiving questions of survey...")
