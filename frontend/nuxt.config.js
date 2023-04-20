@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     ],
     imports: {
         dirs: [
+            'stores',
             // Scan top-level modules      
             'composables',
             // ... or scan modules nested one level deep with a specific name and file extension      
@@ -118,6 +119,7 @@ export default defineNuxtConfig({
     routeRules: {
         // Render these routes with SPA // See: https://nuxt.com/docs/guide/concepts/rendering#route-rules
         '/design/**': { ssr: false },
+        '/design/surveys/**': { ssr: false },
         '/user/**': { ssr: false },
         '/survey/**': { ssr: false },
     },
