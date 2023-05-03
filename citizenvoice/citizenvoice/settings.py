@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'apiapp',
     'rest_framework',
+    'rest_framework.permissions',
     'users.apps.UsersConfig',
     'survey_design.apps.SurveyDesignConfig',
     'respondent.apps.RespondentConfig',
@@ -73,7 +74,7 @@ INSTALLED_APPS = [
     'knox_allauth',
     'allauth',
     'allauth.account',
-    'bulk_update_or_create'
+    'bulk_update_or_create',
 ]
 
 MIDDLEWARE = [
