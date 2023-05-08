@@ -1,4 +1,5 @@
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAndSelf
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
+# from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.shortcuts import get_object_or_404
@@ -27,6 +28,8 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     Answer ViewSet used internally to query data from database.
     """
+    # Figure out the permissions for the answers, do designers to to see them?
+    # permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     serializer_class = AnswerSerializer
 
     def get_queryset(self):
@@ -74,6 +77,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     Question ViewSet used to query data from database.
     The `create` method is overwritten to accept one data object or a array of objects.
     """
+    permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
@@ -154,7 +158,7 @@ class SurveyViewSet(viewsets.ModelViewSet):
     Survey ViewSet used internally to query data from database.
 
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     serializer_class = SurveySerializer
 
     def get_queryset(response):
@@ -177,8 +181,8 @@ class SurveyViewSet(viewsets.ModelViewSet):
         if (type(user) == User):
             surveys_of_user = Survey.objects.all().filter(designer=user.id).order_by('name')
             survey_serializer = self.get_serializer(surveys_of_user, many=True)
-            print("User Id: ", user.id)
-            print(survey_serializer.data)
+            # print("User Id: ", user.id)
+            # print(survey_serializer.data)
             return rf_response(survey_serializer.data)
 
         return rf_response({})
@@ -354,7 +358,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     User ViewSet used internally to query data from database for all users.
     """
-
+    permission_classes = [IsAuthenticatedAndSelf]
     serializer_class = UserSerializer
 
     def get_queryset(response):

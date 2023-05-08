@@ -57,7 +57,7 @@ current_date.setDate(current_date.getDate());
 
 let response = ref({})
 let refresh = ref(() => { })
-let surveys = ref({})
+let surveys = ref([])
 
 onMounted(async () => {
     const response_ = await surveyStore.getSurveysOfCurrentUser()
