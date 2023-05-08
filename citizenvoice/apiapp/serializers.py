@@ -116,4 +116,4 @@ class MapViewSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = MapView
-        fields = ('name', 'map_service_url', 'options')
+        fields = ('id', 'name', 'map_service_url', 'options', 'geojson')

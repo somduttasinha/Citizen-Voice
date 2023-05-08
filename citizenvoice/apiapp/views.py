@@ -534,3 +534,8 @@ class MapViewViewSet(viewsets.ModelViewSet):
 
         queryset = MapView.objects.all()
         return queryset
+
+    @action(detail=False, methods=['get'])
+    def id_names(self, request):
+        mapviews = MapView.objects.values('id', 'name')
+        return Response(mapviews)
