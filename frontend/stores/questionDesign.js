@@ -5,18 +5,6 @@ import { sortBy, path } from 'ramda'
 // UTILS
 const sortByOrder = sortBy(path(['order']))
 
-const questionPlaceholder = {
-    choices: "",
-    is_geospatial: false,
-    map_view: null,
-    order: 0,
-    question_type: "",
-    required: true,
-    survey: "",
-    text: ""
-}
-
-
 export const useQuestionDesignStore = defineStore('question', {
     state: () => ({
         id: null,
@@ -28,13 +16,13 @@ export const useQuestionDesignStore = defineStore('question', {
     actions: {
         async saveCurrentQuestions() {
             const config = setRequestConfig({ method: 'POST', body: [...this.currentQuestions] })
-            const { data, refresh, error } = await useAsyncData(() => $cmsApi(`api/questions/`, config));
+            const { data, error } = await useAsyncData(() => $cmsApi(`/api/questions/`, config));
             this.currentQuestions = sortByOrder(data.value)
-            refresh()
+            // TODD: add catch error
         },
         async setOrderedQuestionBySurvey(id) {
             const config = setRequestConfig({ method: 'GET', survey_id: id })
-            const { data } = await useAsyncData(() => $cmsApi(`api/questions/${id}/ordered_questions`, config));
+            const { data } = await useAsyncData(() => $cmsApi(`/api/questions/${id}/ordered_questions`, config));
 
             this.$patch({ currentQuestions: data })
         },

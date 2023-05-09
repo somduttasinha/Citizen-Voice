@@ -9,7 +9,7 @@ const questionStore = useQuestionDesignStore()
  * @returns Question
  * 
  */
-const question = (props) => {
+const questionProxy = (props) => {
     return computed({
         get: () => questionStore.currentQuestions[props.index],
         set: (value) => {
@@ -30,4 +30,4 @@ const question = (props) => {
 
 
 
-export default question
+export default questionProxy
