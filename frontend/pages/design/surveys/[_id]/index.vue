@@ -7,7 +7,7 @@
                     <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
                     <v-textarea name="title" variant="outlined" v-model="textDescription" type="textarea"
                         label="Description"></v-textarea>
-                    <div class="">
+                    <div v-if="route?.params?._id">
                         <h3 class="mb-6">Questions</h3>
 
                         <draggable h="auto" v-model="questionStore.currentQuestions" item-key="id">
@@ -31,7 +31,7 @@
                                 <v-list-item v-for="(item, i) in questionTypes" :key="i" :value="i" @click="addQuestion({
                                     choices: '',
                                     text: '',
-                                    survey: `http://127.0.0.1:8000/api/surveys/${survey.id}/`,
+                                    survey: survey.id,
                                     order: questionStore.currentQuestions.length + 1,
                                     required: false,
                                     question_type: item.type,
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <aside class="aside">
-                    <VBtn variant="outlined" class="me-4" type="submit" @click="saveSurvey">
+                    <VBtn variant="outlined" class="me-4" type="submit">
                         Save survey
                     </VBtn>
                 </aside>
@@ -164,6 +164,7 @@ const saveSurvey = async () => {
         })
     } else {
         const { id } = await surveyStore.createSurvey(textName.value, textDescription.value, current_date, expire_date)
+        navigateTo(`/design/surveys/${id}`)
     }
     await questionStore.saveCurrentQuestions()
 }

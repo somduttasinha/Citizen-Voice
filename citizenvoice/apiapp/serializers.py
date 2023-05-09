@@ -24,11 +24,13 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('response', 'question', 'created', 'updated', 'body')
 
 
-class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
     """
-    Serialises 'text', 'order', 'required', 'question_type', 'choices', 'is_geospatial', 'map_view'
+    Serializes 'text', 'order', 'required', 'question_type', 'choices', 'is_geospatial', 'map_view'
     fields of the Question model for the API.
     """
+    survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+
     class Meta:
         model = Question
         fields = ('id', 'text', 'order', 'required', 'question_type',
@@ -49,11 +51,13 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         return question
 
 
-class ResponseSerializer(serializers.HyperlinkedModelSerializer):
+class ResponseSerializer(serializers.ModelSerializer):
     """
-    Serialises 'created', 'updated', 'survey', 'interview_uuid', 'respondent'
+    Serializes 'created', 'updated', 'survey', 'interview_uuid', 'respondent'
     fields of the Response model for the API.
     """
+    survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+
     class Meta:
         model = Response
         fields = ('created', 'updated', 'survey',

@@ -5,6 +5,7 @@ from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
 from django.middleware import csrf
 from django.http import HttpResponse
+from django.utils import timezone
 from rest_framework import viewsets, status
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
@@ -196,12 +197,15 @@ class SurveyViewSet(viewsets.ModelViewSet):
             survey_name = self.request.data["name"]
             survey_description = self.request.data["description"]
             once_up_a_time = datetime.now()
-            req = request
+
+            tz_aware_datetime = timezone.make_aware(once_up_a_time)  # Convert to timezone-aware datetime
 
             survey = Survey(name=survey_name, description=survey_description,
-                            publish_date=once_up_a_time, expire_date=once_up_a_time, designer=user)
+                            publish_date=tz_aware_datetime, expire_date=tz_aware_datetime, designer=user)
             survey.save()
-            print(survey)
+
+            survey_serializer = SurveySerializer(survey, context={'request': request})  # Pass the request context
+            return rf_response(survey_serializer.data)
         else:
             print("User was anonymous")
         return rf_response(None)
