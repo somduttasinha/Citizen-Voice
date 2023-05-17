@@ -8,7 +8,7 @@ const sortByOrder = sortBy(path(['order']))
 export const useQuestionDesignStore = defineStore('question', {
     state: () => ({
         id: null,
-        currentQuestions: []
+        currentQuestions: [],
     }),
     getters: {
         getCurrentQuestions: (state) => state.currentQuestions
@@ -16,8 +16,10 @@ export const useQuestionDesignStore = defineStore('question', {
     actions: {
         async saveCurrentQuestions() {
             const config = setRequestConfig({ method: 'POST', body: [...this.currentQuestions] })
-            const { data, error } = await useAsyncData(() => $cmsApi(`/api/questions/`, config));
+            const { data, error, refresh } = await useAsyncData(() => $cmsApi(`/api/questions/`, config));
             this.currentQuestions = sortByOrder(data.value)
+            refresh()
+            return { refresh }
             // TODD: add catch error
         },
         async setOrderedQuestionBySurvey(id) {
@@ -36,6 +38,11 @@ export const useQuestionDesignStore = defineStore('question', {
         setCurrentQuestionValue(index, value) {
             const tempCurrentQuestions = this.currentQuestions
             tempCurrentQuestions[index] = value
+            this.$patch({ currentQuestions: tempCurrentQuestions })
+        },
+        async editCurrentQuestionKeyValue(index, keyValue) {
+            const tempCurrentQuestions = this.currentQuestions
+            tempCurrentQuestions[index] = { ...tempCurrentQuestions[index], ...keyValue }
             this.$patch({ currentQuestions: tempCurrentQuestions })
         }
     },

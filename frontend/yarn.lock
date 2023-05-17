@@ -4614,6 +4614,21 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
+leaflet-draw-toolbar@^0.3.0-alpha.1:
+  version "0.3.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/leaflet-draw-toolbar/-/leaflet-draw-toolbar-0.3.0-alpha.1.tgz#d1431ce00cc8cab4a1ba5f2a72f142262cfb8bac"
+  integrity sha512-OhTetr7QXHaBaq5niiC0aV22j35+c9oVDcVToazJe/XVq9etHLUfMMaSO/bcPTFEBICOymkirnnuplmlfCGKgw==
+
+leaflet-draw@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.4.tgz#45be92f378ed253e7202fdeda1fcc71885198d46"
+  integrity sha512-rsQ6saQO5ST5Aj6XRFylr5zvarWgzWnrg46zQ1MEOEIHsppdC/8hnN8qMoFvACsPvTioAuysya/TVtog15tyAQ==
+
+leaflet-toolbar@^0.4.0-alpha.2:
+  version "0.4.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/leaflet-toolbar/-/leaflet-toolbar-0.4.0-alpha.2.tgz#ab58092d65b3dd158fb874c3f7e36b7ebdb994f8"
+  integrity sha512-g1KeU3DYGUOwXTS0vKIgJ8KgY0h/2B0qENNQUSYMFtSY2yzwaHWMbDyhDbk+aO8LgJ1iOX4fUt2bh1sYZbpmmQ==
+
 leaflet@^1.9.3:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.9.3.tgz#52ec436954964e2d3d39e0d433da4b2500d74414"
@@ -7485,6 +7500,11 @@ util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==
+
+uuid@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

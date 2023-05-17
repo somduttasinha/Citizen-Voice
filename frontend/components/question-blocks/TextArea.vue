@@ -1,6 +1,7 @@
 <template>
-    <Wrapper v-if="question" v-model="question" :question-type="question.question_type" >
-        <v-textarea v-if="question" v-model="question.text" label="Text of the Question" variant="outlined"></v-textarea>
+    <Wrapper :questionIndex="questionIndex" v-if="question" v-model="question" :question-type="question.question_type">
+        <v-textarea hide-details v-if="question" v-model="question.text" label="Text of the Question"
+            variant="outlined"></v-textarea>
     </Wrapper>
 </template>
 
@@ -9,7 +10,7 @@ import questionProxy from "./questionProxy"
 import Wrapper from "./Wrapper.vue"
 
 const props = defineProps({
-    index: Number,
+    questionIndex: Number,
 })
 
 const question = questionProxy(props)

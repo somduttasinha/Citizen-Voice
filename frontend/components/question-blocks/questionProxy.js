@@ -11,8 +11,9 @@ const questionStore = useQuestionDesignStore()
  */
 const questionProxy = (props) => {
     return computed({
-        get: () => questionStore.currentQuestions[props.index],
+        get: () => questionStore.currentQuestions[props.questionIndex],
         set: (value) => {
+            const question = questionStore.currentQuestions[props.questionIndex]
             const updatedKeys = Object.keys(value).reduce((keys, key) => {
                 if (value[key] !== question[key]) {
                     keys.push(key)
@@ -22,7 +23,7 @@ const questionProxy = (props) => {
 
             if (updatedKeys.length > 0) {
                 const updatedQuestion = { ...question, ...value }
-                questionStore.setCurrentQuestionValue(props.index, updatedQuestion)
+                questionStore.setCurrentQuestionValue(props.questionIndex, updatedQuestion)
             }
         }
     })

@@ -6,7 +6,7 @@
                 survey</v-btn>
         </div>
 
-        <v-card>
+        <v-card v-if="surveys">
             <v-list>
                 <v-list-item :link="false" v-for="(item, i) in surveys" :key="i" :value="item">
                     <template v-slot:prepend>
@@ -24,10 +24,11 @@
                         </div>
                     </template>
 
-                    <v-list-item-title>{{ item.name }} | #{{ item.id }}</v-list-item-title> 
+                    <v-list-item-title>{{ item.name }} | #{{ item.id }}</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-card>
+
     </NuxtLayout>
 </template>
 
