@@ -4,58 +4,94 @@
             <v-btn icon>
                 <v-icon class="!cursor-grab">mdi-drag</v-icon>
             </v-btn>
-            <input v-if="modelValue" type="number" class="font-bold w-10" :value="modelValue.order"  @input="$emit('update:modelValue', {...modelValue, order: Number($event.target.value)})">
-            <span v-if="questionType" class="ml-2 m-1 flex flex-wrap justify-between items-center text-xs sm:text-sm bg-gray-200 rounded px-3 py-1 font-bold leading-loose capitalize">{{ questionType }}</span>
+            <input v-if="modelValue" type="number" class="font-bold w-10" :value="modelValue.order"
+                @input="$emit('update:modelValue', { ...modelValue, order: Number($event.target.value) })">
+            <span v-if="questionType"
+                class="ml-2 m-1 flex flex-wrap justify-between items-center text-xs sm:text-sm bg-gray-200 rounded px-3 py-1 font-bold leading-loose capitalize">{{
+                    questionType }}</span>
             <v-toolbar-title class="ml-2" v-if="title">{{ title }}</v-toolbar-title>
-            <v-btn icon class="ml-auto">
-                <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+            <v-menu open-on-hover>
+                <template v-slot:activator="{ props }">
+                    <v-btn icon class="ml-auto" v-bind="props">
+                        <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                </template>
 
-            <!-- <v-menu open-on-hover>
-            <template v-slot:activator="{ props }">
-                <v-btn class="text-none ml-auto" color="white">
-                    <v-icon size="x-large">mdi-dots-vertical</v-icon>
-                </v-btn>
-            </template> -->
-
-            <!-- <v-list>
-                <v-list-item v-if="isAuthenticated" to="/user">
-                    <v-list-item-title>Profile</v-list-item-title>
-                </v-list-item>
-                <v-list-item v-if="!isAuthenticated" to="/login">
-                    <v-list-item-title>Login</v-list-item-title>
-                </v-list-item>
-                <v-list-item v-if="!isAuthenticated" to="/register">
-                    <v-list-item-title>Register</v-list-item-title>
-                </v-list-item>
-                <v-list-item v-if="isAuthenticated" @click="logoutHandler()">
-                    <v-list-item-title>Logout</v-list-item-title>
-                </v-list-item>
-            </v-list> -->
-        <!-- </v-menu> -->
-
+                <v-list style="background-color: white;">
+                    <!-- Don't remove 'some-value' see:https://github.com/vuetifyjs/vuetify/issues/16558 -->
+                    <v-list-item value="some-value" @click="addMapView()">
+                        <v-list-item-title>Add Map View</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-toolbar>
-        <div class="px-6 py-6">
+
+        <!-- SLOT -->
+        <div class="px-6 p-6">
             <slot></slot>
+        </div>
+
+        <!-- MAPVIEW -->
+        <div v-if="mapViewActive" class="px-6 pb-6">
+            <MapViewComp :questionIndex="questionIndex" :mapViewId="modelValue?.map_view" />
         </div>
     </v-sheet>
 </template>
 
 <script setup>
-defineProps({
+import { useMapViewStore } from "~/stores/mapview"
+const MapViewComp = defineAsyncComponent(() => import("../MapView.vue"));
+
+const mapViewActive = ref(false)
+const mapviewOptions = ref([])
+const selectOption = ref(null)
+
+const mapViewStore = useMapViewStore()
+
+const props = defineProps({
     questionType: String,
     title: String,
     modelValue: Object,
+    questionIndex: Number
 })
 
 defineEmits(['update:modelValue'])
 
-// const orderNumberWithZero = ref(0)
+onMounted(async () => {
+    if (props.modelValue?.map_view) {
+        mapViewActive.value = true
+    }
+})
 
-// onMounted(() => {
-//     orderNumberWithZero.value = props.order < 10 ? `0${props.order}` : props.order
+const addMapView = () => {
+    mapViewActive.value = true
+}
+
+// watch(mapViewActive, async (newQuestion, oldQuestion) => {
+//     if (mapViewActive.value) {
+//         try {
+//             const { data: mapview } = await useAsyncData(() => $cmsApi('/api/map_views/id_names/'));
+//             mapviewOptions.value = mapview.value.map(item => ({
+//                 id: item.id,
+//                 label: item.name
+//             }))
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     }
 // })
 
+// watch(selectOption, async (newQuestion, oldQuestion) => {
+//     if (selectOption.value) {
+//         try {
+//             const { data } = await useAsyncData(() => $cmsApi('/api/map_views/' + selectOption.value + '/'));
+//             console.log('data //> ', data)
+//             mapviewData.value = data.value
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     }
+// })
 
 
 </script>

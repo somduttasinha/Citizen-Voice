@@ -1,10 +1,3 @@
-# ====================================================================================================================
-#
-# Created with reference "Build a REST API in 30 minutes with Django REST Framework" by Bennett Garner, May 17, 2019
-# https://medium.com/swlh/build-your-first-rest-api-with-django-rest-framework-e394e39a482c
-#
-# ====================================================================================================================
-
 from rest_framework import serializers
 from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
 from django.contrib.auth.models import User
@@ -63,6 +56,8 @@ class ResponseSerializer(serializers.ModelSerializer):
         fields = ('created', 'updated', 'survey',
                   'interview_uuid', 'respondent')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
+
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -75,6 +70,8 @@ class SurveySerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', 'description', 'is_published', 'need_logged_user', 'editable_answers',
                   'publish_date', 'expire_date', 'public_url', 'designer')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
+
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -85,6 +82,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
+
 
 class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -94,6 +93,8 @@ class PointLocationSerializer(serializers.HyperlinkedModelSerializer):
         model = PointLocation
         fields = ('location', 'name', 'question', 'answer')
 
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
+
 
 class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     """
@@ -102,6 +103,8 @@ class PolygonLocationSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PolygonLocation
         fields = ('location', 'name', 'question', 'answer')
+
+# TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
 
 class LineStringLocationSerializer(serializers.HyperlinkedModelSerializer):

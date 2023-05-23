@@ -15,16 +15,16 @@
             </template>
 
             <v-list>
-                <v-list-item v-if="isAuthenticated" to="/user">
+                <v-list-item value="some-value" v-if="isAuthenticated" to="/user">
                     <v-list-item-title>Profile</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!isAuthenticated" to="/login">
+                <v-list-item value="some-value" v-if="!isAuthenticated" to="/login">
                     <v-list-item-title>Login</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="!isAuthenticated" to="/register">
+                <v-list-item value="some-value" v-if="!isAuthenticated" to="/register">
                     <v-list-item-title>Register</v-list-item-title>
                 </v-list-item>
-                <v-list-item v-if="isAuthenticated" @click="logoutHandler()">
+                <v-list-item value="some-value" v-if="isAuthenticated" @click="logoutHandler()">
                     <v-list-item-title>Logout</v-list-item-title>
                 </v-list-item>
             </v-list>
