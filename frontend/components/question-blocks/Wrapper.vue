@@ -33,18 +33,7 @@
 
         <!-- MAPVIEW -->
         <div v-if="mapViewActive" class="px-6 pb-6">
-            <!-- <v-select label="Select MapView" v-model="selectOption" placeholder="-----" variant="solo"
-                :items="mapviewOptions" item-title="label" item-value="id"></v-select> -->
-            <!-- {{ selectOption }}
-            {{ JSON.stringify(mapviewOptions) }} -->
             <MapViewComp :questionIndex="questionIndex" :mapViewId="modelValue?.map_view" />
-
-            <!-- Map view:
-            - Choose Map View
-            - Edit map View
-            - view map view
-            - Add new mapview -->
-
         </div>
     </v-sheet>
 </template>
