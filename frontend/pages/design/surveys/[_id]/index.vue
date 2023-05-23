@@ -2,7 +2,7 @@
     <NuxtLayout name="default">
         <client-only placeholder="Loading...">
             <form class="mt-4 flex flex-row" @submit.prevent="saveSurvey">
-                <div class="content">
+                <div class="content max-w-3xl ml-auto">
                     <h2 class="mb-4 font-bold">{{ textName || '[ Untitled ]' }}</h2>
                     <v-text-field name="title" v-model="textName" label="Title"></v-text-field>
                     <v-textarea name="title" variant="outlined" v-model="textDescription" type="textarea"
@@ -13,7 +13,7 @@
                         <draggable h="auto" v-model="questionStore.currentQuestions" item-key="id">
                             <template #item="{ element, index }">
                                 <div>
-                                    <component v-if="questionTypes[element.question_type]"
+                                    <component :questionIndex="index" v-if="questionTypes[element.question_type]"
                                         :is="questionTypes[element.question_type].comp" v-bind="{ ...element, index }">
                                     </component>
                                 </div>
@@ -63,7 +63,13 @@ import { TEXT, SHORT_TEXT, RADIO, SELECT, SELECT_MULTIPLE, FLOAT, DATE } from "~
 import { TextArea, TextShort, Radio, Select, SelectMultiple, Number, Date as DateComp } from "@/components/question-blocks"
 import { useSurveyStore } from "~/stores/survey"
 import { useQuestionDesignStore } from "~/stores/questionDesign"
+import { useMapViewStore } from "~/stores/mapview"
 import { pathOr } from 'ramda'
+
+// Init stores
+
+useMapViewStore()
+const surveyStore = useSurveyStore()
 
 
 // Make sure the user is authenticated or trigger the reroute to login
@@ -129,7 +135,7 @@ const questionTypes = {
  * Survey
  */
 
-const surveyStore = useSurveyStore()
+
 const { data: survey, refresh } = await surveyStore.getSurvey(route.params._id)
 
 var expire_date = new Date();
