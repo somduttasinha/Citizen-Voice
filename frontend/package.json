@@ -38,6 +38,7 @@
         "nuxt-api-party": "^0.9.4",
         "pinia": "^2.0.33",
         "ramda": "^0.28.0",
+        "uuid": "^9.0.0",
         "vee-validate": "^4.9.5",
         "vite-plugin-vuetify": "^1.0.2",
         "vue-toastification": "^2.0.0-rc.5",
