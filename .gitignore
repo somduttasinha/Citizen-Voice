@@ -27,6 +27,9 @@ lib/
 lib64/
 parts/
 sdist/
+vue/
+node_modules/
+package-lock.json
 var/
 wheels/
 pip-wheel-metadata/
@@ -149,3 +152,6 @@ dmypy.json
  .idea/misc.xml
  *.ipr
  *.iws
+
+# OS
+.DS_Store
