@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'bulk_update_or_create',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
