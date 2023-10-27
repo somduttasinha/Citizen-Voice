@@ -76,7 +76,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     Question ViewSet used to query data from database.
-    The `create` method is overwritten to accept one data object or a array of objects.
+    The `create` method is overwritten to accept one data object or an array of objects.
     """
     permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     queryset = Question.objects.all()
@@ -91,7 +91,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
             request.data, list) else [request.data]
         questions = []
         """
-        Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        Here we iterate over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
         """
         for question_data in data:
             if 'id' in question_data:
