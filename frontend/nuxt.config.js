@@ -102,7 +102,9 @@ export default defineNuxtConfig({
     apiParty: {
         endpoints: {
             'cms-api': { // Becomes `$cmsApi()`
-                url: process.env.API_PARTY_CMS_URL,
+                // TODO [manuel]: find out why cannot get api url from env
+                url: process.env.API_PARTY_CMS_URL || 'http://localhost:8000',
+                
             }
         }
     },
