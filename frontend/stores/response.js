@@ -17,7 +17,7 @@ export const useStoreResponse = defineStore('response', {
         },
         async getResponse({ id }) {
             console.log('id //> ', id)
-            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id));
+            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); // TODO [manuel]: ID is undefined when starting the survey
             return survey
         },
         async createResponse({ id }) {
