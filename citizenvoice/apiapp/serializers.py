@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Answer, Question, Survey,PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Response as ResponseModel
 from django.contrib.auth.models import User
 
 # =============================================
@@ -52,7 +53,7 @@ class ResponseSerializer(serializers.ModelSerializer):
     survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
 
     class Meta:
-        model = Response
+        model = ResponseModel
         fields = ('created', 'updated', 'survey',
                   'interview_uuid', 'respondent')
 

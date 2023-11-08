@@ -1,4 +1,5 @@
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Answer, Question, Survey, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Response as ResponseModel
 from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAndSelf
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
@@ -310,7 +311,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing all Response instances
         """
 
-        queryset = Response.objects.all().order_by('created')
+        queryset = ResponseModel.objects.all().order_by('created')
         return queryset
 
     @staticmethod
@@ -324,7 +325,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         Return:
             queryset: containing the Response instance with this id
         """
-        queryset = Response.objects.filter(id=id)
+        queryset = ResponseModel.objects.filter(id=id)
         return queryset
 
     @staticmethod
@@ -339,7 +340,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing the Response instances related to this Survey
         """
 
-        queryset = Response.objects.filter(response=survey_id)
+        queryset = ResponseModel.objects.filter(response=survey_id)
         return queryset
 
     @staticmethod
@@ -354,7 +355,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing the Response instances related to this respondent/ user
         """
 
-        queryset = Response.objects.filter(user=respondent)
+        queryset = ResponseModel.objects.filter(user=respondent)
         return queryset
 
 
