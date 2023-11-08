@@ -96,7 +96,7 @@ const survey = await responseStore.getResponse(route.params._id)
 
 
 // TODO: use an API to get n'th question of the selected survey
-let demo_question = 3 // This is a hardcoded value for now
+let demo_question = 1 // This is a hardcoded value for now
 let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 // TODO: get question.map_view once APIs are configured
 const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
