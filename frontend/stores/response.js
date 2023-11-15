@@ -3,10 +3,15 @@ import { useUserStore } from './user'
 import { useGlobalStore } from './global'
 
 
+/* TODO [manuel]: CONTINUE HERE
+    - create a response object can collect uuid, 
+    - use uuid on response path
+*/
+
 export const useStoreResponse = defineStore('response', {
     state: () => ({
         response: null,
-        currentQuestion: 1
+        currentQuestion: 1 // TODO [manuel]: this should be set to the first question of the survey
     }),
     actions: {
         setResponse(response) {
@@ -20,7 +25,7 @@ export const useStoreResponse = defineStore('response', {
             const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); // TODO [manuel]: ID is undefined when starting the survey
             return survey
         },
-        async createResponse({ id }) {
+        async createResponse() {
 
             const config = {
                 headers: {
@@ -30,8 +35,7 @@ export const useStoreResponse = defineStore('response', {
                 //   // Pass the data for the new Response object as the request body
                 //   // TODO: have the respondent set to the logged in user
                 body: {
-                    survey: '/api/surveys/' + id + "/",
-                    interview_uuid: "123",
+                    survey: '/api/surveys/' ,
                     respondent: "/api/users/me/"
                 },
             }
