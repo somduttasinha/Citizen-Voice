@@ -55,7 +55,7 @@ class ResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = ResponseModel
         fields = ('created', 'updated', 'survey',
-                  'interview_uuid', 'respondent')
+                  'respondent', 'interview_uuid')
 
 # TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
