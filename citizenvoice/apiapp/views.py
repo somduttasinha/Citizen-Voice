@@ -4,10 +4,11 @@ from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAn
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
-from django.middleware import csrf
-from django.http import HttpResponse
-from django.utils import timezone
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response as rf_response
+from django.middleware import csrf
+from django.utils import timezone
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
@@ -16,8 +17,6 @@ from django.contrib.auth.models import User
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import action
-from rest_framework.response import Response as rf_response
 
 
 @api_view(['GET'])
@@ -25,6 +24,9 @@ def get_csrf_token(request):
     token = csrf.get_token(request)
     return Response({'csrf_token': token})
 
+# TODO: consider if using viewset is a good option for this. Viewsets are a fast way to create a CRUD API, 
+# but they obfuscate the code; we might want to have more control over the API.
+# REF: https://www.django-rest-framework.org/api-guide/viewsets/
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
