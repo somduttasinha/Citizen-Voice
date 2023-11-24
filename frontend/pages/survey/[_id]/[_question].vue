@@ -61,7 +61,7 @@
                 <i class="fa-solid fa-arrow-left"></i>
                 <span class="q-pa-sm">Previous Question</span>
             </v-btn>
-            <v-space />
+            <v-spacer> </v-spacer>
             <v-btn @click="nextQuestion" color="primary">
                 <i class="fa-solid fa-arrow-right"></i>
                 <span class="q-pa-sm">Next Question</span>
@@ -92,7 +92,7 @@ const survey_store = useSurveyStore()
 const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
 var current_question_index = 0
 
-const survey = await responseStore.getResponse(route.params._id)
+const survey = await responseStore.getSurvey(route.params._id)
 
 
 // TODO: use an API to get n'th question of the selected survey
