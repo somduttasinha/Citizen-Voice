@@ -11,8 +11,8 @@
                         <p class="text-caption ">
                             {{ survey.description }}
                         </p>
-                        <div class=" text-caption">
-                            <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br />
+                        <div class="text-caption">
+                            <!-- <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br /> -->
                             <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
