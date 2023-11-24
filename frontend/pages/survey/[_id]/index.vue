@@ -2,13 +2,13 @@
     <NuxtLayout name="default">
         <div class="padding-16">
             <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
-            <h2>{{ survey.name }}</h2>
+            <h2 v-if="survey">{{ survey.name }}</h2>
 
-            <p>{{ survey.description }} </p>
-            <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
-            <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
+            <p v-if="survey">{{ survey.description }} </p>
+            <!-- <p v-if="survey">Publish date: {{ formatDate(survey.publish_date) }}</p> -->
+            <p v-if="survey">Expire date: {{ formatDate(survey.expire_date) }}</p>
 
-            <v-btn @click="createResponse" color="primary">
+            <v-btn @click="createResponse" color="secondary">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start survey</span>
             </v-btn>
@@ -31,14 +31,24 @@ const origin_url = "http://localhost:3000"
 const data = ref([])
 const route = useRoute()
 
-const survey = await storeResponse.getResponse({ id: route.params._id })
+const survey = await storeResponse.getSurvey({ id: route.params._id })
+
+console.log('survey //>', survey)
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
-    await storeResponse.createResponse({ id: route.params._id })
+    const _response = await storeResponse.createResponse({ surveyId: route.params._id })
 
-    // Navigate to the /survey/${survey.id}/1 page after the response is created
-    return navigateTo('/survey/' + route.params._id + '/1')
+    console.log('response  //>', _response)
+
+    if (_response) { // THIS ENSURES  respondentId is available
+        // Navigate to the /survey/${survey.id}/1 page after the response is created
+
+        // TODO: CONTINUE HERE
+        // Find how to retrieve and set the interviewerId to the store.
+        console.log('interviewerId //>', _response.value.interviewerId)
+        return navigateTo('/survey/' + route.params._id + '/1')
+    }
 }
 
 </script>
