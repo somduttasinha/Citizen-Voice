@@ -305,6 +305,27 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
     serializer_class = ResponseSerializer
 
+    """
+    POST method is used to create a new response
+    Example of a POST request body (JSON):
+    {
+    "survey": 1,
+    "respondent": 1
+    }
+
+    Returns a JSON response with the created response:
+
+    {
+    "created": "2023-11-22T13:16:33.185118Z",
+    "updated": "2023-11-22T13:16:33.185133Z",
+    "survey": 1,
+    "respondent": 1,
+    "interview_uuid": "d983d214-ca04-4861-b740-65c62cdbe321"
+    }
+
+    """
+
+
     def get_queryset(response):
         """
         Returns a set of all Response instances in the database.
