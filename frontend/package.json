@@ -12,7 +12,7 @@
         "lint:fix": "eslint . --fix"
     },
     "devDependencies": {
-        "@kevinmarrec/nuxt-pwa": "^0.16.2",
+        "@kevinmarrec/nuxt-pwa": "^0.0.2",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "@nuxtjs/tailwindcss": "^6.4.1",
         "@pinia/nuxt": "^0.4.7",
@@ -33,7 +33,6 @@
         "dayjs": "^1.11.6",
         "leaflet": "^1.9.3",
         "leaflet-draw": "^1.0.4",
-        "leaflet-draw-toolbar": "^0.3.0-alpha.1",
         "leaflet-toolbar": "^0.4.0-alpha.2",
         "nuxt-api-party": "^0.9.4",
         "pinia": "^2.0.33",
