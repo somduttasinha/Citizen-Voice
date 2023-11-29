@@ -3,16 +3,16 @@ import { useUserStore } from './user'
 import { useGlobalStore } from './global'
 
 
-/* TODO [manuel]: CONTINUE HERE
-    - create a response object can collect uuid, 
-    - use uuid on response path
-*/
-
 export const useStoreResponse = defineStore('response', {
     state: () => ({
         response: null,
         currentQuestion: 1 // TODO [manuel]: this should be set to the first question of the survey
     }),
+    getters: {
+        response() {
+            return this.response
+        }
+    },
     actions: {
         setResponse(response) {
             // [manuel]: Change the value of the response. Is response the right name? is response here the answer to a question?
