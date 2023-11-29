@@ -12,7 +12,7 @@ from django.utils import timezone
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
-# from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.shortcuts import get_object_or_404
@@ -22,7 +22,7 @@ from django.shortcuts import get_object_or_404
 @api_view(['GET'])
 def get_csrf_token(request):
     token = csrf.get_token(request)
-    return Response({'csrf_token': token})
+    return rf_response({'csrf_token': token})
 
 # TODO: consider if using viewset is a good option for this. Viewsets are a fast way to create a CRUD API, 
 # but they obfuscate the code; we might want to have more control over the API.
@@ -119,7 +119,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
 
         serializer = self.get_serializer(questions, many=True)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return rf_response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         update_fields = ['text', 'order', 'required', 'question_type',
@@ -154,7 +154,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         survey = get_object_or_404(Survey, pk=pk)
         questions = survey.question_set.all().order_by('order')
         serializer = self.get_serializer(questions, many=True)
-        return Response(serializer.data)
+        return rf_response(serializer.data)
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
@@ -220,20 +220,20 @@ class SurveyViewSet(viewsets.ModelViewSet):
         user = self.request.user
         survey = Survey.objects.get(id=pk)
         if (survey.is_published):
-            if type(user) is User:
-                survey = Survey.objects.get(id=pk)
-                if (survey.designer != user.id):
-                    print("uses is not the designer")
-                    print(
-                        f"User id: {user.id} \nDesigner id: {survey.designer_id}")
-                    rf_response([])
+            # if type(user) is User:
+            #     survey = Survey.objects.get(id=pk)
+            #     if (survey.designer != user.id):
+            #         print("uses is not the designer")
+            #         print(
+            #             f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+            #         rf_response([])
                 questions = Question.objects.all().filter(survey_id=pk).order_by('order')
                 question_serializer = QuestionSerializer(
                     questions, many=True, context={'request': request})
                 print(question_serializer.data)
                 return rf_response(question_serializer.data)
-            else:
-                print("User was anonymous")
+            # else:
+            #     print("User was anonymous")
         return rf_response([])
 
     # @action(detail=True, methods=['post'])
