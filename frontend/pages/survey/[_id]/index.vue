@@ -31,23 +31,25 @@ const origin_url = "http://localhost:3000"
 const data = ref([])
 const route = useRoute()
 
-const survey = await storeResponse.getSurvey({ id: route.params._id })
+console.log('survey id on route //>', route.params._id)
 
-console.log('survey //>', survey)
+const survey = await storeResponse.getSurvey({ id: route.params._id })
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
-    const _response = await storeResponse.createResponse({ surveyId: route.params._id })
+    const _response = await storeResponse.createResponse({surveyId: route.params._id})
 
-    console.log('response  //>', _response)
 
     if (_response) { // THIS ENSURES  respondentId is available
         // Navigate to the /survey/${survey.id}/1 page after the response is created
 
-        // TODO: CONTINUE HERE
-        // Find how to retrieve and set the interviewerId to the store.
-        console.log('interviewerId //>', _response.value.interviewerId)
+        // Find how to retrieve and set the interviewerId to the stor
+        console.log('successfull creating response//>', _response)
         return navigateTo('/survey/' + route.params._id + '/1')
+    }
+    else {
+        console.log('createResponse did not return anything//>')
+        // return navigateTo('/survey/' + route.params._id)
     }
 }
 
