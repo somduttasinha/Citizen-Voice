@@ -1,22 +1,23 @@
 import { defineStore } from 'pinia'
 import { useUserStore } from './user'
 import { useGlobalStore } from './global'
+import setRequestConfig from './utils/setRequestConfig';
 
 
 export const useStoreResponse = defineStore('response', {
     state: () => ({
-        response: null,
+        responseId: null,
         currentQuestion: 1 // TODO [manuel]: this should be set to the first question of the survey
     }),
     getters: {
         response() {
-            return this.response
+            return this.responseId
         }
     },
     actions: {
         setResponse(response) {
             // [manuel]: Change the value of the response. Is response the right name? is response here the answer to a question?
-            this.response = response
+            this.responseId = response
         },
         setCurrentQuestion(questionNumber) {
             this.currentQuestion = questionNumber
@@ -38,11 +39,15 @@ export const useStoreResponse = defineStore('response', {
         }
             */
             
-            console.log('surveyId //> ', surveyId);
+            // console.log('surveyId //> ', surveyId);
+            const user = useUserStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken
 
             const config = {
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
                 },
                 method: 'POST',
                 //   // Pass the data for the new Response object as the request body
@@ -53,10 +58,18 @@ export const useStoreResponse = defineStore('response', {
                 },
             };
 
-            const { data: response } = await useAsyncData( () => $cmsApi('/api/responses/', config));
+            if (token) {
+                config.headers['Authorization'] = `Token ${token}`
 
-            return response
-            // this.setResponse(survey.interview_uuid)
+            }
+
+            const {data: _response}  = await useAsyncData( () => $cmsApi('/api/responses/', config));
+
+            console.log('response in response store//> ', _response.value.interview_uuid);
+
+            // return _response
+            this.setResponse(_response.value.interview_uuid)
+            return true
             // console.log('id //> ', id);
             // console.log(survey)
 
