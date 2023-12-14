@@ -31,9 +31,10 @@ const origin_url = "http://localhost:3000"
 const data = ref([])
 const route = useRoute()
 
-console.log('survey id on route //>', route.params._id)
-
+// retrieve survey from API
 const survey = await storeResponse.getSurvey({ id: route.params._id })
+
+// console.log('survey//>', survey)
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
