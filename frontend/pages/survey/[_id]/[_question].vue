@@ -3,24 +3,31 @@
         <div class="">
             <!-- Question card: number & text -->
             <v-card v-for="question in questions" class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}</div>
+                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}, id: {{ question.id }}</div>
                 <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
+
+                <!-- Answer card-->
+                <div class="my-card col">
+                    <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>
+                </div>
             </v-card>
 
+            <!-- TODO [manuel]: learn how to use v-cards -->
 
-            <div class="">
+
+            <!-- <div class=""> -->
                 <!-- Map card
           real v-if statement = (question.map_view != null || question.is_geospatial)-->
                 <!--            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">-->
                 <!--                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>-->
                 <!--                <div id="map"></div>-->
                 <!--            </v-card>-->
-            </div>
+            <!-- </div> -->
 
-            <div class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ $route.params._question }}</div>
+            <!-- <div class="my-card">
+                <div class="text-h2 q-mt-sm q-mb-xs">Question (test) {{ $route.params._question }}</div>
                 <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-            </div>
+            </div> -->
         </div>
 
         <div class="q-pa-md row items-start q-gutter-md">
@@ -47,10 +54,10 @@
                 </div>
             </div>
 
-            <!-- Answer card-->
+            <!-- Answer card
             <div class="my-card col">
                 <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>
-            </div>
+            </div> -->
 
 
         </div>
