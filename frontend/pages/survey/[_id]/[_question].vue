@@ -38,7 +38,9 @@
                 </div>
             </v-card>
 
-            <!-- TODO [manuel]: learn how to use v-cards -->
+            <!-- TODO [manuel]: 
+                1. learn how to use v-cards
+                2. focus on displaying one question at the time to the user -->
 
 
             <!-- <div class=""> -->
@@ -56,32 +58,7 @@
             </div> -->
         </div>
 
-        <div class="q-pa-md row items-start q-gutter-md">
-            <!-- Map card -->
-            <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
-                class="my-card col">
-                <div style="height:300px; width:600px">
-                    <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
-                        :maxZoom="18" @click="addCircle">
-                        <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
-                            name="OpenStreetMap"></l-tile-layer>
-                        <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
-                            :radius="map_view.options.radius" :color="map_view.options.color"
-                            :fillColor="map_view.options.fillColor"></l-circle>
-                        <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"
-                            :radius="map_view.options.radius" :color="map_view.options.color"
-                            :fillColor="map_view.options.fillColor"></l-circle>
-                        <l-control position="bottomleft">
-                            <v-btn @click="resetMap">
-                                Reset
-                            </v-btn>
-                        </l-control>
-                    </l-map>
-                </div>
-            </div>
-
-        </div>
-
+        
         <!-- Navigation -->
         <div class="q-pa-md row">
             <v-btn @click="prevQuestion" color="primary">
