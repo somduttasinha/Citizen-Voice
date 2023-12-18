@@ -33,6 +33,7 @@ export const useSurveyStore = defineStore('survey', {
 
             return data
         },
+
         async getSurveys() {
             const user = useUserStore()
             const token = user.getAuthToken
@@ -49,8 +50,7 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
-
+            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config));
             return data
 
         },
@@ -97,7 +97,7 @@ export const useSurveyStore = defineStore('survey', {
 
             }
 
-            const { data: register, pending, error } = await useAsyncData(() => $cmsApi('/api/surveys/create-survey/', config))
+            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
 
             if (error.value) {
                 let warnMessage = null
@@ -234,25 +234,26 @@ export const useSurveyStore = defineStore('survey', {
         },
 
         async getQuestionsOfSurvey(id) {
-            const user = useUserStore()
-            const global = useGlobalStore()
-            const csrftoken = user.getCookie('csrftoken');
-            const token = user.getAuthToken
+            // const user = useUserStore()
+            // const global = useGlobalStore()
+            // const csrftoken = user.getCookie('csrftoken');
+            // const token = user.getAuthToken
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                method: 'GET'
-            }
+            // const config = {
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'X-CSRFToken': csrftoken
+            //     },
+            //     method: 'GET'
+            // }
 
 
-            if (token) {
-                config.headers['Authorization'] = `Token ${token}`
-            }
-
-            const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/' + id + '/questions', config))
+            // if (token) {
+            //     config.headers['Authorization'] = `Token ${token}`
+            // }
+            
+            const config = setRequestConfig({ method: 'GET', survey_id: id });
+            const res = await useAsyncData( () => $cmsApi('/api/surveys/' + id + '/questions', config));
             return res
         },
     }
