@@ -38,9 +38,7 @@
                 </div>
             </v-card>
 
-            <!-- TODO [manuel]: 
-                1. learn how to use v-cards
-                2. focus on displaying one question at the time to the user -->
+
 
 
             <!-- <div class=""> -->
