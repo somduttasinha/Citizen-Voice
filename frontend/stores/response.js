@@ -7,14 +7,23 @@ import setRequestConfig from './utils/setRequestConfig';
 export const useStoreResponse = defineStore('response', {
     state: () => ({
         responseId: null,
-        currentQuestion: 1 // TODO [manuel]: this should be set to the first question of the survey
+        currentQuestion: 1, // TODO [manuel]: this should be set to the first question of the survey
+        answersToCurrentSurvey: [],
     }),
     getters: {
         response() {
             return this.responseId
-        }
+        },
+        getAnswersToCurrentSurvey: (state) => state.answersToCurrentSurvey
+        
     },
     actions: {
+        getRespondentId(){
+            if (localStorage?.getItem('respondent-id') !== null) {
+                return localStorage.getItem('respondent-id')
+            }
+            return null
+        },
         setResponse(response) {
             // [manuel]: Change the value of the response. Is response the right name? is response here the answer to a question?
             this.responseId = response
@@ -23,56 +32,93 @@ export const useStoreResponse = defineStore('response', {
             this.currentQuestion = questionNumber
         },
         async getSurvey({ id }) {
-            console.log('id //> ', id)
-            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); // TODO [manuel]: ID is undefined when starting the survey
+           
+            const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); 
             return survey
         },
         async createResponse({ surveyId  }) {
-            /* Create a new response object in the backend, and
-            returns the following JSON response:
-            {
-            "created": "2023-11-24T12:40:36.779244Z",
-            "updated": "2023-11-24T12:40:36.779651Z",
-            "survey": 1,
-            "respondent": 1,
-            "interview_uuid": "ec030b1d-24ce-4df5-93c9-335ea7da1615"
-        }
-            */
+            /**
+         * Creates a new respondent object linked to a survey and stores the id in the localstorage this way we know if it's the same respondent over multiple questions
+         * First it checks if the respondent-id is not already in the localstorage, if so it skips the respondent creation
+         * @param {*} param0 
+         * @returns 
+         * 
+         * @question what happens if a respondent does multiple surveys, do we need to link all the surveys?
+         */
             
             // console.log('surveyId //> ', surveyId);
             const user = useUserStore()
             const csrftoken = user.getCookie('csrftoken');
             const token = user.getAuthToken
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                method: 'POST',
-                //   // Pass the data for the new Response object as the request body
-                //   // TODO: have the respondent set to the logged in user
-                body: {
-                    survey: 1 , // This must include the survey ID
-                    respondent: 1 // TODO [manuel]: this should be the logged in user
-                },
+            const config = setRequestConfig({
+                method: 'POST', body: {
+                    survey: surveyId,
+                }
+            });
+
+            // First let's check if the respondent is already in the localstorage   
+            if (localStorage?.getItem('respondent-id') !== null) {
+                return localStorage.getItem('respondent-id')
             };
 
+            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('/api/responses/', config));
+
+            if (response?.value?.interview_uuid){
+                localStorage.setItem('respondent-id', response.value.interview_uuid)
+                return response.value.interview_uuid
+            }
+            return null
+        },
+        async submitAnswer(answers) {
+            const user = useUserStore();
+            const global = useGlobalStore();
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken;
+
+            const config = {
+                headers : {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken,
+                },
+                method: 'POST',
+                // pas the data for the new Response object as the request body
+                
+                // TODO: have the repondent set to the logged in user 
+                body: {
+                    survey: "apli/surveys/"+surveyId+'/',
+                    repondent : "api/users/me/",
+                    answers: answers,
+                    responseId: responseId,
+                }
+            };
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
+            };
+            const {data: survey, pending, error} = await useAsyncData('retrieveResponse', () => $cmsApi('/api/responses/submit-response/', config));
 
-            }
-
-            const {data: _response}  = await useAsyncData( () => $cmsApi('/api/responses/', config));
-
-            console.log('response in response store//> ', _response.value.interview_uuid);
-
-            // return _response
-            this.setResponse(_response.value.interview_uuid)
-            return true
-            // console.log('id //> ', id);
-            // console.log(survey)
-
+            console.log("Resposne:");
+            console.log(answers);
         }
+
+        // TODO: CONTINUE HERE
+        // implement the submit-response endpoint in the backend
+
+            // if (token) {
+            //     config.headers['Authorization'] = `Token ${token}`
+
+            // }
+
+            // const {data: _response}  = await useAsyncData( () => $cmsApi('/api/responses/', config));
+
+            // console.log('response in response store//> ', _response.value.interview_uuid);
+
+            // // return _response
+            // this.setResponse(_response.value.interview_uuid)
+            // return true
+            // // console.log('id //> ', id);
+            // // console.log(survey)
+
+        
     }
 })
