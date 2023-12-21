@@ -337,6 +337,45 @@ class ResponseViewSet(viewsets.ModelViewSet):
         queryset = ResponseModel.objects.all().order_by('created')
         return queryset
 
+    @action(detail=False, methods=['POST'], url_path='submit-response')
+    def submit_response(self, request, *args, **kwargs):
+        print("Submitting response...")
+        user = self.request.user
+        answers = self.request.data["answers"]
+        responseId = self.request.data["responseId"]
+        question = 1 # TODO: get id of question from request
+
+        if type(user) is User:
+            print("User:")
+            print(str(User))
+        else:
+            print("User was anonymous")
+        time = datetime.now()
+
+        for answer in answers:
+            text = answer["_text"]
+            resp = ResponseModel.objects.get(pk=int(responseId))
+            # TODO: get question id from request
+            quest = Question.objects.get(pk=1)
+            storedAnswer = Answer(response=resp, question=quest, created=time, 
+                                  updated=time, body=text)
+
+            print(str(answer))
+
+            return rf_response(None)
+
+    @action(detail=True, methods=['GET','POST'], url_path='create-response')
+    def createResponse(self, request, pk=None):
+        survey_id = request.data.get("survey_id")
+        survey = get_object_or_404(Survey, pk=survey_id)
+        response_data= request.data.copy()
+
+        serializer = ResponseSerializer(data=response_data)
+        serializer.is_valid(raise_exception=True)
+        response = serializer.save()
+        response_id = response.id
+        return rf_response(response_id)
+
     @staticmethod
     def GetResponseByID(id):
         """
