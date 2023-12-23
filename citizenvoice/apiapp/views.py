@@ -364,17 +364,31 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
             return rf_response(None)
 
-    @action(detail=True, methods=['GET','POST'], url_path='create-response')
+    @action(detail=True, methods=['POST'], url_path='create-response')
     def createResponse(self, request, pk=None):
-        survey_id = request.data.get("survey_id")
+        print("Creating a new response...")
+        print("Request data: ", request.data)
+        survey_id = request.data.get("survey")
         survey = get_object_or_404(Survey, pk=survey_id)
         response_data= request.data.copy()
 
         serializer = ResponseSerializer(data=response_data)
         serializer.is_valid(raise_exception=True)
         response = serializer.save()
-        response_id = response.id
-        return rf_response(response_id)
+
+        print("Response data: ", response)
+
+        # None values in respondent field are treated a anonymous responses
+        if response_data["respondent"] is None:
+            message = "anonymous"
+        else:
+            print("respondent is not None")
+            message = "authenticated"
+        return rf_response({
+            "respondent": response.respondent,
+            "interview_uuid": response.interview_uuid,
+            "message": message
+            })
 
     @staticmethod
     def GetResponseByID(id):
