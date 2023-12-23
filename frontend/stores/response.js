@@ -1,13 +1,15 @@
-import { defineStore } from 'pinia'
-import { useUserStore } from './user'
-import { useGlobalStore } from './global'
+import { defineStore } from 'pinia';
+import { useUserStore } from './user';
+import { useGlobalStore } from './global';
 import setRequestConfig from './utils/setRequestConfig';
-
+import { useSurveyStore } from './survey';
 
 export const useStoreResponse = defineStore('response', {
     state: () => ({
         responseId: null,
+        respondent: null,
         currentQuestion: 1, // TODO [manuel]: this should be set to the first question of the survey
+        surveyId: null,
         answersToCurrentSurvey: [],
     }),
     getters: {
@@ -32,11 +34,16 @@ export const useStoreResponse = defineStore('response', {
             this.currentQuestion = questionNumber
         },
         async getSurvey({ id }) {
-           
+            
             const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); 
+
+            if (survey) {
+                console.log('survey.value.id in get Survey//> ', survey.value.id);
+                this.surveyId = survey.id;
+            }
             return survey
         },
-        async createResponse({ surveyId  }) {
+        async createResponse({ surveyId, respondentId=null  }) {
             /**
          * Creates a new respondent object linked to a survey and stores the id in the localstorage this way we know if it's the same respondent over multiple questions
          * First it checks if the respondent-id is not already in the localstorage, if so it skips the respondent creation
@@ -51,25 +58,35 @@ export const useStoreResponse = defineStore('response', {
             const csrftoken = user.getCookie('csrftoken');
             const token = user.getAuthToken
 
+
             const config = setRequestConfig({
-                method: 'POST', body: {
+                method: 'POST', 
+                body: {
                     survey: surveyId,
+                    respondent: respondentId  // TODO [manuel]: this is required by the api
                 }
             });
 
             // First let's check if the respondent is already in the localstorage   
-            if (localStorage?.getItem('respondent-id') !== null) {
+            if (localStorage?.getItem('respondent') !== null) {
+                console.log('surveyID in respose store //> ', surveyId);
+                
                 return localStorage.getItem('respondent-id')
-            };
 
-            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('/api/responses/', config));
+            }
+
+            
+            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/responses/response/create-response/', config));
+
 
             if (response?.value?.interview_uuid){
-                localStorage.setItem('respondent-id', response.value.interview_uuid)
+                localStorage.setItem('responseId', response.value.interview_uuid)
+                console.log('response.value.interview_uuid //> ', response.value.interview_uuid);
                 return response.value.interview_uuid
             }
             return null
         },
+
         async submitAnswer(answers) {
             const user = useUserStore();
             const global = useGlobalStore();
@@ -97,7 +114,6 @@ export const useStoreResponse = defineStore('response', {
             };
             const {data: survey, pending, error} = await useAsyncData('retrieveResponse', () => $cmsApi('/api/responses/submit-response/', config));
 
-            console.log("Resposne:");
             console.log(answers);
         }
 
