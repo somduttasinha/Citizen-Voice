@@ -51,6 +51,10 @@ class ResponseSerializer(serializers.ModelSerializer):
     fields of the Response model for the API.
     """
     survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+    respondent = serializers.SerializerMethodField()
+
+    def get_respondent(self, User):
+        return UserSerializer(User.respondent).data
 
     class Meta:
         model = ResponseModel
