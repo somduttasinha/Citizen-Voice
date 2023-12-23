@@ -7,6 +7,7 @@
           >
             <v-card-actions class="justify-center">
               <h2>{{ survey.name }}</h2>
+              
             </v-card-actions>
             <v-card-actions class="justify-center">
               <p>{{ survey.description }} </p>
@@ -25,20 +26,20 @@
             </v-card-actions>
           </v-sheet>
             <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
-            <h2>{{ survey.name }}</h2>
+            <!-- <h2>{{ survey.name }}</h2> -->
 <!--            <h2>{{ survey.name }}</h2>-->
 
-            <p>{{ survey.description }} </p>
-            <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
-            <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
+            <!-- <p>{{ survey.description }} </p> -->
+            <!-- <p>Publish date: {{ formatDate(survey.publish_date) }}</p> -->
+            <!-- <p>Expire date: {{ formatDate(survey.expire_date) }}</p> -->
 <!--            <p>{{ survey.description }} </p>-->
 <!--            <p>Publish date: {{ formatDate(survey.publish_date) }}</p>-->
 <!--            <p>Expire date: {{ formatDate(survey.expire_date) }}</p>-->
 
-            <v-btn @click="createResponse" color="primary">
-                <i class="fa-solid fa-play"></i>
-                <span class="q-pa-sm">Start survey</span>
-            </v-btn>
+            <!-- <v-btn @click="createResponse" color="primary"> -->
+                <!-- <i class="fa-solid fa-play"></i> -->
+                <!-- <span class="q-pa-sm">Start survey</span> -->
+            <!-- </v-btn> -->
 <!--            <v-btn @click="createResponse" color="primary">-->
 <!--                <i class="fa-solid fa-play"></i>-->
 <!--                <span class="q-pa-sm">Start survey</span>-->
@@ -49,6 +50,7 @@
         </div>
     </NuxtLayout>
 </template>
+
 <script setup>
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
@@ -59,14 +61,20 @@ const create_response_url = "/api/responses/"
 const origin_url = "http://localhost:3000"
 const data = ref([])
 const route = useRoute()
+console.log('route id', route.params._id)
 const survey = await storeResponse.getSurvey({ id: route.params._id })
-console.log('name of survey //', survey.value.name)
+console.log('survey.value. in survey index //', survey.value.id)
+
+
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
-    await storeResponse.createResponse({ id: route.params._id })
-    const respondentId = await storeResponse.createResponse({ id: route.params._id })
+    // await storeResponse.createResponse({ id: route.params._id })
+    const responseId = await storeResponse.createResponse({ surveyId: survey.value.id, respondentId: 1 })
+    
     // Navigate to the /survey/${survey.id}/1 page after the response is created
-    if (respondentId) {
+    if (responseId) {
+
+      console.log('response id //', responseId)
         // Navigate to the /survey/${survey.id}/1 page after the response is created
         return navigateTo('/survey/' + route.params._id + '/1')
     }
@@ -76,4 +84,6 @@ const createResponse = async () => {
     //     return navigateTo('/survey/' + route.params._id + '/1')
     // }
 }
+
+
 </script>
