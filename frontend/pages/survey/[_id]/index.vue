@@ -65,6 +65,9 @@ console.log('route id', route.params._id)
 const survey = await storeResponse.getSurvey({ id: route.params._id })
 console.log('survey.value. in survey index //', survey.value.id)
 
+// TODO [MANUEL]: CONTINUE HERE
+//  fix bevahiour of button to start survey, then continue with the page that loads the questions
+
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
