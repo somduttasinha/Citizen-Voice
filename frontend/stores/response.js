@@ -5,18 +5,22 @@ import setRequestConfig from './utils/setRequestConfig';
 import { useSurveyStore } from './survey';
 
 export const useStoreResponse = defineStore('response', {
-    state: () => ({
+    state: () => (
+        {
         responseId: null,
-        respondent: null,
-        currentQuestion: 1, // TODO [manuel]: this should be set to the first question of the survey
+        respondent: null, // if null it means that the respondent 
+        currentQuestion: 1, 
         surveyId: null,
         answersToCurrentSurvey: [],
-    }),
+    }
+    ),
     getters: {
         response() {
             return this.responseId
         },
-        getAnswersToCurrentSurvey: (state) => state.answersToCurrentSurvey
+        // when using ARROW functions, state should be passed as an argument to be able to 
+        // access the state of the store using 'this'
+        getAnswersToCurrentSurvey: (state) => this.answersToCurrentSurvey
         
     },
     actions: {
@@ -41,6 +45,7 @@ export const useStoreResponse = defineStore('response', {
                 console.log('survey.value.id in get Survey//> ', survey.value.id);
                 this.surveyId = survey.id;
             }
+            
             return survey
         },
         async createResponse({ surveyId, respondentId=null  }) {
