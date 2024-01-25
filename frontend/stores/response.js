@@ -5,25 +5,65 @@ import setRequestConfig from './utils/setRequestConfig';
 import { useSurveyStore } from './survey';
 
 export const useStoreResponse = defineStore('response', {
-    state: () => (
-        {
-        responseId: null,
-        respondent: null, // if null it means that the respondent 
-        currentQuestion: 1, 
-        surveyId: null,
-        answersToCurrentSurvey: [],
-    }
-    ),
+    
+    state: () => 
+        // required data for the response store
+        // responseId // if null it means that the respondent 
+        // respondent
+        // currentQuestion
+        // surveyId
+        // answersToCurrentSurvey
+       { return { responseData: {} } },
     getters: {
-        response() {
-            return this.responseId
+        responseId() {
+            return this.responseData.interview_uuid
         },
         // when using ARROW functions, state should be passed as an argument to be able to 
         // access the state of the store using 'this'
-        getAnswersToCurrentSurvey: (state) => this.answersToCurrentSurvey
+        // getAnswersToCurrentSurvey: (state) => this.answersToCurrentSurvey
         
     },
     actions: {
+
+        async createResponse({ surveyId, respondentId=null  }) {
+            /**
+         * Creates a respondent in the backend and initializes the localstorage with:
+         * respondent, iterview-uuid, and message
+         * 
+         * @param {number} surveyId the survey id
+         * @param {number} respondentId the respondent id, null values means that the respondent is not logged in, and the backend will create register the respondent as anonymous (if allowed by the survey)
+         * @returns {object} the response object 
+         * 
+         * @question what happens if a respondent does multiple surveys, do we need to link all the surveys?
+         */
+            
+            // console.log('surveyId //> ', surveyId);
+            const user = useUserStore()
+            const csrftoken = user.getCookie('csrftoken');
+            const token = user.getAuthToken
+
+            const config = setRequestConfig({
+                method: 'POST', 
+                body: {
+                    survey: surveyId,
+                    respondent: respondentId  // this is required by the api
+                }
+            });
+
+            // checks if the interview_uuid is already in the localstorage. If it is, it means that the response has already been created and the localstorage has been initialized   
+            // TODO: fix 
+            // if ("interview_uuid" in state.data) {
+            //     console.log('surveyID in respose store //> ', surveyId);
+            //     return localStorage.getItem('respondent-id')
+            // }
+
+            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/responses/response/create-response/', config));
+
+            const responseData = await response.value;
+            this.responseData = responseData;
+            console.log('responseData //> ', responseData);
+        },
+
         getRespondentId(){
             if (localStorage?.getItem('respondent-id') !== null) {
                 return localStorage.getItem('respondent-id')
@@ -37,6 +77,8 @@ export const useStoreResponse = defineStore('response', {
         setCurrentQuestion(questionNumber) {
             this.currentQuestion = questionNumber
         },
+
+
         async getSurvey({ id }) {
             
             const { data: survey } = await useAsyncData(() => $cmsApi('/api/surveys/' + id)); 
@@ -45,52 +87,10 @@ export const useStoreResponse = defineStore('response', {
                 console.log('survey.value.id in get Survey//> ', survey.value.id);
                 this.surveyId = survey.id;
             }
-            
+
             return survey
         },
-        async createResponse({ surveyId, respondentId=null  }) {
-            /**
-         * Creates a new respondent object linked to a survey and stores the id in the localstorage this way we know if it's the same respondent over multiple questions
-         * First it checks if the respondent-id is not already in the localstorage, if so it skips the respondent creation
-         * @param {*} param0 
-         * @returns 
-         * 
-         * @question what happens if a respondent does multiple surveys, do we need to link all the surveys?
-         */
-            
-            // console.log('surveyId //> ', surveyId);
-            const user = useUserStore()
-            const csrftoken = user.getCookie('csrftoken');
-            const token = user.getAuthToken
-
-
-            const config = setRequestConfig({
-                method: 'POST', 
-                body: {
-                    survey: surveyId,
-                    respondent: respondentId  // TODO [manuel]: this is required by the api
-                }
-            });
-
-            // First let's check if the respondent is already in the localstorage   
-            if (localStorage?.getItem('respondent') !== null) {
-                console.log('surveyID in respose store //> ', surveyId);
-                
-                return localStorage.getItem('respondent-id')
-
-            }
-
-            
-            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/responses/response/create-response/', config));
-
-
-            if (response?.value?.interview_uuid){
-                localStorage.setItem('responseId', response.value.interview_uuid)
-                console.log('response.value.interview_uuid //> ', response.value.interview_uuid);
-                return response.value.interview_uuid
-            }
-            return null
-        },
+        
 
         async submitAnswer(answers) {
             const user = useUserStore();
