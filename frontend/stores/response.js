@@ -57,11 +57,14 @@ export const useStoreResponse = defineStore('response', {
             //     return localStorage.getItem('respondent-id')
             // }
 
-            const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/responses/response/create-response/', config));
+            if (!("interview_uuid" in this.responseData)) {
 
-            const responseData = await response.value;
-            this.responseData = responseData;
-            console.log('responseData //> ', responseData);
+                const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/responses/response/create-response/', config));
+
+                const responseData = await response.value;
+                this.responseData = responseData;
+                console.log('responseData //> ', responseData);
+            }
         },
 
         getRespondentId(){
