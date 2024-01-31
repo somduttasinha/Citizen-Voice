@@ -33,6 +33,10 @@ export const useSurveyStore = defineStore('survey', {
 
             return data
         },
+        
+        selectSurvey(id) {
+            this.selectedSurveyId = id
+        },
 
         async getSurveys() {
             const user = useUserStore()
