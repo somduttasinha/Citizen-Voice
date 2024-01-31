@@ -4,8 +4,8 @@
             <h2 class="h2">Surveys</h2>
             <div class="row q-col-gutter-sm">
                 <v-card v-for="survey in surveys" style="min-width: 300px;" class="my-card col" flat bordered>
-                    <v-card-section class="">
-                        <div class="text-h5 q-mt-sm q-mb-xs">{{
+                    <v-card-item class="">
+                        <div class="text-h5 mb-1 q-mt-sm q-mb-xs">{{
                             survey.name
                         }}</div>
                         <p class="text-caption ">
@@ -13,15 +13,14 @@
                         </p>
                         <div class="text-caption">
                             <!-- <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br /> -->
-                            <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
+                            <span>Expiration date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
                             <v-btn :to="`/survey/${survey.id}`" color="primary">
-                                <i class="fa-solid fa-play"></i>
                                 Start survey
                             </v-btn>
                         </v-card-actions>
-                    </v-card-section>
+                    </v-card-item>
                 </v-card>
             </div>
         </div>
@@ -29,7 +28,11 @@
 </template>
 <script setup>
 import { formatDate } from "~/utils/formatData"
-import { useSubmitForm } from "~/stores/survey.js";
+
+// TODO [MANUEL]: useSubmitForm is not  in survey.js
+// import { useSubmitForm } from "~/stores/survey.js";
+
+
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
