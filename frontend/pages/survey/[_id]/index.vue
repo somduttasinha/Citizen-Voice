@@ -21,7 +21,7 @@
             <v-card-actions class="justify-center" >
               <v-btn @click="createResponse" color="primary">
                 <i class="fa-solid fa-play"></i>
-                <span class="q-pa-sm">Start survey</span>
+                <span class="q-pa-sm">Start Survey</span>
               </v-btn>
             </v-card-actions>
           </v-sheet>
@@ -65,8 +65,12 @@ console.log('route id', route.params._id)
 const survey = await storeResponse.getSurvey({ id: route.params._id })
 console.log('survey.value. in survey index //', survey.value.id)
 
-// TODO [MANUEL]: CONTINUE HERE
+// TODO [MANUEL]: CONTINUE HERE: 
+// Load questions after loading page.
+
 //  fix bevahiour of button to start survey, then continue with the page that loads the questions
+// erron on click:
+// TypeError: $setup.survey is null
 
 
 const createResponse = async () => {
@@ -86,7 +90,8 @@ const createResponse = async () => {
     //     // Navigate to the /survey/${survey.id}/1 page after the response is created
     //     return navigateTo('/survey/' + route.params._id + '/1')
     // }
-}
+};
+
 
 
 </script>
