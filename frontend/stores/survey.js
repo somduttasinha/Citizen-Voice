@@ -6,9 +6,8 @@ import setRequestConfig from './utils/setRequestConfig';
 export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
-            id: null,
+            selectedSurveyId: null,
             currentSurveyDesign: [],
-            surveys: [],
         }
     },
     getters: {
@@ -52,10 +51,6 @@ export const useSurveyStore = defineStore('survey', {
             }
 
             const { data, error} = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config));
-            
-            console.log('Surveys data //> ', data)
-            
-            this.surveys = data
 
             return { data, error }
 
