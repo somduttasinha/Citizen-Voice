@@ -7,7 +7,8 @@ export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
             id: null,
-            currentSurveyDesign: []
+            currentSurveyDesign: [],
+            surveys: [],
         }
     },
     getters: {
@@ -50,8 +51,13 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config));
-            return data
+            const { data, error} = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config));
+            
+            console.log('Surveys data //> ', data)
+            
+            this.surveys = data
+
+            return { data, error }
 
         },
 
