@@ -8,16 +8,14 @@
                         <div class="text-h5 mb-1 q-mt-sm q-mb-xs">{{
                             survey.name
                         }}</div>
-                        <p class="text-caption ">
-                            {{ survey.description }}
-                        </p>
+                    
                         <div class="text-caption">
                             <!-- <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br /> -->
                             <span>Expiration date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
-                        <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
-                            <v-btn :to="`/survey/${survey.id}`" color="primary">
-                            Start survey
+                        <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto elevated">
+                            <v-btn @click="selectSurvey(survey.id)" color="primary">
+                            Participate
                             </v-btn>
                         </v-card-actions>
                     </v-card-item>
@@ -33,14 +31,22 @@ import { formatDate } from "~/utils/formatData"
 // import { useSubmitForm } from "~/stores/survey.js";
 
 
+
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
 // const url = "/api/surveys/"
 // const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 const surveyStore = useSurveyStore();
+surveyStore.$reset(); // reset SelectedSurvey to null
 
 const {data: surveys} = await surveyStore.getSurveys();
+
+// sets id on surveyStore and redirects to survey/id page
+function selectSurvey (id) {
+    surveyStore.selectSurvey(id);
+    navigateTo(`/survey/${id}`);
+};
 
 </script>
 <style lang="scss">
