@@ -17,7 +17,7 @@
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
                             <v-btn :to="`/survey/${survey.id}`" color="primary">
-                                Start survey
+                            Start survey
                             </v-btn>
                         </v-card-actions>
                     </v-card-item>
