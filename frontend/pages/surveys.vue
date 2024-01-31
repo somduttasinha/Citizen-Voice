@@ -39,6 +39,7 @@ import { formatDate } from "~/utils/formatData"
 // const url = "/api/surveys/"
 // const { data: surveys } = await useAsyncData(() => $cmsApi(url));
 const surveyStore = useSurveyStore();
+
 const {data: surveys} = await surveyStore.getSurveys();
 
 </script>
