@@ -77,8 +77,8 @@
 <script setup>
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
-import { useSurveyStore } from "~/stores/survey.js";
-import { useStoreResponse } from '~/stores/response'
+import { useSurveyStore } from "~/stores/survey";
+import { useStoreResponse } from '~/stores/response';
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
@@ -100,14 +100,17 @@ var current_question_index = 0
 // const survey = await responseStore.getSurvey(route.params._id)
 
 
-// TODO: use an API to get n'th question of the selected survey
-let demo_question = 1 // This is a hardcoded value for now
-// let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
-// TODO: get question.map_view once APIs are configured
+// // TODO: use an API to get n'th question of the selected survey
+// let demo_question = 1 // This is a hardcoded value for now
+// // let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
+// // TODO: get question.map_view once APIs are configured
 
-// const getMapView = async (map_view_id) => {
-//     const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + map_view_id));
-//     return map_view
+// const getMapView = async (question_id) => {
+//     const { data: response, pending, error } = await useAsyncData(() => $cmsApi(mapview_url + question_id));
+    
+//     if (response){
+//         return response;
+//     };
 // }
 
 const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
@@ -147,6 +150,7 @@ const removeCircle = async (index) => {
     circles._value.splice(index, 1)
     circleClickedAndRemoved = true
 }
+
 const addCircle = async (event) => {
     if (circleClickedAndRemoved) {
         circleClickedAndRemoved = false
