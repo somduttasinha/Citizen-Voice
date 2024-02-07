@@ -3,7 +3,7 @@
         <div class="">
             <!-- Question card: number & text -->
             <v-card v-for="question in questions" class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question {{ question.order }}, id: {{ question.id }}</div>
+                <div class="text-h2 q-mt-sm q-mb-xs">Question order {{ question.order }}, id: {{ question.id }}</div>
                 <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
 
                 <!-- Answer card-->
@@ -91,16 +91,25 @@ const route = useRoute()
 // Fixme: Cleanup these functions
 const survey_store = useSurveyStore()
 // const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
-const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
+// const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
+const questions = survey_store.questions
+
+console.log("questions in question page:", questions)
 var current_question_index = 0
 
-const survey = await responseStore.getSurvey(route.params._id)
+// const survey = await responseStore.getSurvey(route.params._id)
 
 
 // TODO: use an API to get n'th question of the selected survey
 let demo_question = 1 // This is a hardcoded value for now
-let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
+// let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 // TODO: get question.map_view once APIs are configured
+
+// const getMapView = async (map_view_id) => {
+//     const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + map_view_id));
+//     return map_view
+// }
+
 const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
 
 // to set up the map
