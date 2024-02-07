@@ -1,4 +1,5 @@
 <template>
+  <!-- Survey/index.vue -->
     <NuxtLayout name="default">
         <div class="padding-16">
           <v-sheet
@@ -19,7 +20,7 @@
               <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
             </v-card-actions>
             <v-card-actions class="justify-center" >
-              <v-btn @click="createResponse" color="primary">
+              <v-btn @click="startSurvey" color="primary">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start Survey</span>
               </v-btn>
@@ -55,6 +56,7 @@
 import { ref } from "vue"
 import { navigateTo } from "nuxt/app";
 import { useStoreResponse } from '~/stores/response'
+import { useSurveyStore } from '~/stores/survey'
 const storeResponse = useStoreResponse()
 const survey_url = "/api/surveys/"
 const create_response_url = "/api/responses/"
@@ -64,14 +66,7 @@ const route = useRoute()
 console.log('route id', route.params._id)
 const survey = await storeResponse.getSurvey({ id: route.params._id })
 console.log('survey.value. in survey index //', survey.value.id)
-
-// TODO [MANUEL]: CONTINUE HERE: 
-// Load questions after loading page.
-
-//  fix bevahiour of button to start survey, then continue with the page that loads the questions
-// erron on click:
-// TypeError: $setup.survey is null
-
+const storeSurvey = useSurveyStore()
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
@@ -83,15 +78,32 @@ const createResponse = async () => {
 
       console.log('response id //', responseId)
         // Navigate to the /survey/${survey.id}/1 page after the response is created
-        return navigateTo('/survey/' + route.params._id + '/1')
+        return navigateTo('/survey/' + route.params._id )
     }
 
-    // if (respondentId) {
-    //     // Navigate to the /survey/${survey.id}/1 page after the response is created
-    //     return navigateTo('/survey/' + route.params._id + '/1')
-    // }
 };
 
+const getQuestions = async () => {
+    // Make a GET request to your Django API endpoint to get the questions for the survey
+    const questions = await storeSurvey.getQuestionsOfSurvey()
+    console.log('questions //', questions)
+    // Navigate to the /survey/${survey.id}/1 page after the response is created
+    // if (questions) {
+    //     // Navigate to the /survey/${survey.id}/1 page after the response is created
+    //     return navigateTo('/survey/' + route.params._id + '/' + survey.value.id)
+    // }
+    return questions
+};
+
+const startSurvey = async () => {
+  await createResponse();
+  const questions = await getQuestions();
+  
+  if (questions) {
+    // Navigate to the /survey/${survey.id}/1 page after the response is created
+    return navigateTo('/survey/' + survey.value.id + '/' + 1 ) // TODO: replace 1 with  question orden
+}
+};
 
 
 </script>
