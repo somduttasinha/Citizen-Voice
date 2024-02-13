@@ -1,21 +1,20 @@
 <template>
     <NuxtLayout name="default">
-        <div class="">
+        <div v-for="question in questions" class="">
             <!-- Question card: number & text -->
-            <v-card v-for="question in questions" class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question order {{ question.order }}, id: {{ question.id }}</div>
-                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-
+            <v-card class="my-card" :title=question.text :subtitle=question.order>
+            
+                <!-- CONTINUE: display a single card per page (the url should be different for every question) -->
                 <!-- Answer card-->
                 <div class="my-card col">
-                    <v-textarea name="title" v-model="answer_field" type="textarea" label="Give answer here"></v-textarea>
+                    <v-textarea name="title" v-model="answer_field" type="textarea" label="Give you answer here"></v-textarea>
                 </div>
 
                 <div class="q-pa-md row items-start q-gutter-md">
                     <!-- Map card -->
                     <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
-                        <div style="height:300px; width:600px">
+                        <div style="height:360px; width:auto;">
                             <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
                                 :maxZoom="18" @click="addCircle">
                                 <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
@@ -113,7 +112,20 @@ var current_question_index = 0
 //     };
 // }
 
+// const mapView = async (mapView_id) => {
+//     const { data: response, pending, error } = await useAsyncData(() => $cmsApi(mapview_url + mapView_id));
+    
+//     if (response){
+//         return response;
+//     };
+// };
+
 const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
+
+
+console.log("map view //", map_view)
+console.log("map view.options //", map_view.value.options)
+
 
 // to set up the map
 // const center = ref([47.41322, -1.219482])
