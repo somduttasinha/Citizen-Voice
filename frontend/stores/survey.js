@@ -12,6 +12,9 @@ export const useSurveyStore = defineStore('survey', {
         }
     },
     getters: {
+        questionCount() {
+            return this.questions.length
+        }
 
     },
     actions: {
