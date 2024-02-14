@@ -12,7 +12,7 @@
 
                 <div class="q-pa-md row items-start q-gutter-md">
                     <!-- Map card -->
-                    <!-- <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
+                    <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
                         <div style="height:360px; width:auto;">
                             <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
@@ -32,41 +32,21 @@
                                 </l-control>
                             </l-map>
                         </div>
-                    </div> -->
-
+                    </div>
+                    <!-- Navigation -->
+                    <v-card-actions class="justify-center">
+                        <v-btn @click="prevQuestion" color="primary">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span class="q-pa-sm">Previous Question</span>
+                        </v-btn>
+                        <v-spacer> </v-spacer>
+                        <v-btn @click="nextQuestion" color="primary">
+                            <i class="fa-solid fa-arrow-right"></i>
+                            <span class="q-pa-sm">Next Question</span>
+                        </v-btn>
+                    </v-card-actions>
                 </div>
             </v-card>
-
-
-
-
-            <!-- <div class=""> -->
-                <!-- Map card
-          real v-if statement = (question.map_view != null || question.is_geospatial)-->
-                <!--            <v-card v-if="question.is_geospatial" style="min-width: 300px;" class="my-card col">-->
-                <!--                <div class="text-h5 q-mt-sm q-mb-xs">Map here</div>-->
-                <!--                <div id="map"></div>-->
-                <!--            </v-card>-->
-            <!-- </div> -->
-
-            <!-- <div class="my-card">
-                <div class="text-h2 q-mt-sm q-mb-xs">Question (test) {{ $route.params._question }}</div>
-                <div class="text-h5 q-mt-sm q-mb-xs">{{ question.text }}</div>
-            </div> -->
-        </div>
-
-        
-        <!-- Navigation -->
-        <div class="q-pa-md row">
-            <v-btn @click="prevQuestion" color="primary">
-                <i class="fa-solid fa-arrow-left"></i>
-                <span class="q-pa-sm">Previous Question</span>
-            </v-btn>
-            <v-spacer> </v-spacer>
-            <v-btn @click="nextQuestion" color="primary">
-                <i class="fa-solid fa-arrow-right"></i>
-                <span class="q-pa-sm">Next Question</span>
-            </v-btn>
         </div>
 
     </NuxtLayout>
