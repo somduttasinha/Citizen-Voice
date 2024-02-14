@@ -1,6 +1,6 @@
 <template>
     <NuxtLayout name="default">
-        <div v-for="question in questions" class="">
+        <div class="">
             <!-- Question card: number & text -->
             <v-card class="my-card" :title=question.text :subtitle=question.order>
             
@@ -12,7 +12,7 @@
 
                 <div class="q-pa-md row items-start q-gutter-md">
                     <!-- Map card -->
-                    <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
+                    <!-- <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
                         <div style="height:360px; width:auto;">
                             <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
@@ -32,7 +32,7 @@
                                 </l-control>
                             </l-map>
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
             </v-card>
@@ -82,26 +82,22 @@ import { useStoreResponse } from '~/stores/response';
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-const responseStore = useStoreResponse()
-const question_url = "/api/questions/"
-const mapview_url = "/api/map_views/"
+const responseStore = useStoreResponse();
+const question_url = "/api/questions/";
+const mapview_url = "/api/map_views/";
 
-const route = useRoute()
-// Fixme: Cleanup these functions
-const survey_store = useSurveyStore()
-// const { data: survey } = await useAsyncData(() => $cmsApi(survey_url + route.params._id));
-// const { data: questions } = await survey_store.getQuestionsOfSurvey(route.params._id)
-const questions = survey_store.questions
+const route = useRoute();
+const survey_store = useSurveyStore();
+const questions = survey_store.questions;
+const total_questions = questions.questionCount;
 
-console.log("questions in question page:", questions)
-var current_question_index = 0
+// Here, we use the list of questions in the survey store to display questions according to the order
+// specified when the survey was created. We use the numbers in the URL to navigate between questions
+// while maintaining the order of the questions in the survey store. 
+var current_question_index = route.params._question; // use url questions id as an index to load each question 
+let current_question_id = questions[current_question_index - 1].id;  // gets the id for the questions
+let { data: question } = await useAsyncData(() => $cmsApi(question_url + current_question_id));
 
-// const survey = await responseStore.getSurvey(route.params._id)
-
-
-// // TODO: use an API to get n'th question of the selected survey
-// let demo_question = 1 // This is a hardcoded value for now
-// // let { data: question } = await useAsyncData(() => $cmsApi(question_url + demo_question));
 // // TODO: get question.map_view once APIs are configured
 
 // const getMapView = async (question_id) => {
