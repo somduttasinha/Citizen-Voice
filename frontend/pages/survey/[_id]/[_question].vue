@@ -2,9 +2,7 @@
     <NuxtLayout name="default">
         <div class="">
             <!-- Question card: number & text -->
-            <v-card class="my-card" :title=question.text :subtitle=question.order>
-            
-                <!-- CONTINUE: display a single card per page (the url should be different for every question) -->
+            <v-card class="my-card" :title="question.text" :subtitle="question.order">
                 <!-- Answer card-->
                 <div class="my-card col">
                     <v-textarea name="title" v-model="answer_field" type="textarea" label="Give you answer here"></v-textarea>
@@ -15,16 +13,16 @@
                     <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
                         <div style="height:360px; width:auto;">
-                            <l-map ref="map" v-model:zoom="map_view.options.zoom" :center="map_view.options.center" :minZoom="1"
-                                :maxZoom="18" @click="addCircle">
-                                <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
+                            <l-map ref="map" :zoom=map_View.options.zoom :center=map_View.options.center @click="addCircle" 
+                            >
+                                <l-tile-layer :url=map_View.map_service_url layer-type="base"
                                     name="OpenStreetMap"></l-tile-layer>
-                                <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
+                                <!-- <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
                                     :radius="map_view.options.radius" :color="map_view.options.color"
                                     :fillColor="map_view.options.fillColor"></l-circle>
                                 <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"
                                     :radius="map_view.options.radius" :color="map_view.options.color"
-                                    :fillColor="map_view.options.fillColor"></l-circle>
+                                    :fillColor="map_view.options.fillColor"></l-circle> -->
                                 <l-control position="bottomleft">
                                     <v-btn @click="resetMap">
                                         Reset
@@ -54,7 +52,7 @@
 
 
 <script setup>
-import { ref } from "vue"
+import { ref, watch } from "vue"
 import { navigateTo } from "nuxt/app";
 import { useSurveyStore } from "~/stores/survey";
 import { useStoreResponse } from '~/stores/response';
@@ -76,31 +74,55 @@ const total_questions = questions.questionCount;
 // while maintaining the order of the questions in the survey store. 
 var current_question_index = route.params._question; // use url questions id as an index to load each question 
 let current_question_id = questions[current_question_index - 1].id;  // gets the id for the questions
+let current_map_view_id = questions[current_question_index - 1].map_view;  // gets the value for the map view
 let { data: question } = await useAsyncData(() => $cmsApi(question_url + current_question_id));
+console.log("current map view //", current_map_view_id);
 
-// // TODO: get question.map_view once APIs are configured
+const map_View = ref(null);
+const a = ref(current_map_view_id);
 
-// const getMapView = async (question_id) => {
-//     const { data: response, pending, error } = await useAsyncData(() => $cmsApi(mapview_url + question_id));
-    
-//     if (response){
-//         return response;
-//     };
-// }
 
-// const mapView = async (mapView_id) => {
-//     const { data: response, pending, error } = await useAsyncData(() => $cmsApi(mapview_url + mapView_id));
-    
-//     if (response){
-//         return response;
+//  CONTINUE: Find out if this approach is correct
+const fetchData = async () => {
+    try {
+        const {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
+        map_View.value = map_View;
+    } catch (error) {
+        console.error("Error fetching map view data", error);
+    }
+};
+
+watch(a, (current_map_view_id) => {
+    if (current_map_view_id != null)
+    fetchData();
+});
+
+if (current_map_view_id != null) {
+    fetchData();
+};
+
+
+//  THIS WORKS FOR QUESTION WITH MAP VIEW ID. FAILS OTHERWISE
+//  {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
+
+
+ 
+
+
+
+
+// /// TODO: set up an event that triggers the retrieval of the map view
+// var map_View = null;
+// if (current_map_view_id != null) {
+//     let { data: response, error, pending } = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id )); // for demo only, I will use 5th
+
+//     if(response) {
+//         map_View = response.value;
 //     };
 // };
+console.log("map_View //", map_View)
 
-const { data: map_view } = await useAsyncData(() => $cmsApi(mapview_url + 1)); // for demo only, I will use 5th
 
-
-console.log("map view //", map_view)
-console.log("map view.options //", map_view.value.options)
 
 
 // to set up the map
