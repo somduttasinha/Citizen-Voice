@@ -10,9 +10,9 @@
 
                 <div class="q-pa-md row items-start q-gutter-md">
                     <!-- Map card -->
-                    <div v-show="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
+                    <div v-if="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
-                        <div style="height:360px; width:auto;">
+                        <div style="height:400px; width:auto;">
                             <l-map ref="map" :zoom=map_View.options.zoom :center=map_View.options.center @click="addCircle" 
                             >
                                 <l-tile-layer :url=map_View.map_service_url layer-type="base"
@@ -78,51 +78,8 @@ let current_map_view_id = questions[current_question_index - 1].map_view;  // ge
 let { data: question } = await useAsyncData(() => $cmsApi(question_url + current_question_id));
 console.log("current map view //", current_map_view_id);
 
-const map_View = ref(null);
-const a = ref(current_map_view_id);
-
-
-//  CONTINUE: Find out if this approach is correct
-const fetchData = async () => {
-    try {
-        const {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
-        map_View.value = map_View;
-    } catch (error) {
-        console.error("Error fetching map view data", error);
-    }
-};
-
-watch(a, (current_map_view_id) => {
-    if (current_map_view_id != null)
-    fetchData();
-});
-
-if (current_map_view_id != null) {
-    fetchData();
-};
-
-
-//  THIS WORKS FOR QUESTION WITH MAP VIEW ID. FAILS OTHERWISE
-//  {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
-
-
- 
-
-
-
-
-// /// TODO: set up an event that triggers the retrieval of the map view
-// var map_View = null;
-// if (current_map_view_id != null) {
-//     let { data: response, error, pending } = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id )); // for demo only, I will use 5th
-
-//     if(response) {
-//         map_View = response.value;
-//     };
-// };
+const {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
 console.log("map_View //", map_View)
-
-
 
 
 // to set up the map
