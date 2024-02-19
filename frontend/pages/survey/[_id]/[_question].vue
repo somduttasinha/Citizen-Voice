@@ -33,7 +33,7 @@
                     </div>
                     <!-- Navigation -->
                     <v-card-actions>
-                        <v-btn @click="prevQuestion" color="primary" variant="outlined">
+                        <v-btn v-show="current_question_index > 1" @click="prevQuestion" color="primary" variant="outlined">
                             <i class="fa-solid fa-arrow-left"></i>
                             <span class="q-pa-sm">Previous Question</span>
                         </v-btn>
