@@ -32,17 +32,27 @@
                         </div>
                     </div>
                     <!-- Navigation -->
-                    <v-card-actions class="justify-center">
+                    <v-card-actions class="left">
                         <v-btn @click="prevQuestion" color="primary">
                             <i class="fa-solid fa-arrow-left"></i>
                             <span class="q-pa-sm">Previous Question</span>
                         </v-btn>
                         <v-spacer> </v-spacer>
-                        <v-btn @click="nextQuestion" color="primary">
+                        <v-btn v-show="survey_store.questionCount != current_question_index" @click="nextQuestion" color="primary">
                             <i class="fa-solid fa-arrow-right"></i>
                             <span class="q-pa-sm">Next Question</span>
                         </v-btn>
+                        <v-spacer> </v-spacer>
+                                <v-btn v-show="survey_store.questionCount == current_question_index" @click="submitAnswers" color="primary">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span class="q-pa-sm">Submit</span>
+                                </v-btn>
+                        
                     </v-card-actions>
+                    <div> 
+                        <p>Current index question {{current_question_index}} </p>
+                        <p>total questions {{survey_store.questionCount}} </p>
+                        </div>
                 </div>
             </v-card>
         </div>
@@ -67,7 +77,6 @@ const mapview_url = "/api/map_views/";
 const route = useRoute();
 const survey_store = useSurveyStore();
 const questions = survey_store.questions;
-const total_questions = questions.questionCount;
 
 // Here, we use the list of questions in the survey store to display questions according to the order
 // specified when the survey was created. We use the numbers in the URL to navigate between questions
@@ -81,6 +90,8 @@ console.log("current map view //", current_map_view_id);
 let {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
 console.log("map_View //", map_View)
 
+// TODO: limit nextQuestion to the last question in the survey
+// TODO: Add sumbit button to the last question in the survey. Use v-if to show the button only on the last question
 
 // to set up the map
 // const center = ref([47.41322, -1.219482])
@@ -105,10 +116,17 @@ const prevQuestion = async () => {
         return navigateTo('/survey/' + route.params._id)
     }
 }
+
 const nextQuestion = async () => {
     // if this is not the last question:
     return navigateTo('/survey/' + route.params._id + '/' + (parseInt(route.params._question, 10) + 1))
 }
+
+const submitAnswers = async () => {
+    // TODO: submit answers to the server
+    console.log("submitAnswers function called. Not yet implemented.")
+    return true
+};
 
 // inspired by Roy J's solution on Stack Overflow:
 // https://stackoverflow.com/questions/54499070/leaflet-and-vuejs-how-to-add-a-new-marker-onclick-in-the-map
