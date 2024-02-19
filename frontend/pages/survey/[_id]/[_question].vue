@@ -32,18 +32,16 @@
                         </div>
                     </div>
                     <!-- Navigation -->
-                    <v-card-actions class="left">
-                        <v-btn @click="prevQuestion" color="primary">
+                    <v-card-actions>
+                        <v-btn @click="prevQuestion" color="primary" variant="outlined">
                             <i class="fa-solid fa-arrow-left"></i>
                             <span class="q-pa-sm">Previous Question</span>
                         </v-btn>
-                        <v-spacer> </v-spacer>
-                        <v-btn v-show="survey_store.questionCount != current_question_index" @click="nextQuestion" color="primary">
+                        <v-btn v-show="survey_store.questionCount != current_question_index" @click="nextQuestion" color="primary" variant="outlined">
                             <i class="fa-solid fa-arrow-right"></i>
                             <span class="q-pa-sm">Next Question</span>
                         </v-btn>
-                        <v-spacer> </v-spacer>
-                                <v-btn v-show="survey_store.questionCount == current_question_index" @click="submitAnswers" color="primary">
+                                <v-btn v-show="survey_store.questionCount == current_question_index" @click="submitAnswers" color="primary" variant="tonal">
                                     <i class="fa-solid fa-check"></i>
                                     <span class="q-pa-sm">Submit</span>
                                 </v-btn>
