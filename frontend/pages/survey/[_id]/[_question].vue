@@ -78,7 +78,7 @@ let current_map_view_id = questions[current_question_index - 1].map_view;  // ge
 let { data: question } = await useAsyncData(() => $cmsApi(question_url + current_question_id));
 console.log("current map view //", current_map_view_id);
 
-const {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
+let {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
 console.log("map_View //", map_View)
 
 
