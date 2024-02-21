@@ -1,6 +1,7 @@
 <template>
-    <v-textarea style="padding-top: 16px" label="Your answer" variant="outlined" :value="answer.text"
+    <v-textarea style="padding-top: 16px" label="Your answer" variant="outlined" :value="props.answer" 
                 @input="event => updateAnswer(event)"></v-textarea>
+                <!-- :value should be props.answer.text -->
   <!--  @input="onInput"-->
   </template>
   
@@ -15,7 +16,7 @@
   const props = defineProps({
     question_index: Number,
     question: Object,
-    answer:Object
+    answer: Object
   })
   function updateAnswer(event) {
     props.answer.text = event.target.value
