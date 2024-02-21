@@ -4132,6 +4132,11 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
+leaflet-draw-toolbar@^0.3.0-alpha.1:
+  version "0.3.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/leaflet-draw-toolbar/-/leaflet-draw-toolbar-0.3.0-alpha.1.tgz#d1431ce00cc8cab4a1ba5f2a72f142262cfb8bac"
+  integrity sha512-OhTetr7QXHaBaq5niiC0aV22j35+c9oVDcVToazJe/XVq9etHLUfMMaSO/bcPTFEBICOymkirnnuplmlfCGKgw==
+
 leaflet-draw@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-1.0.4.tgz#45be92f378ed253e7202fdeda1fcc71885198d46"
