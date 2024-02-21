@@ -3,9 +3,24 @@
         <div class="">
             <!-- Question card: number & text -->
             <v-card class="my-card" :title="question.text" :subtitle="question.order">
+                
+
                 <!-- Answer card-->
+                <!-- <div class="my-card col">
+                    <v-textarea name="answer" v-model="answer_field" type="textarea" label="Give you answer here"></v-textarea>
+                </div> -->
+
                 <div class="my-card col">
-                    <v-textarea name="title" v-model="answer_field" type="textarea" label="Give you answer here"></v-textarea>
+                    <!-- COTINUE HERE: use the pops (attributes) of the commopents (see example) to pass write values and capture answers -->
+                    <p>Questions type: {{ question.question_type }}</p>
+                    <RespondentViewQuestionTypesAnswerTypeText v-if="question.question_type === 'text'"/>
+                    <RespondentViewQuestionTypesAnswerTypeShortText v-if="question.question_type === 'short-text'"/>
+                    <RespondentViewQuestionTypesAnswerTypeMultiselect
+                     v-if="question.question_type === 'select'"
+                     :question="question"
+                     />
+                    <RespondentViewQuestionTypesAnswerTypeDate v-if="question.question_type === 'date'"/>
+                    <RespondentViewQuestionTypesAnswerTypeInteger v-if="(question.question_type === 'integer' || question.question_type === 'float') "/>
                 </div>
 
                 <div class="q-pa-md row items-start q-gutter-md">
@@ -45,7 +60,6 @@
                                     <i class="fa-solid fa-check"></i>
                                     <span class="q-pa-sm">Submit</span>
                                 </v-btn>
-                        
                     </v-card-actions>
                     <div> 
                         <p>Current index question {{current_question_index}} </p>
@@ -67,6 +81,8 @@ import { useStoreResponse } from '~/stores/response';
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
+
+// CONTINUE ON collecting answers fand collecting them. I using a store for answers a good approach?
 
 const responseStore = useStoreResponse();
 const question_url = "/api/questions/";
