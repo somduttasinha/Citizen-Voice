@@ -1,19 +1,11 @@
 <template>
     <v-container fluid @input="event => updateAnswer(event)">
-  <!--    <p>{{ selected }}</p>-->
-       <!-- TODO: use v-for to loop through the choices -->
-      <v-checkbox
+      <v-checkbox v-for="(choice, index) in choicesRef"
         v-model="selected"
-        :label="question.choices"
-        value="Choice 1"
-      ></v-checkbox>
-      <v-checkbox
-        v-model="selected"
-        label="Option 2"
-        value="Option 2"
+        :label="choice"
+        :value="index"
       ></v-checkbox>
     </v-container>
-  <!--  <h2>{{selected}}</h2>-->
   </template>
   
   <script>
@@ -32,10 +24,9 @@
     answer: Object,
   })
 
-  const choice = "Choice 1"
-
+  const choicesRef = ref(ref(props.question.choices).value.split(','))
   function updateAnswer(event) {
-    props.answer.text = selected.value
+    props.answer.text = event.target.value
     emit('updateAnswer', props.answer, props.question_index)
   }
   </script>
