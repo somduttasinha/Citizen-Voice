@@ -13,14 +13,31 @@
                 <div class="my-card col">
                     <!-- COTINUE HERE: use the pops (attributes) of the commopents (see example) to pass write values and capture answers -->
                     <p>Questions type: {{ question.question_type }}</p>
-                    <RespondentViewQuestionTypesAnswerTypeText v-if="question.question_type === 'text'"/>
-                    <RespondentViewQuestionTypesAnswerTypeShortText v-if="question.question_type === 'short-text'"/>
+                    <RespondentViewQuestionTypesAnswerTypeText 
+                    v-if="question.question_type === 'text'"
+                    :question="question"
+                    />
+                    <RespondentViewQuestionTypesAnswerTypeShortText 
+                    v-if="question.question_type === 'short-text'"
+                    :question="question"
+                    />
+                    <RespondentViewQuestionTypesAnswerTypeSelect
+                    v-if="question.question_type === 'select'"
+                    :question="question"
+                    />
                     <RespondentViewQuestionTypesAnswerTypeMultiselect
-                     v-if="question.question_type === 'select'"
+                     v-if="question.question_type === 'select-multiple'"
                      :question="question"
                      />
-                    <RespondentViewQuestionTypesAnswerTypeDate v-if="question.question_type === 'date'"/>
-                    <RespondentViewQuestionTypesAnswerTypeInteger v-if="(question.question_type === 'integer' || question.question_type === 'float') "/>
+                    <RespondentViewQuestionTypesAnswerTypeDate 
+                    v-if="question.question_type === 'date'"
+                    :question="question"
+                    />
+                    <RespondentViewQuestionTypesAnswerTypeInteger 
+                    v-if="(question.question_type === 'integer' || 
+                        question.question_type === 'float')" 
+                    :question="question"
+                    />
                 </div>
 
                 <div class="q-pa-md row items-start q-gutter-md">
