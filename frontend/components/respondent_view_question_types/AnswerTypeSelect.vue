@@ -1,7 +1,7 @@
 <template>
     <v-container style="padding: 16px">
       <v-radio-group @input="event => updateAnswer(event)">
-        <v-radio v-for="(option, index) in choicesRef" :value="index" :label="option">
+        <v-radio v-for="(option, index) in optionsRef" :value="index" :label="option">
         </v-radio>
       </v-radio-group>
     </v-container>
@@ -20,7 +20,7 @@
       question: Object,
       answer: Object,
   })
-  const choicesRef = ref(ref(props.question.choices).value.split(','))
+  const optionsRef = ref(ref(props.question.choices).value.split(','))
   function updateAnswer(event) {
     console.log("updating answer")
     props.answer.text = event.target.value
