@@ -25,7 +25,8 @@ class Response(models.Model):
         _("Unique ID of interview"),
         primary_key=True, 
         default=uuid.uuid4,
-         max_length=150
+         max_length=150,
+         unique=True
          )
     respondent = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
 
