@@ -3,40 +3,54 @@
         <div class="">
             <!-- Question card: number & text -->
             <v-card class="my-card" :title="question.text" :subtitle="question.order">
-                
-
                 <!-- Answer card-->
-                <!-- <div class="my-card col">
-                    <v-textarea name="answer" v-model="answer_field" type="textarea" label="Give you answer here"></v-textarea>
-                </div> -->
-
                 <div class="my-card col">
                     <!-- COTINUE HERE: use the pops (attributes) of the commopents (see example) to pass write values and capture answers -->
-                    <p>Questions type: {{ question.question_type }}</p>
+                    <p>Questions type: {{ question.question_type }}
+                    Answer body: {{ answers.text }}
+                    </p>
                     <RespondentViewQuestionTypesAnswerTypeText 
                     v-if="question.question_type === 'text'"
                     :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeShortText 
                     v-if="question.question_type === 'short-text'"
                     :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeSelect
                     v-if="question.question_type === 'select'"
                     :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeMultiselect
                      v-if="question.question_type === 'select-multiple'"
-                     :question="question"
+                    :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                      />
                     <RespondentViewQuestionTypesAnswerTypeDate 
                     v-if="question.question_type === 'date'"
                     :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeInteger 
                     v-if="(question.question_type === 'integer' || 
                         question.question_type === 'float')" 
                     :question="question"
+                    :question_index="current_question_index"
+                    :answer="answers"
+                    @update-answer="handleUpdateAnswer"
                     />
                 </div>
 
@@ -99,7 +113,17 @@ import { useStoreResponse } from '~/stores/response';
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-// CONTINUE ON collecting answers fand collecting them. I using a store for answers a good approach?
+// Replace with your actual answer object
+const body = '';
+const answers = ref({ text: body });  // body of the answer must be a string (as per the API)
+// ref makes the variable reactive
+
+
+const handleUpdateAnswer = (updatedAnswer, questionIndex) =>{
+      // Handle the updated answer here
+      console.log(updatedAnswer)
+        answers.text = updatedAnswer
+    };
 
 const responseStore = useStoreResponse();
 const question_url = "/api/questions/";
