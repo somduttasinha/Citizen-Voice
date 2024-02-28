@@ -6,25 +6,25 @@
             class="d-flex align-center flex-column"
             height="200"
           >
-            <v-card-actions class="justify-center">
-              <h2>{{ survey.name }}</h2>
-              
-            </v-card-actions>
-            <v-card-actions class="justify-center">
-              <p>{{ survey.description }} </p>
-            </v-card-actions>
-            <v-card-actions class="justify-center">
+          <v-card 
+            class="my-card" 
+            :title=survey.name>   
+            <div class="my-card col">
+              <p>{{ survey.description }}</p>
+            </div>
+            <div class="my-card col">
               <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
-            </v-card-actions>
-            <v-card-actions class="justify-center">
+            </div>
+            <div class="my-card col">
               <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
-            </v-card-actions>
+            </div>
             <v-card-actions class="justify-center" >
-              <v-btn @click="startSurvey" color="primary">
+              <v-btn @click="startSurvey" color="primary"  variant="elevated">
                 <i class="fa-solid fa-play"></i>
                 <span class="q-pa-sm">Start Survey</span>
               </v-btn>
             </v-card-actions>
+          </v-card>
           </v-sheet>
             <!-- <p>Counter: {{this.$store.state.counter}}</p>-->
             <!-- <h2>{{ survey.name }}</h2> -->
