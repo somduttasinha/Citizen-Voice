@@ -340,6 +340,8 @@ class ResponseViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['POST'], url_path='submit-response')
     def submit_response(self, request, *args, **kwargs):
         print("Submitting response...")
+
+        # TODO: test submision using this endpoint
         user = self.request.user
         answers = self.request.data["answers"]
         responseId = self.request.data["responseId"]
