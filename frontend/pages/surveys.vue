@@ -14,7 +14,7 @@
                             <span>Expiration date: {{ formatDate(survey.expire_date) }}</span>
                         </div>
                         <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto elevated">
-                            <v-btn @click="selectSurvey(survey.id)" color="primary">
+                            <v-btn @click="selectSurvey(survey.id)" color="primary" variant="elevated">
                             Participate
                             </v-btn>
                         </v-card-actions>
