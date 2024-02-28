@@ -1,6 +1,12 @@
 <template>
-    <v-textarea rows="1" style="padding-top: 16px" label="Your answer" variant="outlined" :value="props.answer" 
-                @input="event => updateAnswer(event)"></v-textarea>
+    <v-textarea 
+    rows="1" 
+    style="padding-top: 16px" 
+    label="Your answer" 
+    variant="outlined" 
+    :value="props.answer.text" 
+    @input="event => updateAnswer(event)">
+    </v-textarea>
                 <!-- :value should be props.answer.text -->
   <!--  @input="onInput"-->
   </template>
