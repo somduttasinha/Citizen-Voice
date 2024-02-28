@@ -1,10 +1,17 @@
 <template>
-    <v-textarea style="padding-top: 16px" label="Your answer" variant="outlined" :value="props.answer" 
-                @input="event => updateAnswer(event)"></v-textarea>
+    <v-textarea 
+    style="padding-top: 16px" 
+    label="Your answer" 
+    variant="outlined" 
+    :value="props.answer.text" 
+    @input="event => updateAnswer(event)" >
+    <!-- call event every time user types in the input field  -->
+  </v-textarea>
                 <!-- :value should be props.answer.text -->
   <!--  @input="onInput"-->
   </template>
-  
+
+
   <script>
   export default {
     name: "AnswerTypeText",
@@ -12,15 +19,15 @@
   </script>
   
   <script setup>
-  const emit = defineEmits(['updateAnswer'])
+  const emit = defineEmits(['updateAnswer']) // always sends the event to the parent component
   const props = defineProps({
     question_index: Number,
     question: Object,
     answer: Object
   })
   function updateAnswer(event) {
-    props.answer.text = event.target.value
-    emit('updateAnswer', props.answer, props.question_index)
+    props.answer.text = event.target.value // what user types in the input field
+    emit('updateAnswer', props.answer, props.question_index) // emits event with propos as payload
   }
   // const answer = ref("")
   //
