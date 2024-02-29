@@ -22,9 +22,9 @@
   })
   const optionsRef = ref(ref(props.question.choices).value.split(','))
   function updateAnswer(event) {
-    console.log("updating answer")
-    props.answer.text = event.target.value
-    emit('updateAnswer', props.answer, question_index)
+    console.log("updating answer:")
+    props.answer.text = optionsRef.value[event.target.value].trim() // name of the selected option
+    emit('updateAnswer', props.answer, props.question_index)
   }
   </script>
   <style scoped>
