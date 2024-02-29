@@ -20,28 +20,28 @@
                     v-if="question.question_type === 'short-text'"
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeSelect
                     v-if="question.question_type === 'select'"
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeMultiselect
                      v-if="question.question_type === 'select-multiple'"
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                      />
                     <RespondentViewQuestionTypesAnswerTypeDate 
                     v-if="question.question_type === 'date'"
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeInteger 
@@ -49,7 +49,7 @@
                         question.question_type === 'float')" 
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                     />
                 </div>
