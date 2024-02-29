@@ -114,9 +114,6 @@ import { useStoreResponse } from '~/stores/response';
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-
-
-
 const responseStore = useStoreResponse();
 const question_url = "/api/questions/";
 const mapview_url = "/api/map_views/";
