@@ -7,13 +7,13 @@
                 <div class="my-card col">
                     <!-- COTINUE HERE: use the pops (attributes) of the commopents (see example) to pass write values and capture answers -->
                     <p>Questions type: {{ question.question_type }}
-                    Answer body: {{ answers.text }}
+                    Answer body: {{ current_answer }}
                     </p>
                     <RespondentViewQuestionTypesAnswerTypeText 
                     v-if="question.question_type === 'text'"
                     :question="question"
                     :question_index="current_question_index"
-                    :answer="answers"
+                    :answer="current_answer"
                     @update-answer="handleUpdateAnswer"
                     />
                     <RespondentViewQuestionTypesAnswerTypeShortText 
@@ -109,21 +109,13 @@ import { ref, watch } from "vue"
 import { navigateTo } from "nuxt/app";
 import { useSurveyStore } from "~/stores/survey";
 import { useStoreResponse } from '~/stores/response';
+
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
-// Replace with your actual answer object
-const body = '';
-const answers = ref({ text: body });  // body of the answer must be a string (as per the API)
-// ref makes the variable reactive
 
 
-const handleUpdateAnswer = (updatedAnswer, questionIndex) =>{
-      // Handle the updated answer here
-      console.log(updatedAnswer)
-        answers.text = updatedAnswer
-    };
 
 const responseStore = useStoreResponse();
 const question_url = "/api/questions/";
@@ -145,8 +137,17 @@ console.log("current map view //", current_map_view_id);
 let {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
 console.log("map_View //", map_View)
 
-// TODO: limit nextQuestion to the last question in the survey
-// TODO: Add sumbit button to the last question in the survey. Use v-if to show the button only on the last question
+// Replace with your actual answer object
+const current_answer = ref({ question_id: current_question_id, text: '' });
+// const answers = ref({ text: body });  // body of the answer must be a string (as per the API)
+// ref makes the variable reactive
+const handleUpdateAnswer = (updatedAnswer, questionIndex) =>{
+      // Handle the updated answer here
+    console.log(updatedAnswer);
+    current_answer.text = updatedAnswer;
+    current_answer.question_index = questionIndex;
+    responseStore.updateAnswer(updatedAnswer);
+    };
 
 // to set up the map
 // const center = ref([47.41322, -1.219482])
