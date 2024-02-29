@@ -342,6 +342,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         print("Submitting response...")
 
         # TODO: test submision using this endpoint
+        # TODO: this is already possible via the answers endpoint
         user = self.request.user
         answers = self.request.data["answers"]
         responseId = self.request.data["responseId"]
