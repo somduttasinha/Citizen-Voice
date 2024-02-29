@@ -126,7 +126,7 @@ export const useStoreResponse = defineStore('response', {
             // Clear all the answers
             this.answers = []
         },
-        async submitAnswer(answers) {
+        async submitAnswer(response_url, question_url, answer_value) {
             const user = useUserStore();
             const global = useGlobalStore();
             const csrftoken = user.getCookie('csrftoken');
@@ -142,18 +142,21 @@ export const useStoreResponse = defineStore('response', {
                 
                 // TODO: have the repondent set to the logged in user 
                 body: {
-                    survey: "apli/surveys/"+surveyId+'/',
-                    repondent : "api/users/me/",
-                    answers: answers,
-                    responseId: responseId,
+                    response: response_url,
+                    question: question_url,
+                    body: answer_value
                 }
             };
             if (token) {
                 config.headers['Authorization'] = `Token ${token}`
             };
-            const {data: survey, pending, error} = await useAsyncData('retrieveResponse', () => $cmsApi('/api/responses/submit-response/', config));
 
-            console.log(answers);
+            const {data: response, pending, error} = await useAsyncData('submitAnswer', () => $cmsApi('/api/answers/', config));
+
+            if (response) {
+                console.log('response submitted //> ');
+            }
+        
         }
 
         // TODO: CONTINUE HERE
