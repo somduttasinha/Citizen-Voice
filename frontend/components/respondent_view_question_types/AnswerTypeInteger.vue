@@ -23,8 +23,8 @@
   })
   function updateAnswer(event) {
     console.log("updating answer")
-    props.answer.text = event.target.value
-    emit('updateAnswer', props.answer, props.question_index)
+    props.answer.text = +event.target.value; // force convertion to interger or float
+    emit('updateAnswer', props.answer, props.question_index);
   }
   </script>
   <style scoped>
