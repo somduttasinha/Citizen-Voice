@@ -13,7 +13,19 @@ export const useStoreResponse = defineStore('response', {
         // currentQuestion
         // surveyId
         // answersToCurrentSurvey
-       { return { responseData: {} } },
+       { 
+        return { 
+            responseData: {},
+            answers: 
+            [
+                // expects and array of objects with the following structure
+                // {
+                // question_index: integer,
+                // body: text,
+                // }
+            ],
+        
+        } },
     getters: {
         responseId() {
             return this.responseData.interview_uuid
@@ -24,6 +36,22 @@ export const useStoreResponse = defineStore('response', {
         
     },
     actions: {
+        updateAnswer(answer) {
+            // updates an answer in the array of answers
+            // answer must have the following structure
+            // {
+            // question_id: integer,
+            // text: text,
+            // }
+            const existingAnswer = this.answers.find(a => a.question_id === answer.question_id);
+            if (existingAnswer) {
+                existingAnswer.text = answer.text;
+            }
+            else {
+                this.answers.push(answer);
+            }
+    
+        },
 
         async createResponse({ surveyId, respondentId=null  }) {
             /**
@@ -94,7 +122,10 @@ export const useStoreResponse = defineStore('response', {
             return survey
         },
         
-
+        clearAnswers() {
+            // Clear all the answers
+            this.answers = []
+        },
         async submitAnswer(answers) {
             const user = useUserStore();
             const global = useGlobalStore();
