@@ -8,16 +8,10 @@
           >
           <v-card 
             class="my-card" 
-            :title=survey.name>   
-            <div class="my-card col">
-              <p>{{ survey.description }}</p>
-            </div>
-            <div class="my-card col">
-              <p>Publish date: {{ formatDate(survey.publish_date) }}</p>
-            </div>
-            <div class="my-card col">
-              <p>Expire date: {{ formatDate(survey.expire_date) }}</p>
-            </div>
+            :title=survey.name
+            :subtitle="'Open until:' + formatDate(survey.expire_date)"   
+            :text="survey.description"
+            >
             <v-card-actions class="justify-center" >
               <v-btn @click="startSurvey" color="primary"  variant="elevated">
                 <i class="fa-solid fa-play"></i>
@@ -67,6 +61,9 @@ console.log('route id', route.params._id)
 const survey = await storeResponse.getSurvey({ id: route.params._id })
 console.log('survey.value. in survey index //', survey.value.id)
 const storeSurvey = useSurveyStore()
+
+// Clear all answers in the Response store
+storeResponse.clearAnswers()
 
 const createResponse = async () => {
     // Make a POST request to your Django API endpoint to create a new Response object
