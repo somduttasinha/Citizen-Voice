@@ -24,7 +24,7 @@
   function updateAnswer(event) {
     console.log("updating answer")
     props.answer.text = event.target.value
-    emit('updateAnswer', props.answer, question_index)
+    emit('updateAnswer', props.answer, props.question_index)
   }
   </script>
   <style scoped>

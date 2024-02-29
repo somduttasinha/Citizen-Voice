@@ -1,5 +1,10 @@
 <template>
-  <v-text-field @input="event => updateAnswer(event)" type="date" label="Date"></v-text-field>
+  <v-text-field @input="event => updateAnswer(event)" 
+    type="date" 
+    label="Date"
+    clearable
+    >
+  </v-text-field>
 </template>
 <!--    v-model="props.answer"-->
 
@@ -19,7 +24,7 @@ const props = defineProps({
 function updateAnswer(event) {
   console.log("updating answer")
   props.answer.text = event.target.value
-  emit('updateAnswer', props.answer, question_index)
+  emit('updateAnswer', props.answer, props.question_index)
 }
 </script>
 <style scoped>
