@@ -12,7 +12,7 @@
         "lint:fix": "eslint . --fix"
     },
     "devDependencies": {
-        "@kevinmarrec/nuxt-pwa": "^0.16.2",
+        "@kevinmarrec/nuxt-pwa": "^0.0.2",
         "@nuxtjs/eslint-config-typescript": "^12.0.0",
         "@nuxtjs/tailwindcss": "^6.4.1",
         "@pinia/nuxt": "^0.4.7",

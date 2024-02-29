@@ -1,4 +1,4 @@
-import { useUserStore } from '../user'
+import { useUserStore } from '../user.js'
 
 const setRequestConfig = (params = { method: "GET" }) => {
     const user = useUserStore()

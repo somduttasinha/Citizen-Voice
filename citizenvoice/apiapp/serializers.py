@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Answer, Question, Survey,PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Response as ResponseModel
 from django.contrib.auth.models import User
 
 # =============================================
@@ -50,11 +51,15 @@ class ResponseSerializer(serializers.ModelSerializer):
     fields of the Response model for the API.
     """
     survey = serializers.PrimaryKeyRelatedField(queryset=Survey.objects.all())
+    respondent = serializers.SerializerMethodField()
+
+    def get_respondent(self, User):
+        return UserSerializer(User.respondent).data
 
     class Meta:
-        model = Response
+        model = ResponseModel
         fields = ('created', 'updated', 'survey',
-                  'interview_uuid', 'respondent')
+                  'respondent', 'interview_uuid')
 
 # TODO: change this to use serializers.ModelSerializer (PrimaryKeyRelatedField)
 
@@ -123,4 +128,4 @@ class MapViewSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = MapView
-        fields = ('id', 'name', 'map_service_url', 'options', 'geojson')
+        fields = ('id', 'name', 'map_service_url', 'options', 'geometries')

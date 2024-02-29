@@ -6,6 +6,7 @@ const ONE_DAY = 60 * 60 * 24 * 1000
 const ONE_WEEK = ONE_DAY * 7
 
 export default defineNuxtConfig({
+
     ssr: true,
     build: {
         transpile: ["vuetify", "vue-toastification/nuxt"],
@@ -55,10 +56,10 @@ export default defineNuxtConfig({
             'composables/**'
         ]
     },
-    // plugins: [
-    //     //     { src: '@/plugins/vuedraggable' }
-    //     { src: '@/plugins/vuedraggable/index.js', ssr: false }
-    // ],
+    plugins: [
+        //     { src: '@/plugins/vuedraggable' }
+        // { src: '@/plugins/vue-draggable/index.js', ssr: false }
+    ],
     vite: {
         define: {
             'process.env.DEBUG': false,
@@ -102,7 +103,9 @@ export default defineNuxtConfig({
     apiParty: {
         endpoints: {
             'cms-api': { // Becomes `$cmsApi()`
-                url: process.env.API_PARTY_CMS_URL,
+                // TODO [manuel]: find out why cannot get api url from env
+                url: process.env.API_PARTY_CMS_URL || 'http://localhost:8000',
+                
             }
         }
     },
