@@ -6,9 +6,9 @@
                 <!-- Answer card-->
                 <div class="my-card col">
                     <!-- COTINUE HERE: use the pops (attributes) of the commopents (see example) to pass write values and capture answers -->
-                    <p>Questions type: {{ question.question_type }}
+                    <!-- <p>Questions type: {{ question.question_type }}
                     Answer body: {{ current_answer }}
-                    </p>
+                    </p> -->
                     <RespondentViewQuestionTypesAnswerTypeText 
                     v-if="question.question_type === 'text'"
                     :question="question"
@@ -92,10 +92,10 @@
                                     <span class="q-pa-sm">Submit</span>
                                 </v-btn>
                     </v-card-actions>
-                    <div> 
+                    <!-- <div> 
                         <p>Current index question {{current_question_index}} </p>
                         <p>total questions {{survey_store.questionCount}} </p>
-                        </div>
+                        </div> -->
                 </div>
             </v-card>
         </div>
@@ -115,7 +115,7 @@ import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LCircle, LControl } from "@vue-leaflet/vue-leaflet";
 
 const responseStore = useStoreResponse();
-const question_url = "/api/questions/";
+const questions_url = "/api/questions/";
 const mapview_url = "/api/map_views/";
 
 const route = useRoute();
@@ -128,7 +128,7 @@ const questions = survey_store.questions;
 var current_question_index = route.params._question; // use url questions id as an index to load each question 
 let current_question_id = questions[current_question_index - 1].id;  // gets the id for the questions
 let current_map_view_id = questions[current_question_index - 1].map_view;  // gets the value for the map view
-let { data: question } = await useAsyncData(() => $cmsApi(question_url + current_question_id));
+let { data: question } = await useAsyncData(() => $cmsApi(questions_url + current_question_id));
 console.log("current map view //", current_map_view_id);
 
 let {data: map_View} = await useAsyncData(() => $cmsApi(mapview_url + current_map_view_id));
@@ -176,9 +176,23 @@ const nextQuestion = async () => {
 }
 
 const submitAnswers = async () => {
-    // TODO: submit answers to the server
-    console.log("submitAnswers function called. Not yet implemented.")
-    return true
+    // TODO: host ulr should be dynamic
+
+    const response_root = "http://localhost:8000/api/responses/";
+    const question_root = "http://localhost:8000/api/questions/";
+
+    for (let i = 0; i < responseStore.answers.length; i++) {
+        const response_url = response_root + responseStore.responseId + "/";
+        const question_url = question_root + responseStore.answers[i].question_id + "/";
+        const answer_text = responseStore.answers[i].text;
+        console.log("submitting answer: ", answer_text);
+        responseStore.submitAnswer(
+            response_url,
+            question_url,
+            answer_text
+        )
+    }
+    return navigateTo('/submitted/')
 };
 
 // inspired by Roy J's solution on Stack Overflow:
