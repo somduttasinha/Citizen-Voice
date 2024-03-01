@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
+from rest_framework.settings import api_settings
+
 
 if os.name == 'nt':
     import platform
@@ -29,16 +32,20 @@ if os.name == 'nt':
 DEFAULT_SURVEY_PUBLISHING_DURATION = 7
 
 # read environment variable form .env file
-load_dotenv()
+load_dotenv("../.env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# read environment variable form .env file
+load_dotenv("../.env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -59,22 +66,39 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django.contrib.sites',
     'apiapp',
     'rest_framework',
+    'rest_framework.permissions',
     'users.apps.UsersConfig',
     'survey_design.apps.SurveyDesignConfig',
-    'respondent.apps.RespondentConfig'
+    'respondent.apps.RespondentConfig',
+    'corsheaders',
+    'knox',
+    'knox_allauth',
+    'allauth',
+    'allauth.account',
+    'bulk_update_or_create',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # CORS
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000']
 
 ROOT_URLCONF = 'citizenvoice.urls'
 
@@ -95,6 +119,28 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'citizenvoice.wsgi.application'
+
+# Configure CORS allowed ports
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://145.94.193.168:3000'
+]
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1'
+]
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://145.94.193.168:3000'
+)
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://145.94.193.168:3000",
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -125,8 +171,8 @@ else:
                 'TEST': {
                     'NAME': os.getenv('TEST_DBASE'),
                 },
-                }
             }
+        }
     elif DATABASE_ENGINE == "spatialite":
         DATABASES = {
             'default': {
@@ -171,14 +217,64 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = 'var/static_root/'
-STATICFILES_DIRS = ['static_vue']
+# STATICFILES_DIRS = ['static_vue']
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if os.name == 'nt':
-    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin\gdal305.dll'
+    GDAL_LIBRARY_VERSION = os.getenv("GDAL_LIBRARY_VERSION", "gdal305.dll")
+    GDAL_LIBRARY_PATH = r'C:\OSGeo4W\bin' + "\\" + GDAL_LIBRARY_VERSION
 
 LOGIN_REDIRECT_URL = 'survey-home'
 LOGIN_URL = 'survey-design-index'
+
+# Knox & AllAuth Authentication
+
+# django-allauth settings
+# In order to make allauth suitable for API user our patched account adapter
+ACCOUNT_ADAPTER = "knox_allauth.adapters.AccountAdapter"
+# SOCIALACCOUNT_ADAPTER = "apps.users.adapters.SocialAccountAdapter"
+# ACCOUNT_ALLOW_REGISTRATION = os.environ['DJANGO_ACCOUNT_ALLOW_REGISTRATION'] = True # fIXME
+ACCOUNT_ALLOW_REGISTRATION = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "username"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO: set to "mandatory"
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_MIN_LENGTH = 2
+
+SITE_ID = 1
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication', ),
+}
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# django-rest-knox
+#
+REST_KNOX = {
+    "AUTH_HEADER_PREFIX": "Token",
+    "TOKEN_TTL": timedelta(hours=24),
+    "SECURE_HASH_ALGORITHM": "cryptography.hazmat.primitives.hashes.SHA512",
+    "AUTH_TOKEN_CHARACTER_LENGTH": 64,
+    "TOKEN_LIMIT_PER_USER": None,
+    "AUTO_REFRESH": False,
+}
+
+# drf-spectacular
+#
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Address API",
+    "DESCRIPTION": "Documentation of API endpoints of Address",
+    "VERSION": "1.0.0",
+    "SCHEMA_PATH_PREFIX": "/api",
+}
