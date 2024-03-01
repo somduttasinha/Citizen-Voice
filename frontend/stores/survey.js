@@ -6,11 +6,15 @@ import setRequestConfig from './utils/setRequestConfig';
 export const useSurveyStore = defineStore('survey', {
     state: () => {
         return {
-            id: null,
-            currentSurveyDesign: []
+            selectedSurveyId: null,
+            currentSurveyDesign: [],
+            questions: [],
         }
     },
     getters: {
+        questionCount() {
+            return this.questions.length
+        }
 
     },
     actions: {
@@ -33,6 +37,13 @@ export const useSurveyStore = defineStore('survey', {
 
             return data
         },
+
+        
+        
+        selectSurvey(id) {
+            this.selectedSurveyId = id
+        },
+
         async getSurveys() {
             const user = useUserStore()
             const token = user.getAuthToken
@@ -49,9 +60,9 @@ export const useSurveyStore = defineStore('survey', {
                 config.headers['Authorization'] = `Token ${token}`
             }
 
-            const data = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config))
+            const { data, error} = await useAsyncData('surveys', () => $cmsApi('/api/surveys', config));
 
-            return data
+            return { data, error }
 
         },
 
@@ -97,7 +108,7 @@ export const useSurveyStore = defineStore('survey', {
 
             }
 
-            const { data: register, pending, error } = await useAsyncData(() => $cmsApi('/api/surveys/create-survey/', config))
+            const { data: register, pending, error } = await useAsyncData('createSurvey', () => $cmsApi('/api/surveys/create-survey/', config))
 
             if (error.value) {
                 let warnMessage = null
@@ -233,27 +244,34 @@ export const useSurveyStore = defineStore('survey', {
 
         },
 
-        async getQuestionsOfSurvey(id) {
-            const user = useUserStore()
-            const global = useGlobalStore()
+        async getQuestionsOfSurvey() {
+            const user = useUserStore();
+            const global = useGlobalStore();
             const csrftoken = user.getCookie('csrftoken');
-            const token = user.getAuthToken
+            const token = user.getAuthToken;
 
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
+            const config = setRequestConfig({
                 method: 'GET'
-            }
+            });
 
+            const id = this.selectedSurveyId
+            console.log('id in get questions//> ', id);
 
-            if (token) {
-                config.headers['Authorization'] = `Token ${token}`
-            }
+            // if (!this.questions){
+                const { data: response, pending, error} = await useAsyncData(() => $cmsApi('api/surveys/' + id + '/questions', config));
+            
+                const responseData = await response.value;  
 
-            const res = await useAsyncData('getSurveys', () => $cmsApi('/api/surveys/' + id + '/questions', config))
-            return res
+                 
+                this.questions = responseData;
+                console.log('Questions //> ', responseData);
+            // }
+
+              if (error.value){
+                console.log('error in get questions //> ', error.value);
+              };
+            
+            return responseData;
         },
     }
 })

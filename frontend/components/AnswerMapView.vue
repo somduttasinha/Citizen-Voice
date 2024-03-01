@@ -1,23 +1,13 @@
 <template>
-    <v-dialog v-model="dialog" width="auto">
+    <v-sheet v-model="dialog" width="auto">
         <template v-slot:activator="{ props }">
-            <div style="height:600px; width:600px">
-                <l-map :key="updateKeyMapWithoutControls" :useGlobalLeaflet="true" ref="mapRef"
-                    @ready="onLeafletReadyMapWithoutControls" :options="{ zoomControl: false }" :minZoom="3" :maxZoom="19"
-                    :noBlockingAnimations="true">
-                    <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
-                        name="OpenStreetMap"></l-tile-layer>
-                    <l-geo-json @ready="geoJsonReady" :key="updateKeyGeoJson"></l-geo-json>
-                    <l-feature-group ref="featureGroupRef" />
-                </l-map>
-            </div>
             <v-btn class="mt-4" variant="tonal" append-icon="mdi-pencil" border v-bind="props">Edit Map</v-btn>
         </template>
 
         <v-card>
             <v-card-text>
-                <v-text-field v-model="title" label="Name of map view" variant="outlined"></v-text-field>
-                <div style="height:600px; width:600px">
+                <!-- <v-text-field v-model="title" label="Name of map view" variant="outlined"></v-text-field> -->
+                <div style="height:600px; width:auto">
                     <l-map ref="mapRefPopUp" @ready="onMapWWControlReady" @update:zoom="updateZoom"
                         @update:center="updateCenter" :noBlockingAnimations="true">
                         <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></l-tile-layer>
@@ -25,13 +15,12 @@
                     </l-map>
                 </div>
             </v-card-text>
-
             <v-card-actions>
                 <v-btn variant="tonal" block @click="submitMap">Save map</v-btn>
                 <!-- <v-btn color="primary" block @click="dialog = false">Save</v-btn> -->
             </v-card-actions>
         </v-card>
-    </v-dialog>
+    </v-sheet>
 </template>
   
 <script setup>
@@ -48,6 +37,7 @@ import { forEach } from 'ramda'
 // Store
 import { useMapViewStore } from "~/stores/mapview"
 import { useQuestionDesignStore } from "~/stores/questionDesign"
+import { useGlobalStore } from '~/stores/global'
 
 const mapViewStore = useMapViewStore()
 const questionStore = useQuestionDesignStore()
@@ -291,6 +281,7 @@ const updateCenter = (value) => {
 }
 
 const submitMap = async () => {
+    const global = useGlobalStore()
     let response
     mapViewData.geojson = drawnItemsRef.value.toGeoJSON()
     // Save new zoom value if not falsely
@@ -322,6 +313,8 @@ const submitMap = async () => {
     updateKeyMapWithoutControls.value++
     setGeoJsonMarkers()
     // response.refresh()
+    global.succes('Map view saved')
+    
 }
 </script>
   

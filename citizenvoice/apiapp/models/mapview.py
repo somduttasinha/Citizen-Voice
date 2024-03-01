@@ -18,9 +18,9 @@ class MapView(models.Model):
     name = models.CharField(_("Name of the MapView location"), max_length=150, default="Delft")
     map_service_url = models.CharField(_("Map Service URL"), max_length=150,
                                        default=default_service_url)
-    # TODO: add JSON validation to see if the data that is being stored is validated JSON
-    options = models.JSONField(default=default_options)
-    geojson = models.JSONField(null=True)
+    # TODO: add JSON validation to see if the data that is being stored is valid JSON
+    options = models.JSONField(_("Map service specific options"), default=default_options)
+    geometries = models.JSONField(_("Custom geometries for the map view"), blank=True, null=True) # TODO: [manuel] this should be a GeoJSONField, can DJANGO SUPPORT THIS? if not, we should do our own validation
 
     def __str__(self):
         return str(self.name)

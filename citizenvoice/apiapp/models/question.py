@@ -21,6 +21,7 @@ class Question(models.Model):
     captured in a comma-separated text field.
     """
 
+    # TODO: [manuel] consider using enum for this
     TEXT = "text"
     SHORT_TEXT = "short-text"
     RADIO = "radio"
@@ -56,8 +57,19 @@ class Question(models.Model):
 
     def __str__(self):
         return self.text
+    class Meta:
+        verbose_name = _("question")
+        verbose_name_plural = _("questions")
+        ordering = ("survey", "order")
+
+    def question_count(self):
+        return self.question_set.count()
+
 
     class Meta:
         verbose_name = _("question")
         verbose_name_plural = _("questions")
         ordering = ("survey", "order")
+
+    def question_count(self):
+        return self.question_set.count()

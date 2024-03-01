@@ -1,29 +1,32 @@
-from .models import Answer, Question, Survey, Response, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Answer, Question, Survey, PointLocation, PolygonLocation, LineStringLocation, MapView
+from .models import Response as ResponseModel
 from .permissions import IsAuthenticatedAndSelfOrMakeReadOnly, IsAuthenticatedAndSelf
 from rest_framework.decorators import api_view
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.response import Response
-from django.middleware import csrf
-from django.http import HttpResponse
-from django.utils import timezone
 from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response as rf_response
+from django.middleware import csrf
+from django.utils import timezone
 from .serializers import AnswerSerializer, PointLocationSerializer, PolygonLocationSerializer, \
     LineStringLocationSerializer, QuestionSerializer, SurveySerializer, ResponseSerializer, UserSerializer, \
     MapViewSerializer
-# from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 
-from rest_framework.decorators import action
-from rest_framework.response import Response as rf_response
 
 
 @api_view(['GET'])
 def get_csrf_token(request):
     token = csrf.get_token(request)
-    return Response({'csrf_token': token})
+    return rf_response({'csrf_token': token})
 
+# TODO: consider if using viewset is a good option for this. Viewsets are a fast way to create a CRUD API, 
+# but they obfuscate the code; we might want to have more control over the API.
+# REF: https://www.django-rest-framework.org/api-guide/viewsets/
 
 class AnswerViewSet(viewsets.ModelViewSet):
     """
@@ -76,7 +79,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
 class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
     """
     Question ViewSet used to query data from database.
-    The `create` method is overwritten to accept one data object or a array of objects.
+    The `create` method is overwritten to accept one data object or an array of objects.
     """
     permission_classes = [IsAuthenticatedAndSelfOrMakeReadOnly]
     queryset = Question.objects.all()
@@ -91,7 +94,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
             request.data, list) else [request.data]
         questions = []
         """
-        Here we iterates over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
+        Here we iterate over each item in the list and checks if it has an 'id' field. If it does, it retrieves the existing Question object with that ID (if it exists). If it doesn't have an 'id' field, it creates a new Question object.
         """
         for question_data in data:
             if 'id' in question_data:
@@ -116,7 +119,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
 
         serializer = self.get_serializer(questions, many=True)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return rf_response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         update_fields = ['text', 'order', 'required', 'question_type',
@@ -151,7 +154,7 @@ class QuestionViewSet(viewsets.ModelViewSet, UpdateModelMixin):
         survey = get_object_or_404(Survey, pk=pk)
         questions = survey.question_set.all().order_by('order')
         serializer = self.get_serializer(questions, many=True)
-        return Response(serializer.data)
+        return rf_response(serializer.data)
 
 
 class SurveyViewSet(viewsets.ModelViewSet):
@@ -217,20 +220,20 @@ class SurveyViewSet(viewsets.ModelViewSet):
         user = self.request.user
         survey = Survey.objects.get(id=pk)
         if (survey.is_published):
-            if type(user) is User:
-                survey = Survey.objects.get(id=pk)
-                if (survey.designer != user.id):
-                    print("uses is not the designer")
-                    print(
-                        f"User id: {user.id} \nDesigner id: {survey.designer_id}")
-                    rf_response([])
+            # if type(user) is User:
+            #     survey = Survey.objects.get(id=pk)
+            #     if (survey.designer != user.id):
+            #         print("uses is not the designer")
+            #         print(
+            #             f"User id: {user.id} \nDesigner id: {survey.designer_id}")
+            #         rf_response([])
                 questions = Question.objects.all().filter(survey_id=pk).order_by('order')
                 question_serializer = QuestionSerializer(
                     questions, many=True, context={'request': request})
                 print(question_serializer.data)
                 return rf_response(question_serializer.data)
-            else:
-                print("User was anonymous")
+            # else:
+            #     print("User was anonymous")
         return rf_response([])
 
     # @action(detail=True, methods=['post'])
@@ -302,6 +305,27 @@ class ResponseViewSet(viewsets.ModelViewSet):
 
     serializer_class = ResponseSerializer
 
+    """
+    POST method is used to create a new response
+    Example of a POST request body (JSON):
+    {
+    "survey": 1,
+    "respondent": 1
+    }
+
+    Returns a JSON response with the created response:
+
+    {
+    "created": "2023-11-22T13:16:33.185118Z",
+    "updated": "2023-11-22T13:16:33.185133Z",
+    "survey": 1,
+    "respondent": 1,
+    "interview_uuid": "d983d214-ca04-4861-b740-65c62cdbe321"
+    }
+
+    """
+
+
     def get_queryset(response):
         """
         Returns a set of all Response instances in the database.
@@ -310,8 +334,64 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing all Response instances
         """
 
-        queryset = Response.objects.all().order_by('created')
+        queryset = ResponseModel.objects.all().order_by('created')
         return queryset
+
+    @action(detail=False, methods=['POST'], url_path='submit-response')
+    def submit_response(self, request, *args, **kwargs):
+        print("Submitting response...")
+
+        # TODO: test submision using this endpoint
+        # TODO: this is already possible via the answers endpoint
+        user = self.request.user
+        answers = self.request.data["answers"]
+        responseId = self.request.data["responseId"]
+        question = 1 # TODO: get id of question from request
+
+        if type(user) is User:
+            print("User:")
+            print(str(User))
+        else:
+            print("User was anonymous")
+        time = datetime.now()
+
+        for answer in answers:
+            text = answer["_text"]
+            resp = ResponseModel.objects.get(pk=int(responseId))
+            # TODO: get question id from request
+            quest = Question.objects.get(pk=1)
+            storedAnswer = Answer(response=resp, question=quest, created=time, 
+                                  updated=time, body=text)
+
+            print(str(answer))
+
+            return rf_response(None)
+
+    @action(detail=True, methods=['POST'], url_path='create-response')
+    def createResponse(self, request, pk=None):
+        print("Creating a new response...")
+        print("Request data: ", request.data)
+        survey_id = request.data.get("survey")
+        survey = get_object_or_404(Survey, pk=survey_id)
+        response_data= request.data.copy()
+
+        serializer = ResponseSerializer(data=response_data)
+        serializer.is_valid(raise_exception=True)
+        response = serializer.save()
+
+        print("Response data: ", response)
+
+        # None values in respondent field are treated a anonymous responses
+        if response_data["respondent"] is None:
+            message = "anonymous"
+        else:
+            print("respondent is not None")
+            message = "authenticated"
+        return rf_response({
+            "respondent": response.respondent,
+            "interview_uuid": response.interview_uuid,
+            "message": message
+            })
 
     @staticmethod
     def GetResponseByID(id):
@@ -324,7 +404,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
         Return:
             queryset: containing the Response instance with this id
         """
-        queryset = Response.objects.filter(id=id)
+        queryset = ResponseModel.objects.filter(id=id)
         return queryset
 
     @staticmethod
@@ -339,7 +419,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing the Response instances related to this Survey
         """
 
-        queryset = Response.objects.filter(response=survey_id)
+        queryset = ResponseModel.objects.filter(response=survey_id)
         return queryset
 
     @staticmethod
@@ -354,7 +434,7 @@ class ResponseViewSet(viewsets.ModelViewSet):
             queryset: containing the Response instances related to this respondent/ user
         """
 
-        queryset = Response.objects.filter(user=respondent)
+        queryset = ResponseModel.objects.filter(user=respondent)
         return queryset
 
 

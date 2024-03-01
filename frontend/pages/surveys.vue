@@ -1,43 +1,56 @@
 <template>
     <NuxtLayout name="default">
-        <div class="padding-16">
-            <h2 class="h2">Surveys</h2>
+        <v-sheet class="d-flex mx-auto px-4">
+            <h1 class="h2 mb-4">Surveys</h1>
             <div class="row q-col-gutter-sm">
-                <v-card v-for="survey in surveys" style="min-width: 300px;" class="my-card col" flat bordered>
-                    <v-card-section class="">
-                        <div class="text-h5 q-mt-sm q-mb-xs">{{
-                            survey.name
-                        }}</div>
-                        <p class="text-caption ">
-                            {{ survey.description }}
-                        </p>
-                        <div class=" text-caption">
-                            <span>Publish date: {{ formatDate(survey.publish_date) }}</span><br />
-                            <span>Expire date: {{ formatDate(survey.expire_date) }}</span>
-                        </div>
-                        <v-card-actions style="padding-left: 0" margin="0" class="item-end q-mt-auto">
-                            <v-btn :to="`/survey/${survey.id}`" color="primary">
-                                <i class="fa-solid fa-play"></i>
-                                Start survey
+                <v-card 
+                    v-for="survey in surveys"  
+                    :title="survey.name"
+                    :subtitle="'Published: ' + formatDate(survey.publishe_date)"
+                    variant="elevated"
+                    width="400"
+                    class="my-card"
+                    >
+                 
+                        <v-card-actions>
+                            <v-btn @click="selectSurvey(survey.id)" color="primary" variant="elevated">
+                            Participate
                             </v-btn>
                         </v-card-actions>
-                    </v-card-section>
+                        <v-divider></v-divider>
                 </v-card>
             </div>
-        </div>
+        </v-sheet>
     </NuxtLayout>
 </template>
 <script setup>
 import { formatDate } from "~/utils/formatData"
+
+// TODO [MANUEL]: useSubmitForm is not  in survey.js
+// import { useSubmitForm } from "~/stores/survey.js";
+
+
+
 /**
  * All `/api/**` are proxies pointing to the local or production server of the backend.
  */
-const url = "/api/surveys/"
-const { data: surveys } = await useAsyncData(() => $cmsApi(url));
+// const url = "/api/surveys/"
+// const { data: surveys } = await useAsyncData(() => $cmsApi(url));
+const surveyStore = useSurveyStore();
+surveyStore.$reset(); // reset SelectedSurvey to null
+
+const {data: surveys} = await surveyStore.getSurveys();
+
+// sets id on surveyStore and redirects to survey/id page
+function selectSurvey (id) {
+    surveyStore.selectSurvey(id);
+    navigateTo(`/survey/${id}`);
+};
+
 </script>
 <style lang="scss">
 .my-card {
-    margin: 10px 15px
+    margin: 20px 15px
 }
 
 .padding-16 {
