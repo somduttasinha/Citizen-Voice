@@ -11,7 +11,7 @@
     />
 
     <!-- Other elements of your web page -->
-    <MapView />
+    <AnswerMapView />
   </div>
 </NuxtLayout>
 </template>
