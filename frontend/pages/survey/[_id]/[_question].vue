@@ -58,24 +58,7 @@
                     <!-- Map card -->
                     <div v-if="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
-                        <div style="height:400px; width:auto;">
-                            <l-map ref="map" :zoom=map_View.options.zoom :center=map_View.options.center @click="addCircle" 
-                            >
-                                <l-tile-layer :url=map_View.map_service_url layer-type="base"
-                                    name="OpenStreetMap"></l-tile-layer>
-                                <!-- <l-circle v-for="circle, index in map_view.options.points" :lat-lng="circle"
-                                    :radius="map_view.options.radius" :color="map_view.options.color"
-                                    :fillColor="map_view.options.fillColor"></l-circle>
-                                <l-circle v-for="circle, index in circles" @click="removeCircle(index)" :lat-lng="circle"
-                                    :radius="map_view.options.radius" :color="map_view.options.color"
-                                    :fillColor="map_view.options.fillColor"></l-circle> -->
-                                <l-control position="bottomleft">
-                                    <v-btn @click="resetMap">
-                                        Reset
-                                    </v-btn>
-                                </l-control>
-                            </l-map>
-                        </div>
+                        
                     </div>
                     <!-- Navigation -->
                     <v-card-actions>
@@ -109,6 +92,7 @@ import { ref, watch } from "vue"
 import { navigateTo } from "nuxt/app";
 import { useSurveyStore } from "~/stores/survey";
 import { useStoreResponse } from '~/stores/response';
+import { useGlobalStore } from "~/stores/global";
 
 // import leaflet from "leaflet"
 import "leaflet/dist/leaflet.css";
@@ -177,7 +161,7 @@ const nextQuestion = async () => {
 
 const submitAnswers = async () => {
     // TODO: host ulr should be dynamic
-
+    const global = useGlobalStore();
     const response_root = "http://localhost:8000/api/responses/";
     const question_root = "http://localhost:8000/api/questions/";
 
@@ -192,7 +176,9 @@ const submitAnswers = async () => {
             answer_text
         )
     }
+    global.succes("Your answers have been submitted")
     return navigateTo('/submitted/')
+    
 };
 
 // inspired by Roy J's solution on Stack Overflow:
