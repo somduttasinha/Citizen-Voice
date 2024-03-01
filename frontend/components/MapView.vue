@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props }">
             <div style="height:600px; width:600px">
                 <l-map :key="updateKeyMapWithoutControls" :useGlobalLeaflet="true" ref="mapRef"
-                    @ready="onLeafletReadyMapWithoutControls" :options="{ zoomControl: false }" :minZoom="3" :maxZoom="18"
+                    @ready="onLeafletReadyMapWithoutControls" :options="{ zoomControl: false }" :minZoom="3" :maxZoom="19"
                     :noBlockingAnimations="true">
                     <l-tile-layer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" layer-type="base"
                         name="OpenStreetMap"></l-tile-layer>
