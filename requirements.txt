@@ -1,13 +1,14 @@
 asgiref==3.5.2
 attrs==21.4.0
-Django==4.1.1
+Django
 djangorestframework==3.13.1
+django-extensions
 django-rest-knox==4.2.0
 django-allauth==0.54.0 # newer versions removed email_address_exists
 drf-spectacular==0.21.2
 # pywatchman # this was added to the requirements but python can't find the package: ERROR: Could not find a version that satisfies the requirement pywatchman==1.4.1 (from versions: none)
 # So lets leave it out and see if nothing breaks, it can be removed later
-GDAL>=3.3.2
+GDAL
 gunicorn==20.1.0
 iniconfig==1.1.1
 packaging==21.3

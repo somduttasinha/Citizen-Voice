@@ -161,3 +161,6 @@ dmypy.json
 
 # OS
 .DS_Store
+
+# devel
+dev-notes.md
