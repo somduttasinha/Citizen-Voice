@@ -16,7 +16,7 @@ pluggy==1.0.0
 psycopg2==2.9.3
 psycopg2-binary==2.9.3
 py==1.11.0
-pyparsing==3.0.9ß
+pyparsing==3.0.9
 pytest==7.1.2
 python-dotenv==0.20.0
 pytz==2022.2.1
