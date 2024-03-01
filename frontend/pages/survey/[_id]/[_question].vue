@@ -56,6 +56,7 @@
 
                 <div class="q-pa-md row items-start q-gutter-md">
                     <!-- Map card -->
+                    <!-- TODO: link answerMapview with map view props in each question -->
                     <div v-if="(question.map_view != null || question.is_geospatial)" style="min-width: 600px;"
                         class="my-card col">
                         <AnswerMapView />
